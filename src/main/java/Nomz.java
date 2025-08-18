@@ -48,12 +48,22 @@ public class Nomz {
         } catch (NumberFormatException e) {
             System.err.println("Invalid string format for integer conversion.");
         }
-        
-        
     }
 
     public static void unmarkTask(String input) {
+        try {
+            int taskIndex = Integer.valueOf(input);
+            if (taskIndex >= taskListIdx) {
+                System.out.println(responseFormat("you gave nomz a bad input :(("));
+            } else {
+                Task t = taskList[taskIndex];
+                t.unmark();
+                System.out.println(responseFormat("Nomz has unmarked your task:\n" + t.toString()));
+            }
 
+        } catch (NumberFormatException e) {
+            System.err.println("Invalid string format for integer conversion.");
+        }
     }
 
 
