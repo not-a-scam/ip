@@ -12,8 +12,18 @@ public class Nomz {
         return LINEBREAK + "\n" + input + "\n" + LINEBREAK;
     }
 
+    /**
+     * Echoes the user input
+     * 
+     * @param input User chat input
+     * @return Formatted chat response
+     */
+    public static String echo(String input) {
+        return responseFormat(input);
+    }
+
     public static void main(String[] args) {
-        System.out.println(responseFormat("Hi im nomz! \nhope you're having a nomztacular day"));
-        System.out.println(responseFormat(BYE));
+        // Greeting
+        System.out.println(responseFormat("Hi im nomz! \nhope you're having a nomztacular day"));        
     }
 }
