@@ -1,0 +1,13 @@
+todo Finish reading book
+deadline CS2103T Homework /by monday morning
+deadline CS2101 Presentation slides /by 29 feb
+event cooking class /from sunday 4pm /to 6pm
+list
+mark 1
+unmark 1
+mark 0
+unmark 2
+mark 0
+mark 2
+list 
+bye
