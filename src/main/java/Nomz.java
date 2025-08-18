@@ -87,6 +87,29 @@ public class Nomz {
         System.out.println(responseFormat("you gave nomz a bad input :(("));
     }
 
+    public static void createEvent(String[] args) {
+        int fromIndex = -1;
+        int toIndex = -1;
+        for(int i = 0; i < args.length; i++) {
+            if(args[i].equals("/from")) {
+                fromIndex = i;
+            } else if(args[i].equals("/to")){
+                toIndex = i;
+            }
+        }
+
+        if(fromIndex > -1 && toIndex > -1) {
+            String description = String.join(" ", Arrays.copyOfRange(args, 0, fromIndex));
+            String from = String.join(" ", Arrays.copyOfRange(args, fromIndex + 1, toIndex));
+            String to = String.join(" ", Arrays.copyOfRange(args, toIndex + 1, args.length));
+
+            addTask(new Event(description, from, to));
+            return;
+        } 
+
+        System.out.println(responseFormat("you gave nomz a bad input :(("));
+    }
+
     /**
      * Handles the logic of the chat
      * @param input User input
@@ -109,6 +132,9 @@ public class Nomz {
                 break;
             case "deadline":
                 createDeadline(Arrays.copyOfRange(args, 1, args.length));
+                break;
+            case "event":
+                createEvent(Arrays.copyOfRange(args, 1, args.length));
                 break;
             default:
                 break;
