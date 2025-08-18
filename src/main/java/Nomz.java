@@ -18,16 +18,6 @@ public class Nomz {
     }
 
     /**
-     * Echoes the user input
-     * 
-     * @param input User chat input
-     * @return Formatted chat response
-     */
-    public static String echo(String input) {
-        return responseFormat(input);
-    }
-
-    /**
      * adds input to Nomz static textList
      * 
      * @param input String to be added
@@ -74,7 +64,7 @@ public class Nomz {
         Scanner sc = new Scanner(System.in);
         String input = sc.nextLine();
         while(!input.equals("bye")) {
-            System.out.println(echo(input));
+            System.out.println(responseFormat(input));
             input = sc.nextLine();
         }
         System.out.println(responseFormat(BYE));
