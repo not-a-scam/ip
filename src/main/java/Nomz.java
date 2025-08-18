@@ -4,9 +4,6 @@ public class Nomz {
     public static final String LINEBREAK = "-----------------------------------------";
     public static final String BYE = "Bye! hope to see you again soon!" ; 
 
-    public static String[] textList = new String[100];
-    public static int textListIdx = 0;
-
     /**
      * Formats a given string to be printed as a response from the chatbot
      * 
@@ -17,29 +14,6 @@ public class Nomz {
         return LINEBREAK + "\n" + input + "\n" + LINEBREAK;
     }
 
-    /**
-     * adds input to Nomz static textList
-     * 
-     * @param input String to be added
-     */
-    public static void addToList(String input) {
-        textList[textListIdx] = input;
-        textListIdx++;
-        System.out.println(responseFormat("nomz added [" + input + "] to your nomz list!"));
-    }
-
-    /**
-     * Prints contents of textList in a list format
-     * @return Formatted string of array content
-     */
-    public static void printTextList(){
-        String res = "";
-        for(int i = 0; i < textListIdx; i++) {
-            res += i + ". " + textList[i] + "\n";
-        }
-
-        System.out.println(responseFormat(res));
-    }
 
     /**
      * Handles the logic of the chat
@@ -48,10 +22,8 @@ public class Nomz {
     public static void chat(String input) {
         switch(input) {
             case "list":
-                printTextList();
                 break;
             default:
-                addToList(input);
                 break;
         }
     }
