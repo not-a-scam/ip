@@ -51,6 +51,20 @@ public class Nomz {
         return res;
     }
 
+    /**
+     * Handles the logic of the chat
+     * @param input User input
+     */
+    public static void chat(String input) {
+        switch(input) {
+            case "list":
+                printTextList();
+                break;
+            default:
+                addToList(input);
+                break;
+        }
+    }
 
     public static void main(String[] args) {
         // Greeting
