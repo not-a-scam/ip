@@ -4,6 +4,8 @@ public class Nomz {
     public static final String LINEBREAK = "-----------------------------------------";
     public static final String BYE = "Bye! hope to see you again soon!" ; 
 
+    public static String[] textList = new String[100];
+
     /**
      * Formats a given string to be printed as a response from the chatbot
      * 
