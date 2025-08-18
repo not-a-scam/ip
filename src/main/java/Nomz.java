@@ -4,6 +4,9 @@ public class Nomz {
     public static final String LINEBREAK = "-----------------------------------------";
     public static final String BYE = "Bye! hope to see you again soon!" ; 
 
+    public static Task[] taskList = new Task[100];
+    public static int taskListIdx = 0;
+
     /**
      * Formats a given string to be printed as a response from the chatbot
      * 
@@ -15,6 +18,13 @@ public class Nomz {
     }
 
     public static void printTaskList() {
+        String res = "";
+        for(int i = 0; i < taskListIdx; i++) {
+            Task t = taskList[i];
+            res += i + ". " + t.toString() + "\n";
+        }
+
+        System.out.println(responseFormat(res));
 
     }
 
