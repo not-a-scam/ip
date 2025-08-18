@@ -48,15 +48,17 @@ public class Nomz {
      * @param input User input
      */
     public static void chat(String input) {
-        switch(input) {
+        String[] args = input.split("[\\s]");
+        String command = args[0];
+        switch(command) {
             case "list":
                 printTaskList();
                 break;
             case "mark":
-                markTask(input);
+                markTask(args[1]);
                 break;
             case "unmark":
-                unmarkTask(input);
+                unmarkTask(args[1]);
                 break;
             default:
                 addTask(input);
