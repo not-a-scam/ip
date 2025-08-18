@@ -5,6 +5,7 @@ public class Nomz {
     public static final String BYE = "Bye! hope to see you again soon!" ; 
 
     public static String[] textList = new String[100];
+    public static int textListIdx = 0;
 
     /**
      * Formats a given string to be printed as a response from the chatbot
@@ -24,6 +25,11 @@ public class Nomz {
      */
     public static String echo(String input) {
         return responseFormat(input);
+    }
+
+    public static void addToList(String input) {
+        textList[textListIdx] = input;
+        System.out.println(responseFormat("nomz added [" + input + "] to your nomz list!"));
     }
 
     public static void main(String[] args) {
