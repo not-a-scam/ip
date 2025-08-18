@@ -35,7 +35,21 @@ public class Nomz {
     }
 
     public static void markTask(String input) {
+        try {
+            int taskIndex = Integer.valueOf(input);
+            if (taskIndex >= taskListIdx) {
+                System.out.println(responseFormat("you gave nomz a bad input :(("));
+            } else {
+                Task t = taskList[taskIndex];
+                t.mark();
+                System.out.println(responseFormat("Nomz says good job!:\n" + t.toString()));
+            }
 
+        } catch (NumberFormatException e) {
+            System.err.println("Invalid string format for integer conversion.");
+        }
+        
+        
     }
 
     public static void unmarkTask(String input) {
