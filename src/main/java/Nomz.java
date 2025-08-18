@@ -18,7 +18,7 @@ public class Nomz {
     }
 
     public static void printTaskList() {
-        String res = "";
+        String res = "here are the tasks in your nomz list:\n\n";
         for(int i = 0; i < taskListIdx; i++) {
             Task t = taskList[i];
             res += i + ". " + t.toString() + "\n";
@@ -26,6 +26,12 @@ public class Nomz {
 
         System.out.println(responseFormat(res));
 
+    }
+
+    public static void addTask(String input) {
+        taskList[taskListIdx] = new Task(input);
+        taskListIdx++;
+        System.out.println(responseFormat("Nomz haz added " + input + " to the nomz list!"));
     }
 
     public static void markTask(String input) {
@@ -53,6 +59,7 @@ public class Nomz {
                 unmarkTask(input);
                 break;
             default:
+                addTask(input);
                 break;
         }
     }
