@@ -28,10 +28,10 @@ public class Nomz {
 
     }
 
-    public static void addTask(String input) {
-        taskList[taskListIdx] = new Task(input);
+    public static void addTask(Task task) {
+        taskList[taskListIdx] = task;
         taskListIdx++;
-        System.out.println(responseFormat("Nomz haz added " + input + " to the nomz list!"));
+        System.out.println(responseFormat("Nomz haz added:\n\t" + task.toString() + "\nto the nomz list!"));
     }
 
     public static void markTask(String input) {
@@ -85,7 +85,6 @@ public class Nomz {
                 unmarkTask(args[1]);
                 break;
             default:
-                addTask(input);
                 break;
         }
     }
