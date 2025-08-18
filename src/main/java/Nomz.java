@@ -67,10 +67,24 @@ public class Nomz {
         }
     }
 
-    public static void createTodo(String[] args){
+    public static void createTodo(String[] args) {
         String description = String.join(" ", args);
         Todo todo = new Todo(description);
         addTask(todo);
+    }
+
+    public static void createDeadline(String[] args) {
+        for(int i = 0; i < args.length; i++) {
+            if(args[i].equals("/by")){
+                String description = String.join(" ", Arrays.copyOfRange(args, 0, i));
+                String by = String.join(" ", Arrays.copyOfRange(args, i+1, args.length));
+
+                addTask(new Deadline(description, by));
+                return;
+            }
+        } 
+
+        System.out.println(responseFormat("you gave nomz a bad input :(("));
     }
 
     /**
@@ -92,6 +106,9 @@ public class Nomz {
                 break;
             case "todo":
                 createTodo(Arrays.copyOfRange(args, 1, args.length));
+                break;
+            case "deadline":
+                createDeadline(Arrays.copyOfRange(args, 1, args.length));
                 break;
             default:
                 break;
