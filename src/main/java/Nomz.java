@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.Arrays;
 
 public class Nomz {
     public static final String LINEBREAK = "-----------------------------------------";
@@ -66,6 +67,11 @@ public class Nomz {
         }
     }
 
+    public static void createTodo(String[] args){
+        String description = String.join(" ", args);
+        Todo todo = new Todo(description);
+        addTask(todo);
+    }
 
     /**
      * Handles the logic of the chat
@@ -83,6 +89,9 @@ public class Nomz {
                 break;
             case "unmark":
                 unmarkTask(args[1]);
+                break;
+            case "todo":
+                createTodo(Arrays.copyOfRange(args, 1, args.length));
                 break;
             default:
                 break;
