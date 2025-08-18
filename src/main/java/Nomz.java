@@ -14,6 +14,18 @@ public class Nomz {
         return LINEBREAK + "\n" + input + "\n" + LINEBREAK;
     }
 
+    public static void printTaskList() {
+
+    }
+
+    public static void markTask(String input) {
+
+    }
+
+    public static void unmarkTask(String input) {
+
+    }
+
 
     /**
      * Handles the logic of the chat
@@ -22,6 +34,13 @@ public class Nomz {
     public static void chat(String input) {
         switch(input) {
             case "list":
+                printTaskList();
+                break;
+            case "mark":
+                markTask(input);
+                break;
+            case "unmark":
+                unmarkTask(input);
                 break;
             default:
                 break;
