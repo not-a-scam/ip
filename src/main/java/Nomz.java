@@ -32,13 +32,13 @@ public class Nomz {
      * Prints contents of textList in a list format
      * @return Formatted string of array content
      */
-    public static String printTextList(){
+    public static void printTextList(){
         String res = "";
         for(int i = 0; i < textListIdx; i++) {
             res += i + ". " + textList[i] + "\n";
         }
 
-        return res;
+        System.out.println(responseFormat(res));
     }
 
     /**
@@ -64,7 +64,7 @@ public class Nomz {
         Scanner sc = new Scanner(System.in);
         String input = sc.nextLine();
         while(!input.equals("bye")) {
-            System.out.println(responseFormat(input));
+            chat(input);
             input = sc.nextLine();
         }
         System.out.println(responseFormat(BYE));
