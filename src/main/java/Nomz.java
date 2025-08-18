@@ -27,10 +27,30 @@ public class Nomz {
         return responseFormat(input);
     }
 
+    /**
+     * adds input to Nomz static textList
+     * 
+     * @param input String to be added
+     */
     public static void addToList(String input) {
         textList[textListIdx] = input;
+        textListIdx++;
         System.out.println(responseFormat("nomz added [" + input + "] to your nomz list!"));
     }
+
+    /**
+     * Prints contents of textList in a list format
+     * @return Formatted string of array content
+     */
+    public static String printTextList(){
+        String res = "";
+        for(int i = 0; i < textListIdx; i++) {
+            res += i + ". " + textList[i] + "\n";
+        }
+
+        return res;
+    }
+
 
     public static void main(String[] args) {
         // Greeting
