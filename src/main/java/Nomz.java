@@ -35,13 +35,20 @@ public class Nomz {
         System.out.println(responseFormat("Nomz haz added:\n\t" + task.toString() + "\nto the nomz list!"));
     }
 
-    public static Task getTaskFromString(String index) throws InvalidNomzArgumentException{
+    public static int intFromString(String index) throws InvalidNomzArgumentException {
         int taskIndex = -1;
         try {
             taskIndex = Integer.valueOf(index);
         } catch (NumberFormatException e) {
             throw new InvalidNomzArgumentException("your index argument is not a valid integer!");
         }
+
+        return taskIndex;
+    }
+
+    public static Task getTaskFromString(String index) throws InvalidNomzArgumentException{
+       
+        int taskIndex = intFromString(index);
 
         if (taskIndex - 1 >= taskList.size()) {
             throw new InvalidNomzArgumentException("task index is out of bounds!");
@@ -121,6 +128,16 @@ public class Nomz {
 
     }
 
+    private static void deleteTask(String[] args) throws InvalidNomzArgumentException {
+        if(args.length < 2) {
+            throw new InvalidNomzArgumentException("you need to provide an index argument :((");
+        }
+
+        int index = intFromString(args[1]);
+        taskList.remove(index - 1);
+        System.out.println(responseFormat("nomz haz removed task " + index + " from the nomz list"));
+    }
+
     /**
      * Handles the logic of the chat
      * @param input User input
@@ -146,6 +163,9 @@ public class Nomz {
                 break;
             case "event":
                 createEvent(args);
+                break;
+            case "delete":
+                deleteTask(args);
                 break;
             default:
                 throw new InvalidNomzCommandException(input);
