@@ -22,7 +22,8 @@ public class Nomz {
         String res = "here are the tasks in your nomz list:\n\n";
         for(int i = 0; i < taskListIdx; i++) {
             Task t = taskList[i];
-            res += i + ". " + t.toString() + "\n";
+            int index = i + 1;
+            res += index + ". " + t.toString() + "\n";
         }
 
         System.out.println(responseFormat(res));
@@ -44,11 +45,11 @@ public class Nomz {
             return null;
         }
 
-        if (taskIndex >= taskListIdx) {
+        if (taskIndex - 1 >= taskListIdx) {
             throw new InvalidNomzArgumentException("task index is out of bounds!");
         }
 
-        return taskList[taskIndex];
+        return taskList[taskIndex - 1];
     }
 
     public static void setTaskMark(String[] args, boolean toMark) throws InvalidNomzArgumentException {
