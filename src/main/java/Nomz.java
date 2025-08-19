@@ -41,8 +41,7 @@ public class Nomz {
         try {
             taskIndex = Integer.valueOf(index);
         } catch (NumberFormatException e) {
-            System.err.println("Invalid string format for integer conversion.");
-            return null;
+            throw new InvalidNomzArgumentException("your index argument is not a valid integer!");
         }
 
         if (taskIndex - 1 >= taskListIdx) {
