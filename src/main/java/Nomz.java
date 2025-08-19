@@ -35,35 +35,34 @@ public class Nomz {
         System.out.println(responseFormat("Nomz haz added:\n\t" + task.toString() + "\nto the nomz list!"));
     }
 
-    public static void markTask(String input) {
+    public static Task getTaskFromString(String index) throws InvalidNomzArgumentException{
+        int taskIndex = -1;
         try {
-            int taskIndex = Integer.valueOf(input);
-            if (taskIndex >= taskListIdx) {
-                System.out.println(responseFormat("you gave nomz a bad input :(("));
-            } else {
-                Task t = taskList[taskIndex];
-                t.mark();
-                System.out.println(responseFormat("Nomz says good job!:\n" + t.toString()));
-            }
-
+            taskIndex = Integer.valueOf(index);
         } catch (NumberFormatException e) {
             System.err.println("Invalid string format for integer conversion.");
+            return null;
         }
+
+        if (taskIndex >= taskListIdx) {
+            throw new InvalidNomzArgumentException("task index is out of bounds!");
+        }
+
+        return taskList[taskIndex];
     }
 
-    public static void unmarkTask(String input) {
-        try {
-            int taskIndex = Integer.valueOf(input);
-            if (taskIndex >= taskListIdx) {
-                System.out.println(responseFormat("you gave nomz a bad input :(("));
-            } else {
-                Task t = taskList[taskIndex];
-                t.unmark();
-                System.out.println(responseFormat("Nomz has unmarked your task:\n" + t.toString()));
-            }
+    public static void setTaskMark(String[] args, boolean toMark) throws InvalidNomzArgumentException {
+        if(args.length < 2) {
+            throw new InvalidNomzArgumentException("you need to provide an index argument :((");
+        }
 
-        } catch (NumberFormatException e) {
-            System.err.println("Invalid string format for integer conversion.");
+        Task t = getTaskFromString(args[1]);
+        if(toMark){
+            t.mark();
+            System.out.println(responseFormat("Nomz says good job!:\n" + t.toString()));
+        } else {
+            t.unmark();
+            System.out.println(responseFormat("Nomz has unmarked your task:\n" + t.toString()));
         }
     }
 
@@ -135,10 +134,10 @@ public class Nomz {
                 printTaskList();
                 break;
             case "mark":
-                markTask(args[1]);
+                setTaskMark(args, true);
                 break;
             case "unmark":
-                unmarkTask(args[1]);
+                setTaskMark(args, false);
                 break;
             case "todo":
                 createTodo(args);
