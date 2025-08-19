@@ -93,10 +93,10 @@ public class Nomz {
         throw new InvalidNomzArgumentException("you didnt use the /by keyword :((");
     }
 
-    public static void createEvent(String[] args) {
+    public static void createEvent(String[] args) throws InvalidNomzArgumentException {
         int fromIndex = -1;
         int toIndex = -1;
-        for(int i = 0; i < args.length; i++) {
+        for(int i = 1; i < args.length; i++) {
             if(args[i].equals("/from")) {
                 fromIndex = i;
             } else if(args[i].equals("/to")){
@@ -104,8 +104,16 @@ public class Nomz {
             }
         }
 
+        if(fromIndex <= 1) {
+            throw new InvalidNomzArgumentException("you didn't use the /from keyword properly :(");
+        }
+
+        if (toIndex <= fromIndex || toIndex <= 3 || toIndex == args.length - 1) { // toIndex must be > from index
+            throw new InvalidNomzArgumentException("you didn't use the /to keyword correctly");
+        }
+
         if(fromIndex > -1 && toIndex > -1) {
-            String description = String.join(" ", Arrays.copyOfRange(args, 0, fromIndex));
+            String description = String.join(" ", Arrays.copyOfRange(args, 1, fromIndex));
             String from = String.join(" ", Arrays.copyOfRange(args, fromIndex + 1, toIndex));
             String to = String.join(" ", Arrays.copyOfRange(args, toIndex + 1, args.length));
 
@@ -113,7 +121,6 @@ public class Nomz {
             return;
         } 
 
-        System.out.println(responseFormat("you gave nomz a bad input :(("));
     }
 
     /**
@@ -140,7 +147,7 @@ public class Nomz {
                 createDeadline(args);
                 break;
             case "event":
-                createEvent(Arrays.copyOfRange(args, 1, args.length));
+                createEvent(args);
                 break;
             default:
                 throw new InvalidNomzCommandException(input);
