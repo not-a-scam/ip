@@ -114,7 +114,7 @@ public class Nomz {
      * Handles the logic of the chat
      * @param input User input
      */
-    public static void chat(String input) {
+    public static void chat(String input) throws NomzException {
         String[] args = input.split("[\\s]");
         String command = args[0];
         switch(command) {
@@ -137,7 +137,7 @@ public class Nomz {
                 createEvent(Arrays.copyOfRange(args, 1, args.length));
                 break;
             default:
-                break;
+                throw new InvalidNomzCommandException(input);
         }
     }
 
@@ -149,8 +149,14 @@ public class Nomz {
         Scanner sc = new Scanner(System.in);
         String input = sc.nextLine();
         while(!input.equals("bye")) {
-            chat(input);
-            input = sc.nextLine();
+            try {
+                chat(input);
+            } catch(NomzException e) {
+                System.err.println(responseFormat(e.getMessage()));
+            } finally {
+                input = sc.nextLine();
+            }
+
         }
         System.out.println(responseFormat(BYE));
         sc.close();
