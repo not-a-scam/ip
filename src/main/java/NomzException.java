@@ -1,8 +1,6 @@
 public class NomzException extends Exception{
-    protected String input;
-    
-    public NomzException(String m, String input) {
+
+    public NomzException(String m) {
         super(m);
-        this.input = input;
     }
 }
