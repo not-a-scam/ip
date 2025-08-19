@@ -67,8 +67,11 @@ public class Nomz {
         }
     }
 
-    public static void createTodo(String[] args) {
-        String description = String.join(" ", args);
+    public static void createTodo(String[] args) throws InvalidNomzArgumentException {
+        if(args.length < 2) {
+            throw new InvalidNomzArgumentException("you didnt specify the task :((");
+        }
+        String description = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
         Todo todo = new Todo(description);
         addTask(todo);
     }
@@ -128,7 +131,7 @@ public class Nomz {
                 unmarkTask(args[1]);
                 break;
             case "todo":
-                createTodo(Arrays.copyOfRange(args, 1, args.length));
+                createTodo(args);
                 break;
             case "deadline":
                 createDeadline(Arrays.copyOfRange(args, 1, args.length));
