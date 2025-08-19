@@ -76,18 +76,21 @@ public class Nomz {
         addTask(todo);
     }
 
-    public static void createDeadline(String[] args) {
-        for(int i = 0; i < args.length; i++) {
+    public static void createDeadline(String[] args) throws InvalidNomzArgumentException {
+        if(args.length < 4) {
+            throw new InvalidNomzArgumentException("you don't have enough arguments :(");
+        }
+
+        for(int i = 2; i < args.length; i++) {
             if(args[i].equals("/by")){
-                String description = String.join(" ", Arrays.copyOfRange(args, 0, i));
+                String description = String.join(" ", Arrays.copyOfRange(args, 1, i));
                 String by = String.join(" ", Arrays.copyOfRange(args, i+1, args.length));
 
                 addTask(new Deadline(description, by));
                 return;
             }
         } 
-
-        System.out.println(responseFormat("you gave nomz a bad input :(("));
+        throw new InvalidNomzArgumentException("you didnt use the /by keyword :((");
     }
 
     public static void createEvent(String[] args) {
@@ -134,7 +137,7 @@ public class Nomz {
                 createTodo(args);
                 break;
             case "deadline":
-                createDeadline(Arrays.copyOfRange(args, 1, args.length));
+                createDeadline(args);
                 break;
             case "event":
                 createEvent(Arrays.copyOfRange(args, 1, args.length));
