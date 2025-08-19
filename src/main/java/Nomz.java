@@ -1,12 +1,12 @@
 import java.util.Scanner;
 import java.util.Arrays;
+import java.util.ArrayList;
 
 public class Nomz {
     public static final String LINEBREAK = "-----------------------------------------";
     public static final String BYE = "Bye! hope to see you again soon!" ; 
 
-    public static Task[] taskList = new Task[100];
-    public static int taskListIdx = 0;
+    public static ArrayList<Task> taskList = new ArrayList<>();
 
     /**
      * Formats a given string to be printed as a response from the chatbot
@@ -20,8 +20,8 @@ public class Nomz {
 
     public static void printTaskList() {
         String res = "here are the tasks in your nomz list:\n\n";
-        for(int i = 0; i < taskListIdx; i++) {
-            Task t = taskList[i];
+        for(int i = 0; i < taskList.size(); i++) {
+            Task t = taskList.get(i);
             int index = i + 1;
             res += index + ". " + t.toString() + "\n";
         }
@@ -31,8 +31,7 @@ public class Nomz {
     }
 
     public static void addTask(Task task) {
-        taskList[taskListIdx] = task;
-        taskListIdx++;
+        taskList.add(task);
         System.out.println(responseFormat("Nomz haz added:\n\t" + task.toString() + "\nto the nomz list!"));
     }
 
@@ -44,11 +43,11 @@ public class Nomz {
             throw new InvalidNomzArgumentException("your index argument is not a valid integer!");
         }
 
-        if (taskIndex - 1 >= taskListIdx) {
+        if (taskIndex - 1 >= taskList.size()) {
             throw new InvalidNomzArgumentException("task index is out of bounds!");
         }
 
-        return taskList[taskIndex - 1];
+        return taskList.get(taskIndex - 1);
     }
 
     public static void setTaskMark(String[] args, boolean toMark) throws InvalidNomzArgumentException {
