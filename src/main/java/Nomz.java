@@ -18,6 +18,10 @@ public class Nomz {
         return LINEBREAK + "\n" + input + "\n" + LINEBREAK;
     }
 
+    /**
+     * Prints current task list to console
+     *
+     */
     public static void printTaskList() {
         String res = "here are the tasks in your nomz list:\n\n";
         for(int i = 0; i < taskList.size(); i++) {
@@ -30,11 +34,21 @@ public class Nomz {
 
     }
 
+    /**
+     * Adds task to task list
+     * @param task task to be added
+     */
     public static void addTask(Task task) {
         taskList.add(task);
         System.out.println(responseFormat("Nomz haz added:\n\t" + task.toString() + "\nto the nomz list!"));
     }
 
+    /**
+     * returns an int from String with error handling
+     * @param index String to be converted
+     * @return index of int type
+     * @throws InvalidNomzArgumentException
+     */
     public static int intFromString(String index) throws InvalidNomzArgumentException {
         int taskIndex = -1;
         try {
@@ -46,6 +60,12 @@ public class Nomz {
         return taskIndex;
     }
 
+    /**
+     * returns task in taskList given a String type index
+     * @param index index of task in taskList
+     * @return task 
+     * @throws InvalidNomzArgumentException
+     */
     public static Task getTaskFromString(String index) throws InvalidNomzArgumentException{
        
         int taskIndex = intFromString(index);
@@ -57,6 +77,13 @@ public class Nomz {
         return taskList.get(taskIndex - 1);
     }
 
+    /**
+     * Marks/unmarks a task based on index given in args
+     * 
+     * @param args must have an integer in args[1]
+     * @param toMark flag to set mark / unmark
+     * @throws InvalidNomzArgumentException
+     */
     public static void setTaskMark(String[] args, boolean toMark) throws InvalidNomzArgumentException {
         if(args.length < 2) {
             throw new InvalidNomzArgumentException("you need to provide an index argument :((");
@@ -72,6 +99,11 @@ public class Nomz {
         }
     }
 
+    /**
+     * Creates a todo task and inserts it into the task list
+     * @param args uses args[1] to end of args as the name of todo
+     * @throws InvalidNomzArgumentException
+     */
     public static void createTodo(String[] args) throws InvalidNomzArgumentException {
         if(args.length < 2) {
             throw new InvalidNomzArgumentException("you didnt specify the task :((");
@@ -81,6 +113,12 @@ public class Nomz {
         addTask(todo);
     }
 
+    /**
+     * Creates a deadline task and inserts it into the task list
+     * @param args searches for /by keyword in args. all arguments before keyword is used as name, 
+     * and all arguments after are used as time
+     * @throws InvalidNomzArgumentException
+     */
     public static void createDeadline(String[] args) throws InvalidNomzArgumentException {
         if(args.length < 4) {
             throw new InvalidNomzArgumentException("you don't have enough arguments :(");
@@ -98,6 +136,12 @@ public class Nomz {
         throw new InvalidNomzArgumentException("you didnt use the /by keyword :((");
     }
 
+    /**
+     * Creates an event task and inserts it into the task list
+     * @param args add args before /from is used as name, all args between /from & /to used as from timing, 
+     * all args after /to used as to timing.
+     * @throws InvalidNomzArgumentException
+     */
     public static void createEvent(String[] args) throws InvalidNomzArgumentException {
         int fromIndex = -1;
         int toIndex = -1;
@@ -128,6 +172,11 @@ public class Nomz {
 
     }
 
+    /**
+     * Deletes task based on index given
+     * @param args args[1] must contain a valid index
+     * @throws InvalidNomzArgumentException
+     */
     private static void deleteTask(String[] args) throws InvalidNomzArgumentException {
         if(args.length < 2) {
             throw new InvalidNomzArgumentException("you need to provide an index argument :((");
