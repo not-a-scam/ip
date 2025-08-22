@@ -217,7 +217,7 @@ public class Nomz {
                 deleteTask(args);
                 break;
             default:
-                throw new InvalidNomzCommandException(input);
+                throw new InvalidNomzCommandException();
         }
     }
 

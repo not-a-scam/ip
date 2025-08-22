@@ -1,6 +1,6 @@
 public class InvalidNomzCommandException extends NomzException {
 
-    public InvalidNomzCommandException(String input) {
+    public InvalidNomzCommandException() {
         super("idk that command :(");
     }
     
