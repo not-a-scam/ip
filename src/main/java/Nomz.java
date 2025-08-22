@@ -3,10 +3,11 @@ import java.util.Arrays;
 import java.util.ArrayList;
 
 public class Nomz {
-    public static final String LINEBREAK = "-----------------------------------------";
-    public static final String BYE = "Bye! hope to see you again soon!" ; 
+    private static final String LINEBREAK = "-----------------------------------------";
+    private static final String BYE = "Bye! hope to see you again soon!" ; 
 
-    public static ArrayList<Task> taskList = new ArrayList<>();
+    private static ArrayList<Task> taskList = new ArrayList<>();
+
 
     /**
      * Formats a given string to be printed as a response from the chatbot
