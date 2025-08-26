@@ -22,7 +22,7 @@ public class Task {
     }
 
     public String savedString() {
-        return type.getSymbol() + "|" + getStatusIcon() + "|" + description;
+        return type.getSymbol() + "|" + (isDone ? 1 : 0) + "|" + description;
     }
 
     @Override
