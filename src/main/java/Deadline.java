@@ -3,33 +3,37 @@ import java.time.format.DateTimeFormatter;
 
 public class Deadline extends Task {
 
-    protected LocalDateTime by = null;
-    protected String byDescription;
+    protected LocalDateTime byTime = null;
+    protected String by;
     private static final DateTimeFormatter OUT = DateTimeFormatter.ofPattern("MMM dd yyyy, h:mma");
 
-    public Deadline(String description, LocalDateTime by) {
+    private Deadline(String description) {
         super(description, TaskType.DEADLINE);
-        this.by = by;
+    }
+    
+    public Deadline(String description, LocalDateTime by) {
+        this(description);
+        this.byTime = by;
     }
 
-    public Deadline(String description, String byDescription) {
-        this(description, (LocalDateTime) null);
-        this.byDescription = byDescription;  
+    public Deadline(String description, String by) {
+        this(description);
+        this.by = by;  
     }
 
     @Override
     public String toString() {
-        if(by.equals(null)) {
-            return super.toString() + " (by: " + byDescription + ")";
+        if(byTime.equals(null)) {
+            return super.toString() + " (by: " + by + ")";
         }
-        return super.toString() + " (by: " + OUT.format(by) + ")";
+        return super.toString() + " (by: " + OUT.format(byTime) + ")";
     }
 
     @Override
     public String savedString(){
-        if(by.equals(null)) {
-            return super.savedString() + "|" + byDescription;
+        if(byTime.equals(null)) {
+            return super.savedString() + "|" + by;
         }
-        return super.savedString() + "|" + by.toString();
+        return super.savedString() + "|" + byTime.toString();
     }
 }
