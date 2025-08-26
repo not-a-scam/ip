@@ -69,6 +69,7 @@ public class Nomz {
                 }
                 s.close();
                 System.out.println("Nomz has successfully loaded all previous tasks!");
+                printTaskList();
             }
         } catch (IOException e) {
             System.err.println("Error: " + e.getMessage());
