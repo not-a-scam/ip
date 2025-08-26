@@ -274,11 +274,17 @@ public class Nomz {
 
         if(fromIndex > -1 && toIndex > -1) {
             String description = String.join(" ", Arrays.copyOfRange(args, 1, fromIndex));
-            String from = String.join(" ", Arrays.copyOfRange(args, fromIndex + 1, toIndex));
-            String to = String.join(" ", Arrays.copyOfRange(args, toIndex + 1, args.length));
+            String fromRaw = String.join(" ", Arrays.copyOfRange(args, fromIndex + 1, toIndex));
+            String toRaw = String.join(" ", Arrays.copyOfRange(args, toIndex + 1, args.length));
 
-            addTask(new Event(description, from, to));
-            return;
+            LocalDateTime from = parseDateTimeFlexible(fromRaw);
+            LocalDateTime to = parseDateTimeFlexible(toRaw);
+
+            if(from == null || to == null) {
+                addTask(new Event(description, fromRaw, toRaw));
+            } else {
+                addTask(new Event(description, from, to));
+            }
         } 
 
     }
