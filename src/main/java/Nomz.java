@@ -22,21 +22,27 @@ public class Nomz {
         return LINEBREAK + "\n" + input + "\n" + LINEBREAK;
     }
 
-    public static void createTaskListFromFile(String filename) {
+    public static void createTaskListFromFile(String directoryPath, String filename) {
         try {
-            File f = new File(filename);
-            savedTasks = f;
-            if(!f.createNewFile()) {
-                Scanner s = new Scanner(f);
+            File directory = new File(directoryPath);
+            if(!directory.exists()) {
+                directory.mkdirs();
+            }
+
+            File file = new File(directoryPath, filename);
+            savedTasks = file;
+            if(!file.createNewFile()) {
+                Scanner s = new Scanner(file);
                 while (s.hasNext()) {
                     Task t = parseTaskFileContent(s.nextLine());
                     taskList.add(t);
                 }
-                System.out.print("Nomz has successfully loaded all previous tasks!");
+                s.close();
+                System.out.println("Nomz has successfully loaded all previous tasks!");
                 printTaskList();
             }
         } catch (IOException e) {
-            System.err.println(e.getMessage());
+            System.err.println("Error: " + e.getMessage());
         }
     }
 
@@ -250,7 +256,8 @@ public class Nomz {
 
     public static void main(String[] args) {
         // Greeting
-        System.out.println(responseFormat("Hi im nomz! \nhope you're having a nomztacular day"));        
+        System.out.println(responseFormat("Hi im nomz! \nhope you're having a nomztacular day")); 
+        createTaskListFromFile("./data", "nomz.txt");       
 
         // Chat
         Scanner sc = new Scanner(System.in);
