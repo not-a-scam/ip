@@ -35,26 +35,40 @@ public class Nomz {
             if(!file.createNewFile()) {
                 Scanner s = new Scanner(file);
                 while (s.hasNext()) {
-                    Task t = parseTaskFileContent(s.nextLine());
-                    taskList.add(t);
+                    parseTaskFileContent(s.nextLine());
                 }
                 s.close();
                 System.out.println("Nomz has successfully loaded all previous tasks!");
-                printTaskList();
             }
         } catch (IOException e) {
             System.err.println("Error: " + e.getMessage());
         }
     }
 
-    public static Task parseTaskFileContent(String f){
-        f.split("[\\|]");
-        return null;
+    public static void parseTaskFileContent(String f) {
+        try {
+            String[] args = f.split("[\\|]");
+            TaskType type = TaskType.fromSymbol(args[0]);
+            switch(type){
+            case TODO:
+                boolean done = args[1].equals("1");
+                initializeTodo(done, args[2]);
+                break;
+            case DEADLINE:
+                initializeDeadline(args[1].equals("1"), args[2], args[3]);
+                break;
+            case EVENT:
+                initializeEvent(args[1].equals("1"), args[2], args[3], args[4]);
+                break;
+            }
+        } catch (NomzException e) {
+            System.err.println(responseFormat(e.getMessage()));
+        }
     }
 
     public static void writeTaskToFile(Task task){
         try {
-            FileWriter fw = new FileWriter(DIRECTORYPATH + File.pathSeparator + FILENAME, true);
+            FileWriter fw = new FileWriter(DIRECTORYPATH + "/" + FILENAME, true);
             fw.write(task.savedString() + "\n");
             fw.close();
         } catch (IOException e) {
@@ -84,6 +98,7 @@ public class Nomz {
      */
     public static void addTask(Task task) {
         taskList.add(task);
+        writeTaskToFile(task);
         System.out.println(responseFormat("Nomz haz added:\n\t" + task.toString() + "\nto the nomz list!"));
     }
 
@@ -157,6 +172,14 @@ public class Nomz {
         addTask(todo);
     }
 
+    public static void initializeTodo(Boolean done, String description) {
+        Todo todo = new Todo(description);
+        if(done) {
+            todo.mark();
+        }
+        taskList.add(todo);
+    }
+
     /**
      * Creates a deadline task and inserts it into the task list
      * @param args searches for /by keyword in args. all arguments before keyword is used as name, 
@@ -178,6 +201,14 @@ public class Nomz {
             }
         } 
         throw new InvalidNomzArgumentException("you didnt use the /by keyword :((");
+    }
+
+    public static void initializeDeadline(boolean done, String description, String by) {
+        Deadline deadline = new Deadline(description, by);
+        if(done) {
+            deadline.mark();
+        }
+        taskList.add(deadline);
     }
 
     /**
@@ -214,6 +245,14 @@ public class Nomz {
             return;
         } 
 
+    }
+
+    public static void initializeEvent(boolean done, String description, String from, String to) {
+        Event event = new Event(description, from, to);
+        if (done) {
+            event.mark();
+        } 
+        taskList.add(event);
     }
 
     /**
