@@ -20,33 +20,6 @@ public class Parser {
         DateTimeFormatter.ISO_LOCAL_DATE
     };
 
-    public static class ParsedCommand {
-        public final CommandType command;
-        public final String description; 
-        public final Integer index;      
-        public final String by;          
-        public final String from, to; 
-        public final LocalDateTime byTime;
-        public final LocalDateTime fromTime, toTime;   
-
-        public ParsedCommand(CommandType c, String d, Integer i, String by, String from, String to, 
-            LocalDateTime byTime, LocalDateTime fromTime, LocalDateTime toTime) {
-            this.command = c; 
-            this.description = d; 
-            this.index = i;
-            this.by = by; 
-            this.from = from; 
-            this.to = to;
-            this.byTime = byTime;
-            this.fromTime = fromTime;
-            this.toTime = toTime;
-        }
-
-        public static ParsedCommand of(CommandType c) {
-            return new ParsedCommand(c, null, null, null, null, null, null, null, null);
-        }
-    }
-
     public static LocalDateTime parseDateTimeFlexible(String s) {
         for (DateTimeFormatter f : DATE_TIME_FORMATS) {
             try {
@@ -114,22 +87,29 @@ public class Parser {
             }
     }
 
-    public static ParsedCommand parse(String input) throws NomzException {
+    public static Command parse(String input) throws NomzException {
         String[] args = input.trim().split("\\s+");
         CommandType cmd = CommandType.fromString(args[0]); 
         switch (cmd) {
-        case LIST: 
+        case LIST:
+            return new ListCommand();
         case BYE:
-            return ParsedCommand.of(cmd);
-
+            return new ByeCommand();
         case MARK:
-        case UNMARK:
+        case UNMARK: {
+            if (args.length < 2) {
+                throw new InvalidNomzArgumentException(Messages.MESSAGE_NO_INDEX_ARGUMENT);
+            }
+            int idx = intFromString(args[1]);
+            boolean toMark = (cmd == CommandType.MARK);
+            return new MarkCommand(idx, toMark);
+        }
         case DELETE: {
             if (args.length < 2) {
                 throw new InvalidNomzArgumentException(Messages.MESSAGE_NO_INDEX_ARGUMENT);
             }
             int idx = intFromString(args[1]);
-            return new ParsedCommand(cmd, null, idx, null, null, null, null, null, null);
+            return new DeleteCommand(idx);
         }
 
         case TODO: {
@@ -137,7 +117,7 @@ public class Parser {
                 throw new InvalidNomzArgumentException(Messages.MESSAGE_NO_DESCRIPTION_ARGUMENT);
             }
             String description = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
-            return new ParsedCommand(cmd, description, null, null, null, null, null, null, null);
+            return new AddTodoCommand(description);
         }
 
         case DEADLINE: {
@@ -158,9 +138,9 @@ public class Parser {
             String byRaw = String.join(" ", Arrays.copyOfRange(args, byPos + 1, args.length));
             LocalDateTime by = parseDateTimeFlexible(byRaw);
             if (by != null) {
-                return new ParsedCommand(cmd, description, null, null, null, null, by, null, null);
+                return new AddDeadlineCommand(description, by);
             }
-            return new ParsedCommand(cmd, description, null, byRaw, null, null, null, null, null);
+            return new AddDeadlineCommand(description, byRaw);
         }
 
         case EVENT: {
@@ -184,9 +164,9 @@ public class Parser {
             LocalDateTime from = parseDateTimeFlexible(fromRaw);
             LocalDateTime to = parseDateTimeFlexible(toRaw);
             if (from != null && to != null) {
-                return new ParsedCommand(cmd, description, null, null, null, null, null, from, to);
+                return new AddEventCommand(description, from, to);
             }
-            return new ParsedCommand(cmd, description, null, null, fromRaw, toRaw, null, null, null);
+            return new AddEventCommand(description, fromRaw, toRaw);
         }
 
         default:
