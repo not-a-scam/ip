@@ -1,12 +1,15 @@
 import java.util.Scanner;
 import java.util.Arrays;
 import java.util.ArrayList;
+import java.io.File; 
+import java.io.IOException;
 
 public class Nomz {
     private static final String LINEBREAK = "-----------------------------------------";
     private static final String BYE = "Bye! hope to see you again soon!" ; 
 
     private static ArrayList<Task> taskList = new ArrayList<>();
+    private static File savedTasks;
 
 
     /**
@@ -17,6 +20,29 @@ public class Nomz {
      */
     public static String responseFormat(String input) {
         return LINEBREAK + "\n" + input + "\n" + LINEBREAK;
+    }
+
+    public static void createTaskListFromFile(String filename) {
+        try {
+            File f = new File(filename);
+            savedTasks = f;
+            if(!f.createNewFile()) {
+                Scanner s = new Scanner(f);
+                while (s.hasNext()) {
+                    Task t = parseTaskFileContent(s.nextLine());
+                    taskList.add(t);
+                }
+                System.out.print("Nomz has successfully loaded all previous tasks!");
+                printTaskList();
+            }
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+    public static Task parseTaskFileContent(String f){
+        f.split("[\\|]");
+        return null;
     }
 
     /**
