@@ -11,8 +11,9 @@ public class TaskList {
         this.tasks = new ArrayList<>(tasks);
     }
 
-    public void add(Task task) {
+    public Task add(Task task) {
         tasks.add(task);
+        return task;
     }
 
     public Task delete(int oneBasedIndex) throws InvalidNomzArgumentException {
