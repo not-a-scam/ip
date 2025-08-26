@@ -4,15 +4,45 @@ import java.util.ArrayList;
 import java.io.File; 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class Nomz {
     private static final String LINEBREAK = "-----------------------------------------";
     private static final String BYE = "Bye! hope to see you again soon!" ; 
+    private static final String DIRECTORYPATH = "./data";
+    private static final String FILENAME = "nomz.txt";
 
     private static ArrayList<Task> taskList = new ArrayList<>();
-    private static String DIRECTORYPATH = "./data";
-    private static String FILENAME = "nomz.txt";
 
+
+    private static final DateTimeFormatter[] INPUT_FORMATTERS = new DateTimeFormatter[] {
+        DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm"),
+        DateTimeFormatter.ofPattern("yyyy-MM-dd"),
+        DateTimeFormatter.ofPattern("d/M/yyyy HHmm"),
+        DateTimeFormatter.ofPattern("d/M/yyyy"),
+        DateTimeFormatter.ISO_LOCAL_DATE_TIME,
+        DateTimeFormatter.ISO_LOCAL_DATE
+    };
+
+    private static LocalDateTime parseDateTimeFlexible(String s) {
+        for (DateTimeFormatter f : INPUT_FORMATTERS) {
+            try {
+                if (f == DateTimeFormatter.ISO_LOCAL_DATE || "yyyy-MM-dd".equals(f.toString())
+                    || "d/M/yyyy".equals(f.toString())) {
+                    // date-only → start of day
+                    LocalDate d = LocalDate.parse(s, f);
+                    return d.atStartOfDay();
+                } else {
+                    return LocalDateTime.parse(s, f);
+                }
+            } catch (DateTimeParseException ignored) {}
+        }
+
+        return null;
+    }
 
     /**
      * Formats a given string to be printed as a response from the chatbot
@@ -196,9 +226,13 @@ public class Nomz {
         for(int i = 2; i < args.length; i++) {
             if(args[i].equals("/by")){
                 String description = String.join(" ", Arrays.copyOfRange(args, 1, i));
-                String by = String.join(" ", Arrays.copyOfRange(args, i+1, args.length));
-
-                addTask(new Deadline(description, by));
+                String byRaw = String.join(" ", Arrays.copyOfRange(args, i+1, args.length));
+                LocalDateTime by = parseDateTimeFlexible(byRaw);
+                if(by == null) {
+                    addTask(new Deadline(description, byRaw));
+                } else {
+                    addTask(new Deadline(description, by));
+                }
                 return;
             }
         } 
