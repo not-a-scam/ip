@@ -1,84 +1,14 @@
 import java.util.Scanner;
 import java.util.Arrays;
-import java.util.ArrayList;
-import java.io.File; 
-import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
 public class Nomz {
-    private static final String DIRECTORYPATH = "./data";
-    private static final String FILENAME = "nomz.txt";
     private static final Ui ui = new Ui();
     private static final Storage storage = new Storage("./data/nomz.txt");
     private static final DateParser dp = new DateParser();
-
-    private static ArrayList<Task> taskList = new ArrayList<>();
-
-
-    /**
-     * Prints current task list to console
-     *
-     */
-    public static void printTaskList() {
-        String res = Messages.MESSAGE_TASK_LIST_HEADER;
-        for(int i = 0; i < taskList.size(); i++) {
-            Task t = taskList.get(i);
-            int index = i + 1;
-            res += index + ". " + t.toString() + "\n";
-        }
-
-        ui.show(res);
-
-    }
-
-    /**
-     * Adds task to task list
-     * @param task task to be added
-     */
-    public static void addTask(Task task) {
-        taskList.add(task);
-        try {
-            storage.append(task);
-        } catch (IOException e) {
-            ui.showError(e.getMessage());
-        }
-        ui.show(String.format(Messages.MESSAGE_ADD_TASK, task.toString()));
-    }
-
-    /**
-     * returns an int from String with error handling
-     * @param index String to be converted
-     * @return index of int type
-     * @throws InvalidNomzArgumentException
-     */
-    public static int intFromString(String index) throws InvalidNomzArgumentException {
-        int taskIndex = -1;
-        try {
-            taskIndex = Integer.valueOf(index);
-        } catch (NumberFormatException e) {
-            throw new InvalidNomzArgumentException(Messages.MESSAGE_INVALID_INTEGER_ARGUMENT);
-        }
-
-        return taskIndex;
-    }
-
-    /**
-     * returns task in taskList given a String type index
-     * @param index index of task in taskList
-     * @return task 
-     * @throws InvalidNomzArgumentException
-     */
-    public static Task getTaskFromString(String index) throws InvalidNomzArgumentException{
-       
-        int taskIndex = intFromString(index);
-
-        if (taskIndex - 1 >= taskList.size()) {
-            throw new InvalidNomzArgumentException(Messages.MESSAGE_INVALID_TASK_INDEX);
-        }
-
-        return taskList.get(taskIndex - 1);
-    }
+    private static TaskList taskList;
+    private static Parser parser = new Parser();
 
     /**
      * Marks/unmarks a task based on index given in args
@@ -92,7 +22,7 @@ public class Nomz {
             throw new InvalidNomzArgumentException(Messages.MESSAGE_NO_INDEX_ARGUMENT);
         }
 
-        Task t = getTaskFromString(args[1]);
+        Task t = taskList.get(parser.intFromString(args[1]));
         if(toMark){
             t.mark();
             ui.show(String.format(Messages.MESSAGE_TASK_MARKED, t.toString()));
@@ -102,7 +32,7 @@ public class Nomz {
         }
 
         try {
-            storage.saveAll(taskList);
+            storage.saveAll(taskList.getTasks());
         } catch (IOException e) {
             ui.showError(e.getMessage());
         }
@@ -119,7 +49,8 @@ public class Nomz {
         }
         String description = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
         Todo todo = new Todo(description);
-        addTask(todo);
+        taskList.add(todo);
+        ui.show(Messages.MESSAGE_ADD_TASK.formatted(todo.toString()));
     }
 
     /**
@@ -138,11 +69,14 @@ public class Nomz {
                 String description = String.join(" ", Arrays.copyOfRange(args, 1, i));
                 String byRaw = String.join(" ", Arrays.copyOfRange(args, i+1, args.length));
                 LocalDateTime by = dp.parseDateTimeFlexible(byRaw);
+                Deadline deadline;
                 if(by == null) {
-                    addTask(new Deadline(description, byRaw));
+                    deadline = new Deadline(description, byRaw);
                 } else {
-                    addTask(new Deadline(description, by));
+                    deadline = new Deadline(description, by);
                 }
+                taskList.add(deadline);
+                ui.show(Messages.MESSAGE_ADD_TASK.formatted(deadline.toString()));
                 return;
             }
         } 
@@ -181,13 +115,15 @@ public class Nomz {
 
             LocalDateTime from = dp.parseDateTimeFlexible(fromRaw);
             LocalDateTime to = dp.parseDateTimeFlexible(toRaw);
-
+            Event event;
             if(from == null || to == null) {
-                addTask(new Event(description, fromRaw, toRaw));
+                event = new Event(description, fromRaw, toRaw);
             } else {
-                addTask(new Event(description, from, to));
+                event = new Event(description, from, to);
             }
-        } 
+            taskList.add(event);
+            ui.show(Messages.MESSAGE_ADD_TASK.formatted(event.toString()));
+        }
 
     }
 
@@ -201,10 +137,10 @@ public class Nomz {
             throw new InvalidNomzArgumentException(Messages.MESSAGE_NO_INDEX_ARGUMENT);
         }
 
-        int index = intFromString(args[1]);
-        taskList.remove(index - 1);
+        int index = parser.intFromString(args[1]);
+        taskList.delete(index);
         try {
-            storage.saveAll(taskList);
+            storage.saveAll(taskList.getTasks());
         } catch (IOException e) {
             ui.showError(e.getMessage());
         }
@@ -221,7 +157,7 @@ public class Nomz {
         Command command = Command.fromString(args[0]);
         switch(command) {
         case LIST:
-            printTaskList();
+            ui.show(taskList.toDisplayString());
             break;
         case MARK:
             setTaskMark(args, true);
@@ -250,7 +186,7 @@ public class Nomz {
         // Greeting
         ui.showWelcome();
         try {
-            taskList = storage.load();
+            taskList = new TaskList(storage.load());
         } catch (NomzException e) {
             ui.show(e.getMessage());
         }
