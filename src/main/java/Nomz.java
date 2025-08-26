@@ -2,6 +2,7 @@ import java.util.Scanner;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.io.File; 
+import java.io.FileWriter;
 import java.io.IOException;
 
 public class Nomz {
@@ -31,7 +32,6 @@ public class Nomz {
             }
 
             File file = new File(directoryPath, filename);
-            savedTasks = file;
             if(!file.createNewFile()) {
                 Scanner s = new Scanner(file);
                 while (s.hasNext()) {
@@ -50,6 +50,16 @@ public class Nomz {
     public static Task parseTaskFileContent(String f){
         f.split("[\\|]");
         return null;
+    }
+
+    public static void writeTaskToFile(Task task){
+        try {
+            FileWriter fw = new FileWriter(DIRECTORYPATH + File.pathSeparator + FILENAME, true);
+            fw.write(task.savedString() + "\n");
+            fw.close();
+        } catch (IOException e) {
+            System.err.println("Error: " + e.getMessage());
+        }
     }
 
     /**
