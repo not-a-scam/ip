@@ -18,28 +18,32 @@ public class Nomz {
     private static ArrayList<Task> taskList = new ArrayList<>();
 
 
-    private static final DateTimeFormatter[] INPUT_FORMATTERS = new DateTimeFormatter[] {
-        DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm"),
-        DateTimeFormatter.ofPattern("yyyy-MM-dd"),
-        DateTimeFormatter.ofPattern("d/M/yyyy HHmm"),
-        DateTimeFormatter.ofPattern("d/M/yyyy"),
-        DateTimeFormatter.ISO_LOCAL_DATE_TIME,
-        DateTimeFormatter.ISO_LOCAL_DATE
-    };
+private static final DateTimeFormatter[] DATE_TIME_FORMATS = new DateTimeFormatter[] {
+    DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm"),
+    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"),
+    DateTimeFormatter.ofPattern("d/M/yyyy HHmm"),
+    DateTimeFormatter.ofPattern("d/M/yyyy HH:mm"),
+    DateTimeFormatter.ISO_LOCAL_DATE_TIME
+};
+
+private static final DateTimeFormatter[] DATE_ONLY_FORMATS = new DateTimeFormatter[] {
+    DateTimeFormatter.ofPattern("yyyy-MM-dd"),
+    DateTimeFormatter.ofPattern("d/M/yyyy"),
+    DateTimeFormatter.ISO_LOCAL_DATE
+};
 
     private static LocalDateTime parseDateTimeFlexible(String s) {
-        for (DateTimeFormatter f : INPUT_FORMATTERS) {
+        for (DateTimeFormatter f : DATE_TIME_FORMATS) {
             try {
-                if (f == DateTimeFormatter.ISO_LOCAL_DATE || "yyyy-MM-dd".equals(f.toString())
-                    || "d/M/yyyy".equals(f.toString())) {
-                    // date-only → start of day
-                    LocalDate d = LocalDate.parse(s, f);
-                    return d.atStartOfDay();
-                } else {
-                    return LocalDateTime.parse(s, f);
-                }
+                return LocalDateTime.parse(s, f);
             } catch (DateTimeParseException ignored) {}
         }
+
+        for (DateTimeFormatter f : DATE_ONLY_FORMATS) {
+        try {
+            return LocalDate.parse(s, f).atStartOfDay();
+        } catch (DateTimeParseException ignored) {}
+    }
 
         return null;
     }
