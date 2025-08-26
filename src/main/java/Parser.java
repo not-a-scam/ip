@@ -21,7 +21,7 @@ public class Parser {
     };
 
     public static class ParsedCommand {
-        public final Command command;
+        public final CommandType command;
         public final String description; 
         public final Integer index;      
         public final String by;          
@@ -29,7 +29,7 @@ public class Parser {
         public final LocalDateTime byTime;
         public final LocalDateTime fromTime, toTime;   
 
-        public ParsedCommand(Command c, String d, Integer i, String by, String from, String to, 
+        public ParsedCommand(CommandType c, String d, Integer i, String by, String from, String to, 
             LocalDateTime byTime, LocalDateTime fromTime, LocalDateTime toTime) {
             this.command = c; 
             this.description = d; 
@@ -42,7 +42,7 @@ public class Parser {
             this.toTime = toTime;
         }
 
-        public static ParsedCommand of(Command c) {
+        public static ParsedCommand of(CommandType c) {
             return new ParsedCommand(c, null, null, null, null, null, null, null, null);
         }
     }
@@ -116,7 +116,7 @@ public class Parser {
 
     public static ParsedCommand parse(String input) throws NomzException {
         String[] args = input.trim().split("\\s+");
-        Command cmd = Command.fromString(args[0]); 
+        CommandType cmd = CommandType.fromString(args[0]); 
         switch (cmd) {
         case LIST: 
         case BYE:

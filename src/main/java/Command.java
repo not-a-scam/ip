@@ -1,19 +1,7 @@
-public enum Command {
-    LIST,
-    MARK,
-    UNMARK,
-    TODO,
-    DEADLINE,
-    EVENT,
-    DELETE,
-    BYE;
+public abstract class Command {
+    public abstract void execute(TaskList tasks, Ui ui, Storage storage) throws NomzException;
 
-    public static Command fromString(String input) throws InvalidNomzCommandException {
-        try {
-            return Command.valueOf(input.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            throw new InvalidNomzCommandException();
-        }
+    public boolean isExit() { 
+        return false; 
     }
 }
-
