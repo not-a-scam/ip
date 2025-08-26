@@ -4,11 +4,23 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 
 public class Nomz {
-    private static final Ui ui = new Ui();
-    private static final Storage storage = new Storage("./data/nomz.txt");
-    private static final DateParser dp = new DateParser();
-    private static TaskList taskList;
-    private static Parser parser = new Parser();
+    private Ui ui;
+    private Storage storage;
+    private TaskList taskList;
+
+    public Nomz(String filepath) {
+        this.storage = new Storage(filepath);
+        this.ui = new Ui();
+        TaskList loaded;
+        try {
+            loaded = new TaskList(storage.load());
+            ui.show(Messages.MESSAGE_LOAD_TASK_SUCCESS);
+        } catch (NomzException e) {
+            ui.showError(e.getMessage());
+            loaded = new TaskList();
+        }
+        this.taskList = loaded;
+    }
 
     /**
      * Marks/unmarks a task based on index given in args
@@ -17,12 +29,12 @@ public class Nomz {
      * @param toMark flag to set mark / unmark
      * @throws InvalidNomzArgumentException
      */
-    public static void setTaskMark(String[] args, boolean toMark) throws InvalidNomzArgumentException {
+    public void setTaskMark(String[] args, boolean toMark) throws InvalidNomzArgumentException {
         if(args.length < 2) {
             throw new InvalidNomzArgumentException(Messages.MESSAGE_NO_INDEX_ARGUMENT);
         }
 
-        Task t = taskList.get(parser.intFromString(args[1]));
+        Task t = taskList.get(Parser.intFromString(args[1]));
         if(toMark){
             t.mark();
             ui.show(String.format(Messages.MESSAGE_TASK_MARKED, t.toString()));
@@ -43,7 +55,7 @@ public class Nomz {
      * @param args uses args[1] to end of args as the name of todo
      * @throws InvalidNomzArgumentException
      */
-    public static void createTodo(String[] args) throws InvalidNomzArgumentException {
+    public void createTodo(String[] args) throws InvalidNomzArgumentException {
         if(args.length < 2) {
             throw new InvalidNomzArgumentException(Messages.MESSAGE_NO_DESCRIPTION_ARGUMENT);
         }
@@ -59,7 +71,7 @@ public class Nomz {
      * and all arguments after are used as time
      * @throws InvalidNomzArgumentException
      */
-    public static void createDeadline(String[] args) throws InvalidNomzArgumentException {
+    public void createDeadline(String[] args) throws InvalidNomzArgumentException {
         if(args.length < 4) {
             throw new InvalidNomzArgumentException(Messages.MESSAGE_NO_ARGUMENTS);
         }
@@ -68,7 +80,7 @@ public class Nomz {
             if(args[i].equals("/by")){
                 String description = String.join(" ", Arrays.copyOfRange(args, 1, i));
                 String byRaw = String.join(" ", Arrays.copyOfRange(args, i+1, args.length));
-                LocalDateTime by = dp.parseDateTimeFlexible(byRaw);
+                LocalDateTime by = Parser.parseDateTimeFlexible(byRaw);
                 Deadline deadline;
                 if(by == null) {
                     deadline = new Deadline(description, byRaw);
@@ -89,7 +101,7 @@ public class Nomz {
      * all args after /to used as to timing.
      * @throws InvalidNomzArgumentException
      */
-    public static void createEvent(String[] args) throws InvalidNomzArgumentException {
+    public void createEvent(String[] args) throws InvalidNomzArgumentException {
         int fromIndex = -1;
         int toIndex = -1;
         for(int i = 1; i < args.length; i++) {
@@ -113,8 +125,8 @@ public class Nomz {
             String fromRaw = String.join(" ", Arrays.copyOfRange(args, fromIndex + 1, toIndex));
             String toRaw = String.join(" ", Arrays.copyOfRange(args, toIndex + 1, args.length));
 
-            LocalDateTime from = dp.parseDateTimeFlexible(fromRaw);
-            LocalDateTime to = dp.parseDateTimeFlexible(toRaw);
+            LocalDateTime from = Parser.parseDateTimeFlexible(fromRaw);
+            LocalDateTime to = Parser.parseDateTimeFlexible(toRaw);
             Event event;
             if(from == null || to == null) {
                 event = new Event(description, fromRaw, toRaw);
@@ -132,12 +144,12 @@ public class Nomz {
      * @param args args[1] must contain a valid index
      * @throws InvalidNomzArgumentException
      */
-    private static void deleteTask(String[] args) throws InvalidNomzArgumentException {
+    private void deleteTask(String[] args) throws InvalidNomzArgumentException {
         if(args.length < 2) {
             throw new InvalidNomzArgumentException(Messages.MESSAGE_NO_INDEX_ARGUMENT);
         }
 
-        int index = parser.intFromString(args[1]);
+        int index = Parser.intFromString(args[1]);
         taskList.delete(index);
         try {
             storage.saveAll(taskList.getTasks());
@@ -152,7 +164,7 @@ public class Nomz {
      * Handles the logic of the chat
      * @param input User input
      */
-    public static void chat(String input) throws NomzException {
+    public void chat(String input) throws NomzException {
         String[] args = input.split("[\\s]");
         Command command = Command.fromString(args[0]);
         switch(command) {
@@ -183,28 +195,23 @@ public class Nomz {
     }
 
     public static void main(String[] args) {
-        // Greeting
-        ui.showWelcome();
-        try {
-            taskList = new TaskList(storage.load());
-        } catch (NomzException e) {
-            ui.show(e.getMessage());
-        }
+
+        Nomz nomz = new Nomz("data/tasks.txt");
 
         // Chat
         Scanner sc = new Scanner(System.in);
         String input = sc.nextLine();
         while(!input.equals("bye")) {
             try {
-                chat(input);
+                nomz.chat(input);
             } catch(NomzException e) {
-                ui.showError(e.getMessage());
+                nomz.ui.showError(e.getMessage());
             } finally {
                 input = sc.nextLine();
             }
 
         }
-        ui.showGoodbye();
+        nomz.ui.showGoodbye();
         sc.close();
     }
 }
