@@ -87,11 +87,24 @@ public class Nomz {
                 initializeTask(todo, done);
                 break;
             case DEADLINE:
-                Deadline deadline = new Deadline(args[2], args[3]);
+                LocalDateTime by = parseDateTimeFlexible(args[3]);
+                Deadline deadline;
+                if (by == null) {
+                    deadline = new Deadline(args[2], args[3]);
+                } else {
+                    deadline = new Deadline(args[2], by);
+                }
                 initializeTask(deadline, done);
                 break;
             case EVENT:
-                Event event = new Event(args[2], args[3], args[4]);
+                LocalDateTime from = parseDateTimeFlexible(args[3]);
+                LocalDateTime to = parseDateTimeFlexible(args[4]);
+                Event event;
+                if (from == null || to == null) {
+                    event = new Event(args[2], args[3], args[4]);
+                } else {
+                    event = new Event(args[2], from, to);
+                }
                 initializeTask(event, done);
                 break;
             }
@@ -296,6 +309,7 @@ public class Nomz {
 
         int index = intFromString(args[1]);
         taskList.remove(index - 1);
+        rewriteFile();
         System.out.println(responseFormat("nomz haz removed task " + index + " from the nomz list"));
     }
 
