@@ -309,6 +309,7 @@ public class Nomz {
 
         int index = intFromString(args[1]);
         taskList.remove(index - 1);
+        rewriteFile();
         System.out.println(responseFormat("nomz haz removed task " + index + " from the nomz list"));
     }
 
