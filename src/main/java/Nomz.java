@@ -4,15 +4,49 @@ import java.util.ArrayList;
 import java.io.File; 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class Nomz {
     private static final String LINEBREAK = "-----------------------------------------";
     private static final String BYE = "Bye! hope to see you again soon!" ; 
+    private static final String DIRECTORYPATH = "./data";
+    private static final String FILENAME = "nomz.txt";
 
     private static ArrayList<Task> taskList = new ArrayList<>();
-    private static String DIRECTORYPATH = "./data";
-    private static String FILENAME = "nomz.txt";
 
+
+private static final DateTimeFormatter[] DATE_TIME_FORMATS = new DateTimeFormatter[] {
+    DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm"),
+    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"),
+    DateTimeFormatter.ofPattern("d/M/yyyy HHmm"),
+    DateTimeFormatter.ofPattern("d/M/yyyy HH:mm"),
+    DateTimeFormatter.ISO_LOCAL_DATE_TIME
+};
+
+private static final DateTimeFormatter[] DATE_ONLY_FORMATS = new DateTimeFormatter[] {
+    DateTimeFormatter.ofPattern("yyyy-MM-dd"),
+    DateTimeFormatter.ofPattern("d/M/yyyy"),
+    DateTimeFormatter.ISO_LOCAL_DATE
+};
+
+    private static LocalDateTime parseDateTimeFlexible(String s) {
+        for (DateTimeFormatter f : DATE_TIME_FORMATS) {
+            try {
+                return LocalDateTime.parse(s, f);
+            } catch (DateTimeParseException ignored) {}
+        }
+
+        for (DateTimeFormatter f : DATE_ONLY_FORMATS) {
+        try {
+            return LocalDate.parse(s, f).atStartOfDay();
+        } catch (DateTimeParseException ignored) {}
+    }
+
+        return null;
+    }
 
     /**
      * Formats a given string to be printed as a response from the chatbot
@@ -39,6 +73,7 @@ public class Nomz {
                 }
                 s.close();
                 System.out.println("Nomz has successfully loaded all previous tasks!");
+                printTaskList();
             }
         } catch (IOException e) {
             System.err.println("Error: " + e.getMessage());
@@ -49,16 +84,32 @@ public class Nomz {
         try {
             String[] args = f.split("[\\|]");
             TaskType type = TaskType.fromSymbol(args[0]);
+            boolean done = args[1].equals("1");
             switch(type){
             case TODO:
-                boolean done = args[1].equals("1");
-                initializeTodo(done, args[2]);
+                Todo todo = new Todo(args[2]);
+                initializeTask(todo, done);
                 break;
             case DEADLINE:
-                initializeDeadline(args[1].equals("1"), args[2], args[3]);
+                LocalDateTime by = parseDateTimeFlexible(args[3]);
+                Deadline deadline;
+                if (by == null) {
+                    deadline = new Deadline(args[2], args[3]);
+                } else {
+                    deadline = new Deadline(args[2], by);
+                }
+                initializeTask(deadline, done);
                 break;
             case EVENT:
-                initializeEvent(args[1].equals("1"), args[2], args[3], args[4]);
+                LocalDateTime from = parseDateTimeFlexible(args[3]);
+                LocalDateTime to = parseDateTimeFlexible(args[4]);
+                Event event;
+                if (from == null || to == null) {
+                    event = new Event(args[2], args[3], args[4]);
+                } else {
+                    event = new Event(args[2], from, to);
+                }
+                initializeTask(event, done);
                 break;
             }
         } catch (NomzException e) {
@@ -100,6 +151,13 @@ public class Nomz {
         taskList.add(task);
         writeTaskToFile(task);
         System.out.println(responseFormat("Nomz haz added:\n\t" + task.toString() + "\nto the nomz list!"));
+    }
+
+    public static void initializeTask(Task task, boolean done) {
+        if(done) {
+            task.mark();
+        }
+        taskList.add(task);
     }
 
     /**
@@ -174,14 +232,6 @@ public class Nomz {
         addTask(todo);
     }
 
-    public static void initializeTodo(Boolean done, String description) {
-        Todo todo = new Todo(description);
-        if(done) {
-            todo.mark();
-        }
-        taskList.add(todo);
-    }
-
     /**
      * Creates a deadline task and inserts it into the task list
      * @param args searches for /by keyword in args. all arguments before keyword is used as name, 
@@ -196,21 +246,17 @@ public class Nomz {
         for(int i = 2; i < args.length; i++) {
             if(args[i].equals("/by")){
                 String description = String.join(" ", Arrays.copyOfRange(args, 1, i));
-                String by = String.join(" ", Arrays.copyOfRange(args, i+1, args.length));
-
-                addTask(new Deadline(description, by));
+                String byRaw = String.join(" ", Arrays.copyOfRange(args, i+1, args.length));
+                LocalDateTime by = parseDateTimeFlexible(byRaw);
+                if(by == null) {
+                    addTask(new Deadline(description, byRaw));
+                } else {
+                    addTask(new Deadline(description, by));
+                }
                 return;
             }
         } 
         throw new InvalidNomzArgumentException("you didnt use the /by keyword :((");
-    }
-
-    public static void initializeDeadline(boolean done, String description, String by) {
-        Deadline deadline = new Deadline(description, by);
-        if(done) {
-            deadline.mark();
-        }
-        taskList.add(deadline);
     }
 
     /**
@@ -240,21 +286,19 @@ public class Nomz {
 
         if(fromIndex > -1 && toIndex > -1) {
             String description = String.join(" ", Arrays.copyOfRange(args, 1, fromIndex));
-            String from = String.join(" ", Arrays.copyOfRange(args, fromIndex + 1, toIndex));
-            String to = String.join(" ", Arrays.copyOfRange(args, toIndex + 1, args.length));
+            String fromRaw = String.join(" ", Arrays.copyOfRange(args, fromIndex + 1, toIndex));
+            String toRaw = String.join(" ", Arrays.copyOfRange(args, toIndex + 1, args.length));
 
-            addTask(new Event(description, from, to));
-            return;
+            LocalDateTime from = parseDateTimeFlexible(fromRaw);
+            LocalDateTime to = parseDateTimeFlexible(toRaw);
+
+            if(from == null || to == null) {
+                addTask(new Event(description, fromRaw, toRaw));
+            } else {
+                addTask(new Event(description, from, to));
+            }
         } 
 
-    }
-
-    public static void initializeEvent(boolean done, String description, String from, String to) {
-        Event event = new Event(description, from, to);
-        if (done) {
-            event.mark();
-        } 
-        taskList.add(event);
     }
 
     /**
@@ -269,6 +313,7 @@ public class Nomz {
 
         int index = intFromString(args[1]);
         taskList.remove(index - 1);
+        rewriteFile();
         System.out.println(responseFormat("nomz haz removed task " + index + " from the nomz list"));
     }
 
