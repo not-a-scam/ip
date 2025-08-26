@@ -23,7 +23,7 @@ public class Deadline extends Task {
 
     @Override
     public String toString() {
-        if(byTime.equals(null)) {
+        if(byTime == null) {
             return super.toString() + " (by: " + by + ")";
         }
         return super.toString() + " (by: " + OUT.format(byTime) + ")";
@@ -31,7 +31,7 @@ public class Deadline extends Task {
 
     @Override
     public String savedString(){
-        if(byTime.equals(null)) {
+        if(byTime == null) {
             return super.savedString() + "|" + by;
         }
         return super.savedString() + "|" + byTime.toString();
