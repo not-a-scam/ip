@@ -1,4 +1,11 @@
+package nomz.commands;
 import java.io.IOException;
+
+import nomz.common.Messages;
+import nomz.data.exception.NomzException;
+import nomz.data.tasks.TaskList;
+import nomz.storage.Storage;
+import nomz.ui.Ui;
 
 public class DeleteCommand extends Command {
     private final int index;

@@ -1,3 +1,11 @@
+package nomz.commands;
+import nomz.common.Messages;
+import nomz.data.exception.NomzException;
+import nomz.data.tasks.Task;
+import nomz.data.tasks.TaskList;
+import nomz.storage.Storage;
+import nomz.ui.Ui;
+
 public class MarkCommand extends Command {
     private final int index;
     private final boolean toMark;

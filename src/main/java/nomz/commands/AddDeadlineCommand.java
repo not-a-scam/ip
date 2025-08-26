@@ -1,8 +1,13 @@
+package nomz.commands;
+
 import java.io.IOException;
 import java.time.LocalDateTime;
 
 import nomz.common.Messages;
-
+import nomz.data.tasks.Deadline;
+import nomz.data.tasks.Task;
+import nomz.data.tasks.TaskList;
+import nomz.storage.Storage;
 import nomz.ui.Ui;
 
 public class AddDeadlineCommand extends Command {
