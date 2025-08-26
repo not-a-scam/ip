@@ -10,8 +10,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 public class Nomz {
-    private static final String LINEBREAK = "-----------------------------------------";
-    private static final String BYE = "Bye! hope to see you again soon!" ; 
     private static final String DIRECTORYPATH = "./data";
     private static final String FILENAME = "nomz.txt";
 
@@ -55,7 +53,7 @@ private static final DateTimeFormatter[] DATE_ONLY_FORMATS = new DateTimeFormatt
      * @return Formatted string 
      */
     public static String responseFormat(String input) {
-        return LINEBREAK + "\n" + input + "\n" + LINEBREAK;
+        return Messages.MESSAGE_LINEBREAK + "\n" + input + "\n" + Messages.MESSAGE_LINEBREAK;
     }
 
     public static void createTaskListFromFile(String directoryPath, String filename) {
@@ -72,7 +70,7 @@ private static final DateTimeFormatter[] DATE_ONLY_FORMATS = new DateTimeFormatt
                     parseTaskFileContent(s.nextLine());
                 }
                 s.close();
-                System.out.println("Nomz has successfully loaded all previous tasks!");
+                System.out.println(Messages.MESSAGE_LOAD_TASK_SUCCESS);
                 printTaskList();
             }
         } catch (IOException e) {
@@ -132,7 +130,7 @@ private static final DateTimeFormatter[] DATE_ONLY_FORMATS = new DateTimeFormatt
      *
      */
     public static void printTaskList() {
-        String res = "here are the tasks in your nomz list:\n\n";
+        String res = Messages.MESSAGE_TASK_LIST_HEADER;
         for(int i = 0; i < taskList.size(); i++) {
             Task t = taskList.get(i);
             int index = i + 1;
@@ -150,7 +148,7 @@ private static final DateTimeFormatter[] DATE_ONLY_FORMATS = new DateTimeFormatt
     public static void addTask(Task task) {
         taskList.add(task);
         writeTaskToFile(task);
-        System.out.println(responseFormat("Nomz haz added:\n\t" + task.toString() + "\nto the nomz list!"));
+        System.out.println(responseFormat(String.format(Messages.MESSAGE_ADD_TASK, task.toString())));
     }
 
     public static void initializeTask(Task task, boolean done) {
@@ -171,7 +169,7 @@ private static final DateTimeFormatter[] DATE_ONLY_FORMATS = new DateTimeFormatt
         try {
             taskIndex = Integer.valueOf(index);
         } catch (NumberFormatException e) {
-            throw new InvalidNomzArgumentException("your index argument is not a valid integer!");
+            throw new InvalidNomzArgumentException(Messages.MESSAGE_INVALID_INTEGER_ARGUMENT);
         }
 
         return taskIndex;
@@ -188,7 +186,7 @@ private static final DateTimeFormatter[] DATE_ONLY_FORMATS = new DateTimeFormatt
         int taskIndex = intFromString(index);
 
         if (taskIndex - 1 >= taskList.size()) {
-            throw new InvalidNomzArgumentException("task index is out of bounds!");
+            throw new InvalidNomzArgumentException(Messages.MESSAGE_INVALID_TASK_INDEX);
         }
 
         return taskList.get(taskIndex - 1);
@@ -203,16 +201,16 @@ private static final DateTimeFormatter[] DATE_ONLY_FORMATS = new DateTimeFormatt
      */
     public static void setTaskMark(String[] args, boolean toMark) throws InvalidNomzArgumentException {
         if(args.length < 2) {
-            throw new InvalidNomzArgumentException("you need to provide an index argument :((");
+            throw new InvalidNomzArgumentException(Messages.MESSAGE_NO_INDEX_ARGUMENT);
         }
 
         Task t = getTaskFromString(args[1]);
         if(toMark){
             t.mark();
-            System.out.println(responseFormat("Nomz says good job!:\n" + t.toString()));
+            System.out.println(responseFormat(String.format(Messages.MESSAGE_TASK_MARKED, t.toString())));
         } else {
             t.unmark();
-            System.out.println(responseFormat("Nomz has unmarked your task:\n" + t.toString()));
+            System.out.println(responseFormat(String.format(Messages.MESSAGE_TASK_UNMARKED, t.toString())));
         }
 
         rewriteFile();
@@ -225,7 +223,7 @@ private static final DateTimeFormatter[] DATE_ONLY_FORMATS = new DateTimeFormatt
      */
     public static void createTodo(String[] args) throws InvalidNomzArgumentException {
         if(args.length < 2) {
-            throw new InvalidNomzArgumentException("you didnt specify the task :((");
+            throw new InvalidNomzArgumentException(Messages.MESSAGE_NO_DESCRIPTION_ARGUMENT);
         }
         String description = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
         Todo todo = new Todo(description);
@@ -240,7 +238,7 @@ private static final DateTimeFormatter[] DATE_ONLY_FORMATS = new DateTimeFormatt
      */
     public static void createDeadline(String[] args) throws InvalidNomzArgumentException {
         if(args.length < 4) {
-            throw new InvalidNomzArgumentException("you don't have enough arguments :(");
+            throw new InvalidNomzArgumentException(Messages.MESSAGE_NO_ARGUMENTS);
         }
 
         for(int i = 2; i < args.length; i++) {
@@ -256,7 +254,7 @@ private static final DateTimeFormatter[] DATE_ONLY_FORMATS = new DateTimeFormatt
                 return;
             }
         } 
-        throw new InvalidNomzArgumentException("you didnt use the /by keyword :((");
+        throw new InvalidNomzArgumentException(Messages.MESSAGE_NO_BY_KEYWORD);
     }
 
     /**
@@ -277,11 +275,11 @@ private static final DateTimeFormatter[] DATE_ONLY_FORMATS = new DateTimeFormatt
         }
 
         if(fromIndex <= 1) {
-            throw new InvalidNomzArgumentException("you didn't use the /from keyword properly :(");
+            throw new InvalidNomzArgumentException(Messages.MESSAGE_WRONG_FROM_KEYWORD);
         }
 
         if (toIndex <= fromIndex || toIndex <= 3 || toIndex == args.length - 1) { // toIndex must be > from index
-            throw new InvalidNomzArgumentException("you didn't use the /to keyword correctly");
+            throw new InvalidNomzArgumentException(Messages.MESSAGE_WRONG_TO_KEYWORD);
         }
 
         if(fromIndex > -1 && toIndex > -1) {
@@ -308,13 +306,13 @@ private static final DateTimeFormatter[] DATE_ONLY_FORMATS = new DateTimeFormatt
      */
     private static void deleteTask(String[] args) throws InvalidNomzArgumentException {
         if(args.length < 2) {
-            throw new InvalidNomzArgumentException("you need to provide an index argument :((");
+            throw new InvalidNomzArgumentException(Messages.MESSAGE_NO_INDEX_ARGUMENT);
         }
 
         int index = intFromString(args[1]);
         taskList.remove(index - 1);
         rewriteFile();
-        System.out.println(responseFormat("nomz haz removed task " + index + " from the nomz list"));
+        System.out.println(responseFormat(String.format(Messages.MESSAGE_DELETE_TASK, index)));
     }
 
     public static void rewriteFile() {
@@ -366,8 +364,8 @@ private static final DateTimeFormatter[] DATE_ONLY_FORMATS = new DateTimeFormatt
 
     public static void main(String[] args) {
         // Greeting
-        System.out.println(responseFormat("Hi im nomz! \nhope you're having a nomztacular day")); 
-        createTaskListFromFile(DIRECTORYPATH, FILENAME);       
+        System.out.println(responseFormat(Messages.MESSAGE_WELCOME));
+        createTaskListFromFile(DIRECTORYPATH, FILENAME);
 
         // Chat
         Scanner sc = new Scanner(System.in);
@@ -382,7 +380,7 @@ private static final DateTimeFormatter[] DATE_ONLY_FORMATS = new DateTimeFormatt
             }
 
         }
-        System.out.println(responseFormat(BYE));
+        System.out.println(responseFormat(Messages.MESSAGE_BYE));
         sc.close();
     }
 }
