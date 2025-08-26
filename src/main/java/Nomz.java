@@ -12,6 +12,7 @@ import java.time.format.DateTimeParseException;
 public class Nomz {
     private static final String DIRECTORYPATH = "./data";
     private static final String FILENAME = "nomz.txt";
+    private static final Ui ui = new Ui();
 
     private static ArrayList<Task> taskList = new ArrayList<>();
 
@@ -46,16 +47,6 @@ private static final DateTimeFormatter[] DATE_ONLY_FORMATS = new DateTimeFormatt
         return null;
     }
 
-    /**
-     * Formats a given string to be printed as a response from the chatbot
-     * 
-     * @param input String to be formatted
-     * @return Formatted string 
-     */
-    public static String responseFormat(String input) {
-        return Messages.MESSAGE_LINEBREAK + "\n" + input + "\n" + Messages.MESSAGE_LINEBREAK;
-    }
-
     public static void createTaskListFromFile(String directoryPath, String filename) {
         try {
             File directory = new File(directoryPath);
@@ -70,11 +61,11 @@ private static final DateTimeFormatter[] DATE_ONLY_FORMATS = new DateTimeFormatt
                     parseTaskFileContent(s.nextLine());
                 }
                 s.close();
-                System.out.println(Messages.MESSAGE_LOAD_TASK_SUCCESS);
+                ui.show(Messages.MESSAGE_LOAD_TASK_SUCCESS);
                 printTaskList();
             }
         } catch (IOException e) {
-            System.err.println("Error: " + e.getMessage());
+            ui.showError(e.getMessage());
         }
     }
 
@@ -111,7 +102,7 @@ private static final DateTimeFormatter[] DATE_ONLY_FORMATS = new DateTimeFormatt
                 break;
             }
         } catch (NomzException e) {
-            System.err.println(responseFormat(e.getMessage()));
+            ui.showError(e.getMessage());
         }
     }
 
@@ -121,7 +112,7 @@ private static final DateTimeFormatter[] DATE_ONLY_FORMATS = new DateTimeFormatt
             fw.write(task.savedString() + "\n");
             fw.close();
         } catch (IOException e) {
-            System.err.println("Error: " + e.getMessage());
+            ui.showError(e.getMessage());
         }
     }
 
@@ -137,7 +128,7 @@ private static final DateTimeFormatter[] DATE_ONLY_FORMATS = new DateTimeFormatt
             res += index + ". " + t.toString() + "\n";
         }
 
-        System.out.println(responseFormat(res));
+        ui.show(res);
 
     }
 
@@ -148,7 +139,7 @@ private static final DateTimeFormatter[] DATE_ONLY_FORMATS = new DateTimeFormatt
     public static void addTask(Task task) {
         taskList.add(task);
         writeTaskToFile(task);
-        System.out.println(responseFormat(String.format(Messages.MESSAGE_ADD_TASK, task.toString())));
+        ui.show(String.format(Messages.MESSAGE_ADD_TASK, task.toString()));
     }
 
     public static void initializeTask(Task task, boolean done) {
@@ -207,10 +198,10 @@ private static final DateTimeFormatter[] DATE_ONLY_FORMATS = new DateTimeFormatt
         Task t = getTaskFromString(args[1]);
         if(toMark){
             t.mark();
-            System.out.println(responseFormat(String.format(Messages.MESSAGE_TASK_MARKED, t.toString())));
+            ui.show(String.format(Messages.MESSAGE_TASK_MARKED, t.toString()));
         } else {
             t.unmark();
-            System.out.println(responseFormat(String.format(Messages.MESSAGE_TASK_UNMARKED, t.toString())));
+            ui.show(String.format(Messages.MESSAGE_TASK_UNMARKED, t.toString()));
         }
 
         rewriteFile();
@@ -312,7 +303,7 @@ private static final DateTimeFormatter[] DATE_ONLY_FORMATS = new DateTimeFormatt
         int index = intFromString(args[1]);
         taskList.remove(index - 1);
         rewriteFile();
-        System.out.println(responseFormat(String.format(Messages.MESSAGE_DELETE_TASK, index)));
+        ui.show(String.format(Messages.MESSAGE_DELETE_TASK, index));
     }
 
     public static void rewriteFile() {
@@ -323,7 +314,7 @@ private static final DateTimeFormatter[] DATE_ONLY_FORMATS = new DateTimeFormatt
         }
         fw.close();
     } catch (IOException e) {
-        System.err.println("Error: " + e.getMessage());
+        ui.showError(e.getMessage());
     }
 }
 
@@ -364,7 +355,7 @@ private static final DateTimeFormatter[] DATE_ONLY_FORMATS = new DateTimeFormatt
 
     public static void main(String[] args) {
         // Greeting
-        System.out.println(responseFormat(Messages.MESSAGE_WELCOME));
+        ui.showWelcome();;
         createTaskListFromFile(DIRECTORYPATH, FILENAME);
 
         // Chat
@@ -374,13 +365,13 @@ private static final DateTimeFormatter[] DATE_ONLY_FORMATS = new DateTimeFormatt
             try {
                 chat(input);
             } catch(NomzException e) {
-                System.err.println(responseFormat(e.getMessage()));
+                ui.showError(e.getMessage());
             } finally {
                 input = sc.nextLine();
             }
 
         }
-        System.out.println(responseFormat(Messages.MESSAGE_BYE));
+        ui.showGoodbye();
         sc.close();
     }
 }

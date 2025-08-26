@@ -19,10 +19,6 @@ public class Ui {
         System.err.println(Messages.MESSAGE_LINEBREAK + "\n" + message + "\n" + Messages.MESSAGE_LINEBREAK);
     }
 
-    public void showLoaded() {
-        show(Messages.MESSAGE_LOAD_TASK_SUCCESS);
-    }
-
     public void showGoodbye() {
         show(Messages.MESSAGE_BYE);
         scanner.close();
