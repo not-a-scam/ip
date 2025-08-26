@@ -1,4 +1,7 @@
+package nomz.ui;
 import java.util.Scanner;
+
+import nomz.common.Messages;
 
 public class Ui {
 

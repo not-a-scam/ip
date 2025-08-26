@@ -1,3 +1,6 @@
+package nomz.data.tasks;
+import nomz.data.exception.InvalidNomzCommandException;
+
 public enum TaskType {
     TODO("T"),
     DEADLINE("D"),

@@ -1,3 +1,4 @@
+package nomz.data.tasks;
 public class Task {
     protected String description;
     protected boolean isDone;

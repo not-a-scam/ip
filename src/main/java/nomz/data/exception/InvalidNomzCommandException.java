@@ -1,3 +1,4 @@
+package nomz.data.exception;
 public class InvalidNomzCommandException extends NomzException {
 
     public InvalidNomzCommandException() {
