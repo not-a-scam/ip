@@ -79,16 +79,19 @@ public class Nomz {
         try {
             String[] args = f.split("[\\|]");
             TaskType type = TaskType.fromSymbol(args[0]);
+            boolean done = args[1].equals("1");
             switch(type){
             case TODO:
-                boolean done = args[1].equals("1");
-                initializeTodo(done, args[2]);
+                Todo todo = new Todo(args[2]);
+                initializeTask(todo, done);
                 break;
             case DEADLINE:
-                initializeDeadline(args[1].equals("1"), args[2], args[3]);
+                Deadline deadline = new Deadline(args[2], args[3]);
+                initializeTask(deadline, done);
                 break;
             case EVENT:
-                initializeEvent(args[1].equals("1"), args[2], args[3], args[4]);
+                Event event = new Event(args[2], args[3], args[4]);
+                initializeTask(event, done);
                 break;
             }
         } catch (NomzException e) {
@@ -130,6 +133,13 @@ public class Nomz {
         taskList.add(task);
         writeTaskToFile(task);
         System.out.println(responseFormat("Nomz haz added:\n\t" + task.toString() + "\nto the nomz list!"));
+    }
+
+    public static void initializeTask(Task task, boolean done) {
+        if(done) {
+            task.mark();
+        }
+        taskList.add(task);
     }
 
     /**
@@ -204,14 +214,6 @@ public class Nomz {
         addTask(todo);
     }
 
-    public static void initializeTodo(Boolean done, String description) {
-        Todo todo = new Todo(description);
-        if(done) {
-            todo.mark();
-        }
-        taskList.add(todo);
-    }
-
     /**
      * Creates a deadline task and inserts it into the task list
      * @param args searches for /by keyword in args. all arguments before keyword is used as name, 
@@ -237,14 +239,6 @@ public class Nomz {
             }
         } 
         throw new InvalidNomzArgumentException("you didnt use the /by keyword :((");
-    }
-
-    public static void initializeDeadline(boolean done, String description, String by) {
-        Deadline deadline = new Deadline(description, by);
-        if(done) {
-            deadline.mark();
-        }
-        taskList.add(deadline);
     }
 
     /**
@@ -289,14 +283,6 @@ public class Nomz {
 
     }
 
-    public static void initializeEvent(boolean done, String description, String from, String to) {
-        Event event = new Event(description, from, to);
-        if (done) {
-            event.mark();
-        } 
-        taskList.add(event);
-    }
-
     /**
      * Deletes task based on index given
      * @param args args[1] must contain a valid index
@@ -309,7 +295,6 @@ public class Nomz {
 
         int index = intFromString(args[1]);
         taskList.remove(index - 1);
-        rewriteFile();
         System.out.println(responseFormat("nomz haz removed task " + index + " from the nomz list"));
     }
 
