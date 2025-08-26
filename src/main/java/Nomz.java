@@ -156,6 +156,8 @@ public class Nomz {
             t.unmark();
             System.out.println(responseFormat("Nomz has unmarked your task:\n" + t.toString()));
         }
+
+        rewriteFile();
     }
 
     /**
@@ -269,6 +271,19 @@ public class Nomz {
         taskList.remove(index - 1);
         System.out.println(responseFormat("nomz haz removed task " + index + " from the nomz list"));
     }
+
+    public static void rewriteFile() {
+    try {
+        FileWriter fw = new FileWriter(DIRECTORYPATH + "/" + FILENAME, false); // overwrite mode
+        for (Task task : taskList) {
+            fw.write(task.savedString() + "\n");
+        }
+        fw.close();
+    } catch (IOException e) {
+        System.err.println("Error: " + e.getMessage());
+    }
+}
+
 
     /**
      * Handles the logic of the chat
