@@ -9,7 +9,8 @@ public class Nomz {
     private static final String BYE = "Bye! hope to see you again soon!" ; 
 
     private static ArrayList<Task> taskList = new ArrayList<>();
-    private static File savedTasks;
+    private static String DIRECTORYPATH = "./data";
+    private static String FILENAME = "nomz.txt";
 
 
     /**
@@ -257,7 +258,7 @@ public class Nomz {
     public static void main(String[] args) {
         // Greeting
         System.out.println(responseFormat("Hi im nomz! \nhope you're having a nomztacular day")); 
-        createTaskListFromFile("./data", "nomz.txt");       
+        createTaskListFromFile(DIRECTORYPATH, FILENAME);       
 
         // Chat
         Scanner sc = new Scanner(System.in);
