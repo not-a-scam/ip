@@ -13,39 +13,10 @@ public class Nomz {
     private static final String DIRECTORYPATH = "./data";
     private static final String FILENAME = "nomz.txt";
     private static final Ui ui = new Ui();
+    private static final Parser parser = new Parser();
+    private static final DateParser dp = new DateParser();
 
     private static ArrayList<Task> taskList = new ArrayList<>();
-
-
-private static final DateTimeFormatter[] DATE_TIME_FORMATS = new DateTimeFormatter[] {
-    DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm"),
-    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"),
-    DateTimeFormatter.ofPattern("d/M/yyyy HHmm"),
-    DateTimeFormatter.ofPattern("d/M/yyyy HH:mm"),
-    DateTimeFormatter.ISO_LOCAL_DATE_TIME
-};
-
-private static final DateTimeFormatter[] DATE_ONLY_FORMATS = new DateTimeFormatter[] {
-    DateTimeFormatter.ofPattern("yyyy-MM-dd"),
-    DateTimeFormatter.ofPattern("d/M/yyyy"),
-    DateTimeFormatter.ISO_LOCAL_DATE
-};
-
-    private static LocalDateTime parseDateTimeFlexible(String s) {
-        for (DateTimeFormatter f : DATE_TIME_FORMATS) {
-            try {
-                return LocalDateTime.parse(s, f);
-            } catch (DateTimeParseException ignored) {}
-        }
-
-        for (DateTimeFormatter f : DATE_ONLY_FORMATS) {
-        try {
-            return LocalDate.parse(s, f).atStartOfDay();
-        } catch (DateTimeParseException ignored) {}
-    }
-
-        return null;
-    }
 
     public static void createTaskListFromFile(String directoryPath, String filename) {
         try {
@@ -58,50 +29,18 @@ private static final DateTimeFormatter[] DATE_ONLY_FORMATS = new DateTimeFormatt
             if(!file.createNewFile()) {
                 Scanner s = new Scanner(file);
                 while (s.hasNext()) {
-                    parseTaskFileContent(s.nextLine());
+                    try {
+                        Task t = parser.parseTaskFileContent(s.nextLine());
+                        taskList.add(t);
+                    } catch (NomzException e) {
+                        ui.showError(e.getMessage());
+                    }
                 }
                 s.close();
                 ui.show(Messages.MESSAGE_LOAD_TASK_SUCCESS);
                 printTaskList();
             }
         } catch (IOException e) {
-            ui.showError(e.getMessage());
-        }
-    }
-
-    public static void parseTaskFileContent(String f) {
-        try {
-            String[] args = f.split("[\\|]");
-            TaskType type = TaskType.fromSymbol(args[0]);
-            boolean done = args[1].equals("1");
-            switch(type){
-            case TODO:
-                Todo todo = new Todo(args[2]);
-                initializeTask(todo, done);
-                break;
-            case DEADLINE:
-                LocalDateTime by = parseDateTimeFlexible(args[3]);
-                Deadline deadline;
-                if (by == null) {
-                    deadline = new Deadline(args[2], args[3]);
-                } else {
-                    deadline = new Deadline(args[2], by);
-                }
-                initializeTask(deadline, done);
-                break;
-            case EVENT:
-                LocalDateTime from = parseDateTimeFlexible(args[3]);
-                LocalDateTime to = parseDateTimeFlexible(args[4]);
-                Event event;
-                if (from == null || to == null) {
-                    event = new Event(args[2], args[3], args[4]);
-                } else {
-                    event = new Event(args[2], from, to);
-                }
-                initializeTask(event, done);
-                break;
-            }
-        } catch (NomzException e) {
             ui.showError(e.getMessage());
         }
     }
@@ -140,13 +79,6 @@ private static final DateTimeFormatter[] DATE_ONLY_FORMATS = new DateTimeFormatt
         taskList.add(task);
         writeTaskToFile(task);
         ui.show(String.format(Messages.MESSAGE_ADD_TASK, task.toString()));
-    }
-
-    public static void initializeTask(Task task, boolean done) {
-        if(done) {
-            task.mark();
-        }
-        taskList.add(task);
     }
 
     /**
@@ -236,7 +168,7 @@ private static final DateTimeFormatter[] DATE_ONLY_FORMATS = new DateTimeFormatt
             if(args[i].equals("/by")){
                 String description = String.join(" ", Arrays.copyOfRange(args, 1, i));
                 String byRaw = String.join(" ", Arrays.copyOfRange(args, i+1, args.length));
-                LocalDateTime by = parseDateTimeFlexible(byRaw);
+                LocalDateTime by = dp.parseDateTimeFlexible(byRaw);
                 if(by == null) {
                     addTask(new Deadline(description, byRaw));
                 } else {
@@ -278,8 +210,8 @@ private static final DateTimeFormatter[] DATE_ONLY_FORMATS = new DateTimeFormatt
             String fromRaw = String.join(" ", Arrays.copyOfRange(args, fromIndex + 1, toIndex));
             String toRaw = String.join(" ", Arrays.copyOfRange(args, toIndex + 1, args.length));
 
-            LocalDateTime from = parseDateTimeFlexible(fromRaw);
-            LocalDateTime to = parseDateTimeFlexible(toRaw);
+            LocalDateTime from = dp.parseDateTimeFlexible(fromRaw);
+            LocalDateTime to = dp.parseDateTimeFlexible(toRaw);
 
             if(from == null || to == null) {
                 addTask(new Event(description, fromRaw, toRaw));

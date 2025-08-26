@@ -16,4 +16,5 @@ public class Messages {
     public static final String MESSAGE_WRONG_FROM_KEYWORD = "you didnt use the /from keyword properly :((";
     public static final String MESSAGE_WRONG_TO_KEYWORD = "you didnt use the /to keyword properly :(("; 
     public static final String MESSAGE_DELETE_TASK = "nomz haz removed task %s from the nomz list";
+    public static final String MESSAGE_INVALID_FORMAT = "the file contains an invalid format :(";
 }
