@@ -7,7 +7,6 @@ import java.util.Scanner;
 
 public class Storage {
     private final File file;
-    private final Parser parser = new Parser();
     
     public Storage(String filePath) {
         this.file = new File(filePath);
