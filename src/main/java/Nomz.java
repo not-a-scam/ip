@@ -194,31 +194,31 @@ public class Nomz {
      */
     public static void chat(String input) throws NomzException {
         String[] args = input.split("[\\s]");
-        String command = args[0];
+        Command command = Command.fromString(args[0]);
         switch(command) {
-            case "list":
-                printTaskList();
-                break;
-            case "mark":
-                setTaskMark(args, true);
-                break;
-            case "unmark":
-                setTaskMark(args, false);
-                break;
-            case "todo":
-                createTodo(args);
-                break;
-            case "deadline":
-                createDeadline(args);
-                break;
-            case "event":
-                createEvent(args);
-                break;
-            case "delete":
-                deleteTask(args);
-                break;
-            default:
-                throw new InvalidNomzCommandException();
+        case LIST:
+            printTaskList();
+            break;
+        case MARK:
+            setTaskMark(args, true);
+            break;
+        case UNMARK:
+            setTaskMark(args, false);
+            break;
+        case TODO:
+            createTodo(args);
+            break;
+        case DEADLINE:
+            createDeadline(args);
+            break;
+        case EVENT:
+            createEvent(args);
+            break;
+        case DELETE:
+            deleteTask(args);
+            break;
+        default:
+            throw new InvalidNomzCommandException();
         }
     }
 
