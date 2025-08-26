@@ -21,6 +21,10 @@ public class Task {
         this.isDone = false;
     }
 
+    public String savedString() {
+        return type.getSymbol() + "|" + (isDone ? 1 : 0) + "|" + description;
+    }
+
     @Override
     public String toString(){
         return "["+ type.getSymbol() + "][" + getStatusIcon() + "] " + description;  

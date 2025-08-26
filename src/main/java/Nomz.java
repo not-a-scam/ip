@@ -1,12 +1,17 @@
 import java.util.Scanner;
 import java.util.Arrays;
 import java.util.ArrayList;
+import java.io.File; 
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class Nomz {
     private static final String LINEBREAK = "-----------------------------------------";
     private static final String BYE = "Bye! hope to see you again soon!" ; 
 
     private static ArrayList<Task> taskList = new ArrayList<>();
+    private static String DIRECTORYPATH = "./data";
+    private static String FILENAME = "nomz.txt";
 
 
     /**
@@ -17,6 +22,58 @@ public class Nomz {
      */
     public static String responseFormat(String input) {
         return LINEBREAK + "\n" + input + "\n" + LINEBREAK;
+    }
+
+    public static void createTaskListFromFile(String directoryPath, String filename) {
+        try {
+            File directory = new File(directoryPath);
+            if(!directory.exists()) {
+                directory.mkdirs();
+            }
+
+            File file = new File(directoryPath, filename);
+            if(!file.createNewFile()) {
+                Scanner s = new Scanner(file);
+                while (s.hasNext()) {
+                    parseTaskFileContent(s.nextLine());
+                }
+                s.close();
+                System.out.println("Nomz has successfully loaded all previous tasks!");
+            }
+        } catch (IOException e) {
+            System.err.println("Error: " + e.getMessage());
+        }
+    }
+
+    public static void parseTaskFileContent(String f) {
+        try {
+            String[] args = f.split("[\\|]");
+            TaskType type = TaskType.fromSymbol(args[0]);
+            switch(type){
+            case TODO:
+                boolean done = args[1].equals("1");
+                initializeTodo(done, args[2]);
+                break;
+            case DEADLINE:
+                initializeDeadline(args[1].equals("1"), args[2], args[3]);
+                break;
+            case EVENT:
+                initializeEvent(args[1].equals("1"), args[2], args[3], args[4]);
+                break;
+            }
+        } catch (NomzException e) {
+            System.err.println(responseFormat(e.getMessage()));
+        }
+    }
+
+    public static void writeTaskToFile(Task task){
+        try {
+            FileWriter fw = new FileWriter(DIRECTORYPATH + "/" + FILENAME, true);
+            fw.write(task.savedString() + "\n");
+            fw.close();
+        } catch (IOException e) {
+            System.err.println("Error: " + e.getMessage());
+        }
     }
 
     /**
@@ -41,6 +98,7 @@ public class Nomz {
      */
     public static void addTask(Task task) {
         taskList.add(task);
+        writeTaskToFile(task);
         System.out.println(responseFormat("Nomz haz added:\n\t" + task.toString() + "\nto the nomz list!"));
     }
 
@@ -98,6 +156,8 @@ public class Nomz {
             t.unmark();
             System.out.println(responseFormat("Nomz has unmarked your task:\n" + t.toString()));
         }
+
+        rewriteFile();
     }
 
     /**
@@ -112,6 +172,14 @@ public class Nomz {
         String description = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
         Todo todo = new Todo(description);
         addTask(todo);
+    }
+
+    public static void initializeTodo(Boolean done, String description) {
+        Todo todo = new Todo(description);
+        if(done) {
+            todo.mark();
+        }
+        taskList.add(todo);
     }
 
     /**
@@ -135,6 +203,14 @@ public class Nomz {
             }
         } 
         throw new InvalidNomzArgumentException("you didnt use the /by keyword :((");
+    }
+
+    public static void initializeDeadline(boolean done, String description, String by) {
+        Deadline deadline = new Deadline(description, by);
+        if(done) {
+            deadline.mark();
+        }
+        taskList.add(deadline);
     }
 
     /**
@@ -173,6 +249,14 @@ public class Nomz {
 
     }
 
+    public static void initializeEvent(boolean done, String description, String from, String to) {
+        Event event = new Event(description, from, to);
+        if (done) {
+            event.mark();
+        } 
+        taskList.add(event);
+    }
+
     /**
      * Deletes task based on index given
      * @param args args[1] must contain a valid index
@@ -187,6 +271,19 @@ public class Nomz {
         taskList.remove(index - 1);
         System.out.println(responseFormat("nomz haz removed task " + index + " from the nomz list"));
     }
+
+    public static void rewriteFile() {
+    try {
+        FileWriter fw = new FileWriter(DIRECTORYPATH + "/" + FILENAME, false); // overwrite mode
+        for (Task task : taskList) {
+            fw.write(task.savedString() + "\n");
+        }
+        fw.close();
+    } catch (IOException e) {
+        System.err.println("Error: " + e.getMessage());
+    }
+}
+
 
     /**
      * Handles the logic of the chat
@@ -224,7 +321,8 @@ public class Nomz {
 
     public static void main(String[] args) {
         // Greeting
-        System.out.println(responseFormat("Hi im nomz! \nhope you're having a nomztacular day"));        
+        System.out.println(responseFormat("Hi im nomz! \nhope you're having a nomztacular day")); 
+        createTaskListFromFile(DIRECTORYPATH, FILENAME);       
 
         // Chat
         Scanner sc = new Scanner(System.in);
