@@ -10,47 +10,11 @@ public class Nomz {
     private static final String DIRECTORYPATH = "./data";
     private static final String FILENAME = "nomz.txt";
     private static final Ui ui = new Ui();
-    private static final Parser parser = new Parser();
+    private static final Storage storage = new Storage("./data/nomz.txt");
     private static final DateParser dp = new DateParser();
 
     private static ArrayList<Task> taskList = new ArrayList<>();
 
-    public static void createTaskListFromFile(String directoryPath, String filename) {
-        try {
-            File directory = new File(directoryPath);
-            if(!directory.exists()) {
-                directory.mkdirs();
-            }
-
-            File file = new File(directoryPath, filename);
-            if(!file.createNewFile()) {
-                Scanner s = new Scanner(file);
-                while (s.hasNext()) {
-                    try {
-                        Task t = parser.parseTaskFileContent(s.nextLine());
-                        taskList.add(t);
-                    } catch (NomzException e) {
-                        ui.showError(e.getMessage());
-                    }
-                }
-                s.close();
-                ui.show(Messages.MESSAGE_LOAD_TASK_SUCCESS);
-                printTaskList();
-            }
-        } catch (IOException e) {
-            ui.showError(e.getMessage());
-        }
-    }
-
-    public static void writeTaskToFile(Task task){
-        try {
-            FileWriter fw = new FileWriter(DIRECTORYPATH + "/" + FILENAME, true);
-            fw.write(task.savedString() + "\n");
-            fw.close();
-        } catch (IOException e) {
-            ui.showError(e.getMessage());
-        }
-    }
 
     /**
      * Prints current task list to console
@@ -74,7 +38,11 @@ public class Nomz {
      */
     public static void addTask(Task task) {
         taskList.add(task);
-        writeTaskToFile(task);
+        try {
+            storage.append(task);
+        } catch (IOException e) {
+            ui.showError(e.getMessage());
+        }
         ui.show(String.format(Messages.MESSAGE_ADD_TASK, task.toString()));
     }
 
@@ -133,7 +101,11 @@ public class Nomz {
             ui.show(String.format(Messages.MESSAGE_TASK_UNMARKED, t.toString()));
         }
 
-        rewriteFile();
+        try {
+            storage.saveAll(taskList);
+        } catch (IOException e) {
+            ui.showError(e.getMessage());
+        }
     }
 
     /**
@@ -231,21 +203,13 @@ public class Nomz {
 
         int index = intFromString(args[1]);
         taskList.remove(index - 1);
-        rewriteFile();
+        try {
+            storage.saveAll(taskList);
+        } catch (IOException e) {
+            ui.showError(e.getMessage());
+        }
         ui.show(String.format(Messages.MESSAGE_DELETE_TASK, index));
     }
-
-    public static void rewriteFile() {
-    try {
-        FileWriter fw = new FileWriter(DIRECTORYPATH + "/" + FILENAME, false); // overwrite mode
-        for (Task task : taskList) {
-            fw.write(task.savedString() + "\n");
-        }
-        fw.close();
-    } catch (IOException e) {
-        ui.showError(e.getMessage());
-    }
-}
 
 
     /**
@@ -284,8 +248,12 @@ public class Nomz {
 
     public static void main(String[] args) {
         // Greeting
-        ui.showWelcome();;
-        createTaskListFromFile(DIRECTORYPATH, FILENAME);
+        ui.showWelcome();
+        try {
+            taskList = storage.load();
+        } catch (NomzException e) {
+            ui.show(e.getMessage());
+        }
 
         // Chat
         Scanner sc = new Scanner(System.in);
