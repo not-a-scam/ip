@@ -10,6 +10,9 @@ import nomz.data.tasks.TaskList;
 import nomz.storage.Storage;
 import nomz.ui.Ui;
 
+/**
+ * Adds an event task to the task list.
+ */
 public class AddEventCommand extends Command {
     private final String description;
     private final LocalDateTime fromTime, toTime;
