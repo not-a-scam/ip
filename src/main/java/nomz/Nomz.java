@@ -7,11 +7,16 @@ import nomz.parser.Parser;
 import nomz.storage.Storage;
 import nomz.ui.Ui;
 
+/** Main entry point for the Nomz application. */
 public class Nomz {
     private Ui ui;
     private Storage storage;
     private TaskList taskList;
 
+    /**
+     * Creates a Nomz application instance.
+     * @param filepath The path to the task storage file.
+     */
     public Nomz(String filepath) {
         this.storage = new Storage(filepath);
         this.ui = new Ui();
@@ -26,6 +31,9 @@ public class Nomz {
         this.taskList = loaded;
     }
 
+    /**
+     * Starts the Nomz application.
+     */
     public void run() {
         ui.showWelcome();
         boolean isExit = false;
@@ -42,7 +50,6 @@ public class Nomz {
     }
 
     public static void main(String[] args) {
-
         new Nomz("data/tasks.txt").run();;
     }
 }
