@@ -6,10 +6,18 @@ import nomz.data.tasks.TaskList;
 import nomz.storage.Storage;
 import nomz.ui.Ui;
 
+/**
+ * Command to mark a task as done or not done.
+ */
 public class MarkCommand extends Command {
     private final int index;
     private final boolean toMark;
     
+    /**
+     * Creates a MarkCommand to mark a task as done or not done.
+     * @param index
+     * @param toMark
+     */
     public MarkCommand(int index, boolean toMark) { 
         this.index = index; 
         this.toMark = toMark; 
