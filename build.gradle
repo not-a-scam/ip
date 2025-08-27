@@ -34,6 +34,7 @@ application {
 shadowJar {
     archiveBaseName = "nomz"
     archiveClassifier = null
+    archiveFileName = "nomz.jar"
 }
 
 run{
