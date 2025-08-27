@@ -24,4 +24,16 @@ public class AddTodoCommand extends Command {
         }
         ui.show(Messages.MESSAGE_ADD_TASK.formatted(t.toString()));
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof AddTodoCommand)) {
+            return false;
+        }
+        AddTodoCommand other = (AddTodoCommand) obj;
+        return description.equals(other.description);
+    }
 }
