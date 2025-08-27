@@ -16,6 +16,7 @@ public class AddTodoCommand extends Command {
 
     /**
      * Creates an AddTodoCommand with the specified description.
+     * 
      * @param description
      */
     public AddTodoCommand(String description) { 

@@ -17,6 +17,7 @@ public class Deadline extends Task {
     
     /**
      * Creates a Deadline task with the specified description and a LocalDateTime object.
+     * 
      * @param description
      * @param by
      */
@@ -27,6 +28,7 @@ public class Deadline extends Task {
 
     /**
      * Creates a Deadline task with the specified description and String represented time.
+     * 
      * @param description
      * @param by
      */

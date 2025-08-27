@@ -15,6 +15,7 @@ public class MarkCommand extends Command {
     
     /**
      * Creates a MarkCommand to mark a task as done or not done.
+     * 
      * @param index
      * @param toMark
      */

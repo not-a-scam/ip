@@ -10,6 +10,7 @@ public class Task {
 
     /**
      * Creates a Task with the specified description and type.
+     * 
      * @param description
      * @param type
      */
@@ -21,6 +22,7 @@ public class Task {
 
     /**
      * Returns the status icon of the task.
+     * 
      * @return
      */
     public String getStatusIcon() {
@@ -43,6 +45,7 @@ public class Task {
 
     /**
      * Returns a string representation of the task for saving.
+     * 
      * @return
      */
     public String savedString() {
@@ -66,4 +69,3 @@ public class Task {
         return isDone == task.isDone && description.equals(task.description) && type == task.type;
     }
 }
-

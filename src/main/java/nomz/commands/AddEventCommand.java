@@ -22,6 +22,7 @@ public class AddEventCommand extends Command {
     /**
      * Creates an AddEventCommand with the specified description and LocalDateTime
      * objects to represent the event's time period.
+     * 
      * @param description
      * @param fromTime
      * @param toTime
@@ -38,6 +39,7 @@ public class AddEventCommand extends Command {
     /**
      * Creates an AddEventCommand with the specified description and Strings to represent
      * the event's start and end time.
+     * 
      * @param description
      * @param from
      * @param to

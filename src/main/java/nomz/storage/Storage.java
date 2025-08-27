@@ -1,4 +1,5 @@
 package nomz.storage;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -10,12 +11,15 @@ import nomz.data.exception.NomzException;
 import nomz.data.tasks.Task;
 import nomz.parser.Parser;
 
-/** Handles storage and retrieval of tasks. */
+/**
+ * Handles storage and retrieval of tasks.
+ */
 public class Storage {
     private final File file;
-    
+
     /**
      * Creates a Storage object to manage task storage.
+     * 
      * @param filePath The path to the file where tasks are stored.
      */
     public Storage(String filePath) {
@@ -37,6 +41,7 @@ public class Storage {
 
     /**
      * Loads tasks from the storage file.
+     * 
      * @return A list of tasks loaded from the file.
      * @throws NomzException If the file content is invalid.
      */
@@ -53,6 +58,7 @@ public class Storage {
 
     /**
      * Appends a new task to the storage file.
+     * 
      * @param task The task to append.
      * @throws IOException If an I/O error occurs.
      */
@@ -64,6 +70,7 @@ public class Storage {
 
     /**
      * Saves all tasks to the storage file.
+     * 
      * @param tasks The list of tasks to save.
      * @throws IOException If an I/O error occurs.
      */

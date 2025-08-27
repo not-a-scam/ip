@@ -1,15 +1,19 @@
 package nomz.ui;
+
 import java.util.Scanner;
 
 import nomz.common.Messages;
 
-/** Handles user interaction and input/output. */
+/**
+ * Handles user interaction and input/output.
+ */
 public class Ui {
 
     private final Scanner scanner = new Scanner(System.in);
 
     /**
      * Displays a message to the user.
+     * 
      * @param s The message to display.
      */
     public void show(String s) {
@@ -25,6 +29,7 @@ public class Ui {
 
     /**
      * Reads a command from the user input.
+     * 
      * @return The command entered by the user.
      */
     public String readCommand() {
@@ -33,6 +38,7 @@ public class Ui {
 
     /**
      * Displays an error message to the user.
+     * 
      * @param message The error message to display.
      */
     public void showError(String message) {

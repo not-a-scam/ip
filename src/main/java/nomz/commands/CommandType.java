@@ -9,6 +9,7 @@ public enum CommandType {
 
     /**
      * Converts a string representation of a command to its CommandType enum.
+     * 
      * @param input
      * @return
      * @throws InvalidNomzCommandException

@@ -20,6 +20,7 @@ public class Event extends Task{
 
     /**
      * Creates an Event task with the specified description and String represented time.
+     * 
      * @param description
      * @param from
      * @param to
@@ -32,6 +33,7 @@ public class Event extends Task{
 
     /**
      * Creates an Event task with the specified description and LocalDateTime objects.
+     * 
      * @param description
      * @param fromTime
      * @param toTime

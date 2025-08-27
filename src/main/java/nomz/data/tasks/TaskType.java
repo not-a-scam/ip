@@ -17,6 +17,7 @@ public enum TaskType {
 
     /**
      * Returns the symbol representing the task type.
+     * 
      * @return
      */
     public String getSymbol() {
@@ -25,6 +26,7 @@ public enum TaskType {
 
     /**
      * Returns the task type corresponding to the given symbol.
+     * 
      * @param symbol
      * @return
      * @throws InvalidNomzCommandException

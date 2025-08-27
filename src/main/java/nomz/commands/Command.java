@@ -12,6 +12,7 @@ public abstract class Command {
 
     /**
      * Executes the command.
+     * 
      * @param tasks
      * @param ui
      * @param storage
@@ -21,6 +22,7 @@ public abstract class Command {
 
     /**
      * Checks if the command is an exit command.
+     * 
      * @return
      */
     public boolean isExit() { 

@@ -1,4 +1,5 @@
 package nomz;
+
 import nomz.commands.Command;
 import nomz.common.Messages;
 import nomz.data.exception.NomzException;
@@ -7,7 +8,9 @@ import nomz.parser.Parser;
 import nomz.storage.Storage;
 import nomz.ui.Ui;
 
-/** Main entry point for the Nomz application. */
+/**
+ * Main entry point for the Nomz application.
+ */
 public class Nomz {
     private Ui ui;
     private Storage storage;
@@ -15,6 +18,7 @@ public class Nomz {
 
     /**
      * Creates a Nomz application instance.
+     * 
      * @param filepath The path to the task storage file.
      */
     public Nomz(String filepath) {
@@ -45,11 +49,12 @@ public class Nomz {
                 isExit = c.isExit();
             } catch (NomzException e) {
                 ui.showError(e.getMessage());
-        }
+            }
         }
     }
 
     public static void main(String[] args) {
-        new Nomz("data/tasks.txt").run();;
+        new Nomz("data/tasks.txt").run();
+        ;
     }
 }
