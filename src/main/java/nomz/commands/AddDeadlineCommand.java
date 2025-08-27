@@ -46,4 +46,23 @@ public class AddDeadlineCommand extends Command {
         }
         ui.show(Messages.MESSAGE_ADD_TASK.formatted(t.toString()));
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof AddDeadlineCommand)) {
+            return false;
+        }
+        AddDeadlineCommand other = (AddDeadlineCommand) obj;
+        if (useDateTime != other.useDateTime) {
+            return false;
+        }
+        if (useDateTime) {
+            return description.equals(other.description) && byTime.equals(other.byTime);
+        } else {
+            return description.equals(other.description) && by.equals(other.by);
+        }
+    }
 }
