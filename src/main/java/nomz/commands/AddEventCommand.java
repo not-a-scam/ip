@@ -60,10 +60,17 @@ public class AddEventCommand extends Command {
             return false;
         }
         AddEventCommand other = (AddEventCommand) obj;
-        return description.equals(other.description)
-                && fromTime.equals(other.fromTime)
-                && toTime.equals(other.toTime)
-                && from.equals(other.from)
-                && to.equals(other.to);
+        if (useDateTime != other.useDateTime) {
+            return false;
+        }
+        if (useDateTime) {
+            return description.equals(other.description)
+                    && fromTime.equals(other.fromTime)
+                    && toTime.equals(other.toTime);
+        } else {
+            return description.equals(other.description)
+                    && from.equals(other.from)
+                    && to.equals(other.to);
+        }
     }
 }
