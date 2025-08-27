@@ -5,6 +5,9 @@ import nomz.data.tasks.TaskList;
 import nomz.storage.Storage;
 import nomz.ui.Ui;
 
+/**
+ * Represents a command in the application.
+ */
 public abstract class Command {
 
     /**
