@@ -2,6 +2,9 @@ package nomz.data.tasks;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Represents an event task in Nomz.
+ */
 public class Event extends Task{
 
     private static final DateTimeFormatter OUT = DateTimeFormatter.ofPattern("MMM dd yyyy, h:mma");
@@ -15,12 +18,24 @@ public class Event extends Task{
         super(description, TaskType.EVENT);
     }
 
+    /**
+     * Creates an Event task with the specified description and String represented time.
+     * @param description
+     * @param from
+     * @param to
+     */
     public Event(String description, String from, String to) {
         this(description);
         this.from = from;
         this.to = to;
     }
 
+    /**
+     * Creates an Event task with the specified description and LocalDateTime objects.
+     * @param description
+     * @param fromTime
+     * @param toTime
+     */
     public Event(String description, LocalDateTime fromTime, LocalDateTime toTime) {
         this(description);
         this.fromTime = fromTime;
