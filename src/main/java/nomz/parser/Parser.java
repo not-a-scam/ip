@@ -74,45 +74,45 @@ public class Parser {
     }
 
     public static Task parseTaskFileContent(String f) throws NomzException{
-            String[] args = f.split("[\\|]");
-            TaskType type = TaskType.fromSymbol(args[0]);
-            boolean done = args[1].equals("1");
-            switch(type){
-            case TODO:
-                Todo todo = new Todo(args[2]);
-                if (done) {
-                    todo.mark();
-                }
-                return todo;
-
-            case DEADLINE:
-                LocalDateTime by = parseDateTimeFlexible(args[3]);
-                Deadline deadline;
-                if (by == null) {
-                    deadline = new Deadline(args[2], args[3]);
-                } else {
-                    deadline = new Deadline(args[2], by);
-                }
-                if (done) {
-                    deadline.mark();
-                }
-                return deadline;
-            case EVENT:
-                LocalDateTime from = parseDateTimeFlexible(args[3]);
-                LocalDateTime to = parseDateTimeFlexible(args[4]);
-                Event event;
-                if (from == null || to == null) {
-                    event = new Event(args[2], args[3], args[4]);
-                } else {
-                    event = new Event(args[2], from, to);
-                }
-                if (done) {
-                    event.mark();
-                }
-                return event;
-            default:
-                throw new InvalidNomzArgumentException(Messages.MESSAGE_INVALID_FORMAT);
+        String[] args = f.split("[\\|]");
+        TaskType type = TaskType.fromSymbol(args[0]);
+        boolean done = args[1].equals("1");
+        switch(type){
+        case TODO:
+            Todo todo = new Todo(args[2]);
+            if (done) {
+                todo.mark();
             }
+            return todo;
+
+        case DEADLINE:
+            LocalDateTime by = parseDateTimeFlexible(args[3]);
+            Deadline deadline;
+            if (by == null) {
+                deadline = new Deadline(args[2], args[3]);
+            } else {
+                deadline = new Deadline(args[2], by);
+            }
+            if (done) {
+                deadline.mark();
+            }
+            return deadline;
+        case EVENT:
+            LocalDateTime from = parseDateTimeFlexible(args[3]);
+            LocalDateTime to = parseDateTimeFlexible(args[4]);
+            Event event;
+            if (from == null || to == null) {
+                event = new Event(args[2], args[3], args[4]);
+            } else {
+                event = new Event(args[2], from, to);
+            }
+            if (done) {
+                event.mark();
+            }
+            return event;
+        default:
+            throw new InvalidNomzArgumentException(Messages.MESSAGE_INVALID_FORMAT);
+        }
     }
 
     /**
