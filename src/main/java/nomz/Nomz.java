@@ -26,20 +26,20 @@ public class Nomz {
         this.taskList = loaded;
     }
 
-public void run() {
-    ui.showWelcome();
-    boolean isExit = false;
-    while (!isExit) {
-        try {
-            String fullCommand = ui.readCommand();
-            Command c = Parser.parse(fullCommand);
-            c.execute(taskList, ui, storage);
-            isExit = c.isExit();
-        } catch (NomzException e) {
-            ui.showError(e.getMessage());
+    public void run() {
+        ui.showWelcome();
+        boolean isExit = false;
+        while (!isExit) {
+            try {
+                String fullCommand = ui.readCommand();
+                Command c = Parser.parse(fullCommand);
+                c.execute(taskList, ui, storage);
+                isExit = c.isExit();
+            } catch (NomzException e) {
+                ui.showError(e.getMessage());
+        }
         }
     }
-}
 
     public static void main(String[] args) {
 
