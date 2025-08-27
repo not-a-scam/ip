@@ -48,7 +48,7 @@ public class Parser {
         DateTimeFormatter.ISO_LOCAL_DATE
     };
 
-    public static LocalDateTime parseDateTimeFlexible(String s) {
+    private static LocalDateTime parseDateTimeFlexible(String s) {
         for (DateTimeFormatter f : DATE_TIME_FORMATS) {
             try {
                 return LocalDateTime.parse(s, f);
@@ -65,7 +65,7 @@ public class Parser {
     }
 
     /** Convert a string to an integer, throwing an exception if it is not a valid integer. */
-    public static int intFromString(String index) throws InvalidNomzArgumentException {
+    private static int intFromString(String index) throws InvalidNomzArgumentException {
         try { 
             return Integer.parseInt(index); 
         } catch (NumberFormatException e) { 
@@ -115,6 +115,12 @@ public class Parser {
             }
     }
 
+    /**
+     * Parses a user command from the input string.
+     * @param input The input string to parse.
+     * @return The corresponding Command object.
+     * @throws NomzException If the input is invalid.
+     */
     public static Command parse(String input) throws NomzException {
         String[] args = input.trim().split("\\s+");
         CommandType cmd = CommandType.fromString(args[0]); 
