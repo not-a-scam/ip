@@ -8,8 +8,16 @@ import nomz.data.tasks.Todo;
 import nomz.storage.Storage;
 import nomz.ui.Ui;
 
+/**
+ * Adds a todo task to the task list.
+ */
 public class AddTodoCommand extends Command {
     private final String description;
+
+    /**
+     * Creates an AddTodoCommand with the specified description.
+     * @param description
+     */
     public AddTodoCommand(String description) { 
         this.description = description; 
     }
