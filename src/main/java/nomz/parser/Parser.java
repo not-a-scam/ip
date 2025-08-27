@@ -32,6 +32,7 @@ import nomz.commands.Command;
 
 import nomz.common.Messages;
 
+/** Parses user input into commands and arguments. */
 public class Parser {
 
     private static final DateTimeFormatter[] DATE_TIME_FORMATS = new DateTimeFormatter[] {
@@ -64,7 +65,7 @@ public class Parser {
         return null;
     }
 
-    /** Convert a string to an integer, throwing an exception if it is not a valid integer. */
+    
     private static int intFromString(String index) throws InvalidNomzArgumentException {
         try { 
             return Integer.parseInt(index); 
@@ -73,6 +74,12 @@ public class Parser {
         }
     }
 
+    /**
+     * Parses the content of a task file and returns the corresponding Task object.
+     * @param f The content of the task file.
+     * @return The Task object represented by the file content.
+     * @throws NomzException If the file content is invalid.
+     */
     public static Task parseTaskFileContent(String f) throws NomzException{
         String[] args = f.split("[\\|]");
         TaskType type = TaskType.fromSymbol(args[0]);
