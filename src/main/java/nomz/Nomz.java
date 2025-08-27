@@ -1,3 +1,4 @@
+package nomz;
 import nomz.commands.Command;
 import nomz.common.Messages;
 import nomz.data.exception.NomzException;
