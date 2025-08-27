@@ -3,6 +3,7 @@ package nomz.parser;
 import nomz.commands.Command;
 import nomz.commands.AddTodoCommand;
 import nomz.commands.AddEventCommand;
+import nomz.commands.AddDeadlineCommand;
 
 import java.beans.Transient;
 import java.time.LocalDateTime ;
@@ -10,6 +11,8 @@ import java.time.LocalDateTime ;
 import static nomz.common.Messages.MESSAGE_NO_DESCRIPTION_ARGUMENT;
 import static nomz.common.Messages.MESSAGE_WRONG_FROM_KEYWORD;
 import static nomz.common.Messages.MESSAGE_WRONG_TO_KEYWORD;
+import static nomz.common.Messages.MESSAGE_NO_BY_KEYWORD;
+import static nomz.common.Messages.MESSAGE_NO_ARGUMENTS;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -146,4 +149,73 @@ public class ParserTest {
         }
     }
 
+    @Test
+    public void parse_validDeadlineWithDateTime_returnsDeadlineWithDateTime() {
+        String input = "deadline submit report /by 2024-10-10 23:59";
+        Command expected = new AddDeadlineCommand("submit report", LocalDateTime.of(2024, 10, 10, 23, 59));
+        Command result = null;
+        try {
+            result = Parser.parse(input);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void parse_validDeadlineWithStringTime_returnsDeadlineWithStringTime() {
+        String input = "deadline submit report /by tomorrow";
+        Command expected = new AddDeadlineCommand("submit report", "tomorrow");
+        Command result = null;
+        try {
+            result = Parser.parse(input);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void parse_invalidDeadlineNoArgs_throwsException() {
+        String input = "deadline";
+        Command result = null;
+        try {
+            result = Parser.parse(input);
+        } catch (Exception e) {
+            assertEquals(MESSAGE_NO_ARGUMENTS, e.getMessage());
+        }
+    }
+
+    @Test
+    public void parse_invalidDeadlineNoByDescription_throwsException() {
+        String input = "deadline submit report /by";
+        Command result = null;
+        try {
+            result = Parser.parse(input);
+        } catch (Exception e) {
+            assertEquals(MESSAGE_NO_ARGUMENTS, e.getMessage());
+        }
+    }
+
+    @Test
+    public void parse_invalidDeadlineNoBy_throwsException() {
+        String input = "deadline submit report ";
+        Command result = null;
+        try {
+            result = Parser.parse(input);
+        } catch (Exception e) {
+            assertEquals(MESSAGE_NO_ARGUMENTS, e.getMessage());
+        }
+    }
+
+    @Test
+    public void parse_invalidDeadlineNoDescription_throwsException() {
+        String input = "deadline /by noon";
+        Command result = null;
+        try {
+            result = Parser.parse(input);
+        } catch (Exception e) {
+            assertEquals(MESSAGE_NO_ARGUMENTS, e.getMessage());
+        }
+    }
 }
