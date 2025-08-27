@@ -1,4 +1,8 @@
 package nomz.common;
+
+/**
+ * Contains the various messages used in the application.
+ */
 public class Messages {
     public static final String MESSAGE_LINEBREAK = "-----------------------------------------";
     public static final String MESSAGE_BYE = "Bye! hope to see you again soon!" ; 
