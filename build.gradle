@@ -28,7 +28,7 @@ test {
 }
 
 application {
-    mainClass.set("Nomz")
+    mainClass.set("nomz.Nomz")
 }
 
 shadowJar {

@@ -37,4 +37,19 @@ public class Deadline extends Task {
         }
         return super.savedString() + "|" + byTime.toString();
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if (!super.equals(other)) {
+            return false;
+        }
+        if (!(other instanceof Deadline)) {
+            return false;
+        }
+        Deadline deadline = (Deadline) other;
+        if (byTime == null) {
+            return (by.equals(deadline.by));
+        }
+        return byTime.equals(deadline.byTime);
+    }
 }

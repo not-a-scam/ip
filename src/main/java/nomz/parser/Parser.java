@@ -48,7 +48,7 @@ public class Parser {
         DateTimeFormatter.ISO_LOCAL_DATE
     };
 
-    public static LocalDateTime parseDateTimeFlexible(String s) {
+    private static LocalDateTime parseDateTimeFlexible(String s) {
         for (DateTimeFormatter f : DATE_TIME_FORMATS) {
             try {
                 return LocalDateTime.parse(s, f);
@@ -65,7 +65,7 @@ public class Parser {
     }
 
     /** Convert a string to an integer, throwing an exception if it is not a valid integer. */
-    public static int intFromString(String index) throws InvalidNomzArgumentException {
+    private static int intFromString(String index) throws InvalidNomzArgumentException {
         try { 
             return Integer.parseInt(index); 
         } catch (NumberFormatException e) { 
@@ -74,47 +74,53 @@ public class Parser {
     }
 
     public static Task parseTaskFileContent(String f) throws NomzException{
-            String[] args = f.split("[\\|]");
-            TaskType type = TaskType.fromSymbol(args[0]);
-            boolean done = args[1].equals("1");
-            switch(type){
-            case TODO:
-                Todo todo = new Todo(args[2]);
-                if (done) {
-                    todo.mark();
-                }
-                return todo;
-
-            case DEADLINE:
-                LocalDateTime by = parseDateTimeFlexible(args[3]);
-                Deadline deadline;
-                if (by == null) {
-                    deadline = new Deadline(args[2], args[3]);
-                } else {
-                    deadline = new Deadline(args[2], by);
-                }
-                if (done) {
-                    deadline.mark();
-                }
-                return deadline;
-            case EVENT:
-                LocalDateTime from = parseDateTimeFlexible(args[3]);
-                LocalDateTime to = parseDateTimeFlexible(args[4]);
-                Event event;
-                if (from == null || to == null) {
-                    event = new Event(args[2], args[3], args[4]);
-                } else {
-                    event = new Event(args[2], from, to);
-                }
-                if (done) {
-                    event.mark();
-                }
-                return event;
-            default:
-                throw new InvalidNomzArgumentException(Messages.MESSAGE_INVALID_FORMAT);
+        String[] args = f.split("[\\|]");
+        TaskType type = TaskType.fromSymbol(args[0]);
+        boolean done = args[1].equals("1");
+        switch(type){
+        case TODO:
+            Todo todo = new Todo(args[2]);
+            if (done) {
+                todo.mark();
             }
+            return todo;
+
+        case DEADLINE:
+            LocalDateTime by = parseDateTimeFlexible(args[3]);
+            Deadline deadline;
+            if (by == null) {
+                deadline = new Deadline(args[2], args[3]);
+            } else {
+                deadline = new Deadline(args[2], by);
+            }
+            if (done) {
+                deadline.mark();
+            }
+            return deadline;
+        case EVENT:
+            LocalDateTime from = parseDateTimeFlexible(args[3]);
+            LocalDateTime to = parseDateTimeFlexible(args[4]);
+            Event event;
+            if (from == null || to == null) {
+                event = new Event(args[2], args[3], args[4]);
+            } else {
+                event = new Event(args[2], from, to);
+            }
+            if (done) {
+                event.mark();
+            }
+            return event;
+        default:
+            throw new InvalidNomzArgumentException(Messages.MESSAGE_INVALID_FORMAT);
+        }
     }
 
+    /**
+     * Parses a user command from the input string.
+     * @param input The input string to parse.
+     * @return The corresponding Command object.
+     * @throws NomzException If the input is invalid.
+     */
     public static Command parse(String input) throws NomzException {
         String[] args = input.trim().split("\\s+");
         CommandType cmd = CommandType.fromString(args[0]); 

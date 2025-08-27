@@ -30,5 +30,17 @@ public class Task {
     public String toString(){
         return "["+ type.getSymbol() + "][" + getStatusIcon() + "] " + description;  
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Task)) {
+            return false;
+        }
+        Task task = (Task) o;
+        return isDone == task.isDone && description.equals(task.description) && type == task.type;
+    }
 }
 

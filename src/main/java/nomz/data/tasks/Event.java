@@ -42,4 +42,20 @@ public class Event extends Task{
         }
         return super.savedString() + "|" + fromTime.toString() + "|" + toTime.toString();
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if (!super.equals(other)) {
+            return false;
+        }
+        if (!(other instanceof Event)) {
+            return false;
+        }
+        Event event = (Event) other;
+        if (fromTime == null) {
+            return (from.equals(event.from) && to.equals(event.to));
+        }
+
+        return fromTime.equals(event.fromTime) && toTime.equals(event.toTime);
+    }
 }
