@@ -16,6 +16,13 @@ public class AddEventCommand extends Command {
     private final String from, to;
     private final boolean useDateTime;
 
+    /**
+     * Creates an AddEventCommand with the specified description and LocalDateTime
+     * objects to represent the event's time period.
+     * @param description
+     * @param fromTime
+     * @param toTime
+     */
     public AddEventCommand(String description, LocalDateTime fromTime, LocalDateTime toTime) {
         this.description = description; 
         this.fromTime = fromTime; 
@@ -25,6 +32,13 @@ public class AddEventCommand extends Command {
         this.useDateTime = true;
     }
 
+    /**
+     * Creates an AddEventCommand with the specified description and Strings to represent
+     * the event's start and end time.
+     * @param description
+     * @param from
+     * @param to
+     */
     public AddEventCommand(String description, String from, String to) {
         this.description = description; 
         this.fromTime = null; 
