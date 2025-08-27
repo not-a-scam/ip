@@ -7,9 +7,16 @@ import nomz.data.tasks.TaskList;
 import nomz.storage.Storage;
 import nomz.ui.Ui;
 
+/**
+ * Command to delete a task.
+ */
 public class DeleteCommand extends Command {
     private final int index;
-    
+
+    /**
+     * Creates a DeleteCommand to delete a task at the specified index.
+     * @param index
+     */
     public DeleteCommand(int index) {
         this.index = index; 
     }
