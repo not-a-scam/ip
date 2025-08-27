@@ -50,4 +50,20 @@ public class AddEventCommand extends Command {
         }
         ui.show(Messages.MESSAGE_ADD_TASK.formatted(t.toString()));
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof AddEventCommand)) {
+            return false;
+        }
+        AddEventCommand other = (AddEventCommand) obj;
+        return description.equals(other.description)
+                && fromTime.equals(other.fromTime)
+                && toTime.equals(other.toTime)
+                && from.equals(other.from)
+                && to.equals(other.to);
+    }
 }
