@@ -1,6 +1,9 @@
 package nomz.commands;
 import nomz.data.exception.InvalidNomzCommandException;
 
+/**
+ * Represents the different types of commands in the application.
+ */
 public enum CommandType {
     LIST, MARK, UNMARK, TODO, DEADLINE, EVENT, DELETE, BYE;
 
