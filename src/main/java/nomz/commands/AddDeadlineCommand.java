@@ -10,6 +10,9 @@ import nomz.data.tasks.TaskList;
 import nomz.storage.Storage;
 import nomz.ui.Ui;
 
+/**
+ * Adds a deadline task to the task list.
+ */
 public class AddDeadlineCommand extends Command {
     private final String description;
     private final LocalDateTime byTime;
