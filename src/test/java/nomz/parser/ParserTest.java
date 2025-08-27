@@ -5,6 +5,10 @@ import nomz.commands.AddTodoCommand;
 import nomz.commands.AddEventCommand;
 import nomz.commands.AddDeadlineCommand;
 
+import nomz.data.tasks.Todo;
+import nomz.data.tasks.Event;
+import nomz.data.tasks.Deadline;
+
 import java.beans.Transient;
 import java.time.LocalDateTime ;
 
@@ -18,6 +22,8 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ParserTest {
+
+    // Test for parse method
     @Test
     public void parse_validTodo_returnsTodo() {
         String input = "todo read book";
@@ -218,4 +224,19 @@ public class ParserTest {
             assertEquals(MESSAGE_NO_ARGUMENTS, e.getMessage());
         }
     }
+
+    // Test for parseTaskFileContent method
+    @Test
+    public void parseTaskFileContent_validTodo_returnsTodo() {
+        String input = "T|0|read book";
+        Task expected = new Todo("read book");
+        Task result = null;
+        try {
+            result = Parser.parseTaskFileContent(input);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        assertEquals(expected, result);
+    }
+    
 }
