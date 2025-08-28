@@ -1,4 +1,5 @@
 package nomz.data.tasks;
+
 import java.util.ArrayList;
 
 import nomz.common.Messages;

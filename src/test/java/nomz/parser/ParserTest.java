@@ -1,17 +1,14 @@
 package nomz.parser;
 
+import java.time.LocalDateTime;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import nomz.commands.Command;
 import nomz.commands.AddTodoCommand;
 import nomz.commands.AddEventCommand;
 import nomz.commands.AddDeadlineCommand;
-
-import nomz.data.tasks.Task;
-import nomz.data.tasks.Todo;
-import nomz.data.tasks.Event;
-import nomz.data.tasks.Deadline;
-
-import java.beans.Transient;
-import java.time.LocalDateTime ;
 
 import static nomz.common.Messages.MESSAGE_NO_DESCRIPTION_ARGUMENT;
 import static nomz.common.Messages.MESSAGE_WRONG_FROM_KEYWORD;
@@ -19,8 +16,10 @@ import static nomz.common.Messages.MESSAGE_WRONG_TO_KEYWORD;
 import static nomz.common.Messages.MESSAGE_NO_BY_KEYWORD;
 import static nomz.common.Messages.MESSAGE_NO_ARGUMENTS;
 
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import nomz.data.tasks.Task;
+import nomz.data.tasks.Todo;
+import nomz.data.tasks.Event;
+import nomz.data.tasks.Deadline;
 
 public class ParserTest {
 
@@ -226,7 +225,6 @@ public class ParserTest {
         }
     }
 
-    // Test for parseTaskFileContent method
     @Test
     public void parseTaskFileContent_validTodoUnmarked_returnsTodo() {
         String input = "T|0|read book";
@@ -361,6 +359,4 @@ public class ParserTest {
         }
         assertEquals(expected, result);
     }
-
-
 }

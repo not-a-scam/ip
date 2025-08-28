@@ -1,18 +1,19 @@
 package nomz.ui;
 
-import java.io.ByteArrayOutputStream;
-import java.io.ByteArrayInputStream;
 import java.io.PrintStream;
 import java.io.InputStream;
-
-import static nomz.common.Messages.MESSAGE_LINEBREAK;
-import static nomz.common.Messages.MESSAGE_BYE;
-import static nomz.common.Messages.MESSAGE_WELCOME;
+import java.io.ByteArrayOutputStream;
+import java.io.ByteArrayInputStream;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import static nomz.common.Messages.MESSAGE_LINEBREAK;
+import static nomz.common.Messages.MESSAGE_BYE;
+import static nomz.common.Messages.MESSAGE_WELCOME;
 
 
 class UiTest {
@@ -20,6 +21,7 @@ class UiTest {
     private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
     private final PrintStream originalOut = System.out;
     private final PrintStream originalErr = System.err;
+    
     private Ui ui;
 
     @BeforeEach

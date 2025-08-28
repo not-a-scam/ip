@@ -19,10 +19,6 @@ public class Ui {
     public void show(String s) {
         System.out.println(Messages.MESSAGE_LINEBREAK + "\n" + s + "\n" + Messages.MESSAGE_LINEBREAK);
     }
-
-    /**
-     * Displays a welcome message to the user.
-     */
     public void showWelcome() {
         show(Messages.MESSAGE_WELCOME);
     }

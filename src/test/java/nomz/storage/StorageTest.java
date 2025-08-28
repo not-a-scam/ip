@@ -1,21 +1,22 @@
 package nomz.storage;
 
-import nomz.data.exception.NomzException;
-
-import nomz.data.tasks.Task;
-import nomz.data.tasks.Todo;
-
-import nomz.parser.Parser;
+import java.util.ArrayList;
 
 import java.io.File;
+
 import java.nio.file.Files;
-import java.util.ArrayList;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import nomz.data.exception.NomzException;
+import nomz.data.tasks.Task;
+import nomz.data.tasks.Todo;
+import nomz.parser.Parser;
 
 class StorageTest {
     private static final String TEST_FILE_PATH = "test_data/storage_test.txt";

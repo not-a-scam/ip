@@ -1,4 +1,5 @@
 package nomz.data.tasks;
+
 import nomz.data.exception.InvalidNomzCommandException;
 
 /**

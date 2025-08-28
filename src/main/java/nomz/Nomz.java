@@ -12,6 +12,7 @@ import nomz.ui.Ui;
  * Main entry point for the Nomz application.
  */
 public class Nomz {
+
     private Ui ui;
     private Storage storage;
     private TaskList taskList;
@@ -55,6 +56,5 @@ public class Nomz {
 
     public static void main(String[] args) {
         new Nomz("data/tasks.txt").run();
-        ;
     }
 }

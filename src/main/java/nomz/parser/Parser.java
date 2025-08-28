@@ -1,30 +1,16 @@
 package nomz.parser;
 
+import java.util.Arrays;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Arrays;
-
-import nomz.data.tasks.TaskType;
-
-import nomz.data.tasks.Deadline;
-import nomz.data.tasks.Event;
-import nomz.data.tasks.Todo;
-
-import nomz.data.tasks.Task;
-
-import nomz.data.exception.InvalidNomzArgumentException;
-import nomz.data.exception.InvalidNomzCommandException;
-import nomz.data.exception.NomzException;
 
 import nomz.commands.ListCommand;
 import nomz.commands.MarkCommand;
-
 import nomz.commands.CommandType;
-
 import nomz.commands.DeleteCommand;
-
 import nomz.commands.AddDeadlineCommand;
 import nomz.commands.AddEventCommand;
 import nomz.commands.AddTodoCommand;
@@ -32,6 +18,17 @@ import nomz.commands.ByeCommand;
 import nomz.commands.Command;
 
 import nomz.common.Messages;
+
+import nomz.data.exception.InvalidNomzArgumentException;
+import nomz.data.exception.InvalidNomzCommandException;
+import nomz.data.exception.NomzException;
+
+import nomz.data.tasks.TaskType;
+import nomz.data.tasks.Deadline;
+import nomz.data.tasks.Event;
+import nomz.data.tasks.Todo;
+import nomz.data.tasks.Task;
+
 
 /**
  * Parses user input into commands and arguments.
@@ -56,13 +53,17 @@ public class Parser {
         for (DateTimeFormatter f : DATE_TIME_FORMATS) {
             try {
                 return LocalDateTime.parse(s, f);
-            } catch (DateTimeParseException ignored) {}
+            } catch (DateTimeParseException ignored) {
+                // Continue to next format
+            }
         }
 
         for (DateTimeFormatter f : DATE_ONLY_FORMATS) {
             try {
                 return LocalDate.parse(s, f).atStartOfDay();
-            } catch (DateTimeParseException ignored) {}
+            } catch (DateTimeParseException ignored) {
+                // Continue to next format
+            }
         }
 
         return null;
@@ -76,14 +77,7 @@ public class Parser {
         }
     }
 
-    /**
-     * Parses the content of a task file and returns the corresponding Task object.
-     * 
-     * @param f The content of the task file.
-     * @return The Task object represented by the file content.
-     * @throws NomzException If the file content is invalid.
-     */
-    public static Task parseTaskFileContent(String f) throws NomzException {
+    public static Task parseTaskFileContent(String f) throws NomzException{
         String[] args = f.split("[\\|]");
         TaskType type = TaskType.fromSymbol(args[0]);
         boolean done = args[1].equals("1");
@@ -107,6 +101,7 @@ public class Parser {
                 deadline.mark();
             }
             return deadline;
+
         case EVENT:
             LocalDateTime from = parseDateTimeFlexible(args[3]);
             LocalDateTime to = parseDateTimeFlexible(args[4]);
@@ -120,6 +115,7 @@ public class Parser {
                 event.mark();
             }
             return event;
+
         default:
             throw new InvalidNomzArgumentException(Messages.MESSAGE_INVALID_FORMAT);
         }
@@ -138,9 +134,12 @@ public class Parser {
         switch (cmd) {
         case LIST:
             return new ListCommand();
+
         case BYE:
             return new ByeCommand();
+
         case MARK:
+        // Fallthrough
         case UNMARK: {
             if (args.length < 2) {
                 throw new InvalidNomzArgumentException(Messages.MESSAGE_NO_INDEX_ARGUMENT);
@@ -149,6 +148,7 @@ public class Parser {
             boolean toMark = (cmd == CommandType.MARK);
             return new MarkCommand(idx, toMark);
         }
+        
         case DELETE: {
             if (args.length < 2) {
                 throw new InvalidNomzArgumentException(Messages.MESSAGE_NO_INDEX_ARGUMENT);
