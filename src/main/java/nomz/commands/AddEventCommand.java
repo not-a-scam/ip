@@ -1,6 +1,7 @@
 package nomz.commands;
-// AddEventCommand.java
+
 import java.io.IOException;
+
 import java.time.LocalDateTime;
 
 import nomz.common.Messages;
@@ -12,8 +13,8 @@ import nomz.ui.Ui;
 
 public class AddEventCommand extends Command {
     private final String description;
-    private final LocalDateTime fromTime, toTime;
     private final String from, to;
+    private final LocalDateTime fromTime, toTime;
     private final boolean useDateTime;
 
     public AddEventCommand(String description, LocalDateTime fromTime, LocalDateTime toTime) {
