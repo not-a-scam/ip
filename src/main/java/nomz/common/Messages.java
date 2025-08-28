@@ -29,4 +29,8 @@ public class Messages {
 
     public static final String MESSAGE_WRONG_FROM_KEYWORD = "you didnt use the /from keyword properly :((";
     public static final String MESSAGE_WRONG_TO_KEYWORD = "you didnt use the /to keyword properly :(("; 
+
+    // Find Command Messages
+    public static final String MESSAGE_FIND_NO_MATCH = "nomz couldn't find any tasks with: %s";
+    public static final String MESSAGE_FIND_RESULTS_HEADER = "nomz found some matching tasks!:\n";
 }
