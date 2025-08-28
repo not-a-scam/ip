@@ -1,12 +1,14 @@
 package nomz.data.tasks;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Deadline extends Task {
 
-    protected LocalDateTime byTime = null;
-    protected String by;
     private static final DateTimeFormatter OUT = DateTimeFormatter.ofPattern("MMM dd yyyy, h:mma");
+
+    private LocalDateTime byTime = null;
+    private String by;
 
     private Deadline(String description) {
         super(description, TaskType.DEADLINE);
