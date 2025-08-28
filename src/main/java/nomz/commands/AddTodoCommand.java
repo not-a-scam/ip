@@ -1,4 +1,5 @@
 package nomz.commands;
+
 import java.io.IOException;
 
 import nomz.common.Messages;
@@ -10,6 +11,7 @@ import nomz.ui.Ui;
 
 public class AddTodoCommand extends Command {
     private final String description;
+    
     public AddTodoCommand(String description) { 
         this.description = description; 
     }
