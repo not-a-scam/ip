@@ -1,4 +1,5 @@
 package nomz;
+
 import nomz.commands.Command;
 import nomz.common.Messages;
 import nomz.data.exception.NomzException;
@@ -8,6 +9,7 @@ import nomz.storage.Storage;
 import nomz.ui.Ui;
 
 public class Nomz {
+
     private Ui ui;
     private Storage storage;
     private TaskList taskList;
@@ -37,12 +39,11 @@ public class Nomz {
                 isExit = c.isExit();
             } catch (NomzException e) {
                 ui.showError(e.getMessage());
-        }
+            }
         }
     }
 
     public static void main(String[] args) {
-
         new Nomz("data/tasks.txt").run();;
     }
 }
