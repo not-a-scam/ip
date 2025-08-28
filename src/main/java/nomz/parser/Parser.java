@@ -19,6 +19,7 @@ import nomz.data.exception.NomzException;
 
 import nomz.commands.ListCommand;
 import nomz.commands.MarkCommand;
+import nomz.commands.FindCommand;
 
 import nomz.commands.CommandType;
 
@@ -144,6 +145,14 @@ public class Parser {
             }
             int idx = intFromString(args[1]);
             return new DeleteCommand(idx);
+        }
+
+        case FIND: {
+            if (args.length < 2) {
+                throw new InvalidNomzArgumentException(Messages.MESSAGE_NO_ARGUMENTS);
+            }
+            String keyword = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
+            return new FindCommand(keyword);
         }
 
         case TODO: {
