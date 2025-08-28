@@ -26,6 +26,14 @@ public class Task {
         return type.getSymbol() + "|" + (isDone ? 1 : 0) + "|" + description;
     }
 
+    /**
+     * Returns the description of the task.
+     * @return the description of the task
+     */
+    public String getDescription() {
+        return this.description;
+    }
+
     @Override
     public String toString(){
         return "["+ type.getSymbol() + "][" + getStatusIcon() + "] " + description;  
@@ -43,4 +51,3 @@ public class Task {
         return isDone == task.isDone && description.equals(task.description) && type == task.type;
     }
 }
-
