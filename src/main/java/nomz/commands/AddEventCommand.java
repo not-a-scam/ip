@@ -1,5 +1,5 @@
 package nomz.commands;
-// AddEventCommand.java
+
 import java.io.IOException;
 import java.time.LocalDateTime;
 
@@ -10,12 +10,23 @@ import nomz.data.tasks.TaskList;
 import nomz.storage.Storage;
 import nomz.ui.Ui;
 
+/**
+ * Adds an event task to the task list.
+ */
 public class AddEventCommand extends Command {
     private final String description;
     private final LocalDateTime fromTime, toTime;
     private final String from, to;
     private final boolean useDateTime;
 
+    /**
+     * Creates an AddEventCommand with the specified description and LocalDateTime
+     * objects to represent the event's time period.
+     * 
+     * @param description
+     * @param fromTime
+     * @param toTime
+     */
     public AddEventCommand(String description, LocalDateTime fromTime, LocalDateTime toTime) {
         this.description = description; 
         this.fromTime = fromTime; 
@@ -25,6 +36,14 @@ public class AddEventCommand extends Command {
         this.useDateTime = true;
     }
 
+    /**
+     * Creates an AddEventCommand with the specified description and Strings to represent
+     * the event's start and end time.
+     * 
+     * @param description
+     * @param from
+     * @param to
+     */
     public AddEventCommand(String description, String from, String to) {
         this.description = description; 
         this.fromTime = null; 

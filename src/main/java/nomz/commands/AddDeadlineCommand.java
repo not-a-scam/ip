@@ -10,12 +10,21 @@ import nomz.data.tasks.TaskList;
 import nomz.storage.Storage;
 import nomz.ui.Ui;
 
+/**
+ * Adds a deadline task to the task list.
+ */
 public class AddDeadlineCommand extends Command {
     private final String description;
     private final LocalDateTime byTime;
     private final String by;
     private final boolean useDateTime;
 
+    /**
+     * Creates an AddDeadlineCommand with the specified description and a LocalDateTime
+     * 
+     * @param description
+     * @param byTime 
+     */
     public AddDeadlineCommand(String description, LocalDateTime byTime) {
         this.description = description;
         this.byTime = byTime;
@@ -23,6 +32,12 @@ public class AddDeadlineCommand extends Command {
         useDateTime = true;
     }
 
+    /**
+     * Creates an AddDeadlineCommand with the specified description and a String to represent complement time
+     * 
+     * @param description
+     * @param by
+     */
     public AddDeadlineCommand(String description, String by) {
         this.description = description;
         this.byTime = null;
