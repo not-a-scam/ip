@@ -1,8 +1,10 @@
 package nomz.storage;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.FileNotFoundException;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -38,7 +40,9 @@ public class Storage {
                 Task t = Parser.parseTaskFileContent(s.nextLine());
                 list.add(t);
             }
-        } catch (FileNotFoundException ignore) {}
+        } catch (FileNotFoundException ignore) {
+            // File not found, return empty list
+        }
         return list;
     }
 
