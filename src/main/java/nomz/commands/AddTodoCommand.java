@@ -17,20 +17,20 @@ public class AddTodoCommand extends Command {
 
     /**
      * Creates an AddTodoCommand with the specified description.
-     * 
+     *
      * @param description
      */
-    public AddTodoCommand(String description) { 
-        this.description = description; 
+    public AddTodoCommand(String description) {
+        this.description = description;
     }
 
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) {
         Task t = tasks.add(new Todo(description));
-        try { 
-            storage.append(t); 
-        } catch (IOException e) { 
-            ui.showError(e.getMessage()); 
+        try {
+            storage.append(t);
+        } catch (IOException e) {
+            ui.showError(e.getMessage());
         }
         ui.show(Messages.MESSAGE_ADD_TASK.formatted(t.toString()));
     }

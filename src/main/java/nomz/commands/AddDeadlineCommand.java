@@ -1,7 +1,6 @@
 package nomz.commands;
 
 import java.io.IOException;
-
 import java.time.LocalDateTime;
 
 import nomz.common.Messages;
@@ -22,9 +21,9 @@ public class AddDeadlineCommand extends Command {
 
     /**
      * Creates an AddDeadlineCommand with the specified description and a LocalDateTime
-     * 
+     *
      * @param description
-     * @param byTime 
+     * @param byTime
      */
     public AddDeadlineCommand(String description, LocalDateTime byTime) {
         this.description = description;
@@ -35,7 +34,7 @@ public class AddDeadlineCommand extends Command {
 
     /**
      * Creates an AddDeadlineCommand with the specified description and a String to represent complement time
-     * 
+     *
      * @param description
      * @param by
      */
@@ -49,16 +48,16 @@ public class AddDeadlineCommand extends Command {
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) {
         Task t;
-        if(!useDateTime) {
+        if (!useDateTime) {
             t = new Deadline(description, by);
         } else {
             t = new Deadline(description, byTime);
         }
         tasks.add(t);
-        try { 
-            storage.append(t); 
-        } catch (IOException e) { 
-            ui.showError(e.getMessage()); 
+        try {
+            storage.append(t);
+        } catch (IOException e) {
+            ui.showError(e.getMessage());
         }
         ui.show(Messages.MESSAGE_ADD_TASK.formatted(t.toString()));
     }

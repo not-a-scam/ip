@@ -20,7 +20,7 @@ public class TaskList {
 
     /**
      * Creates a TaskList with the specified list of tasks.
-     * 
+     *
      * @param tasks
      */
     public TaskList(ArrayList<Task> tasks) {
@@ -29,7 +29,7 @@ public class TaskList {
 
     /**
      * Adds a task to the list.
-     * 
+     *
      * @param task
      * @return
      */
@@ -40,7 +40,7 @@ public class TaskList {
 
     /**
      * Deletes a task from the list. Uses one based indexing.
-     * 
+     *
      * @param oneBasedIndex
      * @return
      * @throws InvalidNomzArgumentException
@@ -55,7 +55,7 @@ public class TaskList {
 
     /**
      * Retrieves a task from the list. Uses one based indexing.
-     * 
+     *
      * @param oneBasedIndex
      * @return
      * @throws InvalidNomzArgumentException
@@ -70,7 +70,7 @@ public class TaskList {
 
     /**
      * Returns the number of tasks in the list.
-     * 
+     *
      * @return
      */
     public int size() {
@@ -80,7 +80,7 @@ public class TaskList {
 
     /**
      * Returns the list of tasks.
-     * 
+     *
      * @return
      */
     public ArrayList<Task> getTasks() {
@@ -89,7 +89,7 @@ public class TaskList {
 
     /**
      * Returns a string representation of the task list for display.
-     * 
+     *
      * @return
      */
     public String toDisplayString() {

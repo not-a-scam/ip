@@ -1,7 +1,6 @@
 package nomz.commands;
 
 import java.io.IOException;
-
 import java.time.LocalDateTime;
 
 import nomz.common.Messages;
@@ -16,21 +15,23 @@ import nomz.ui.Ui;
  */
 public class AddEventCommand extends Command {
     private final String description;
-    private final String from, to;
-    private final LocalDateTime fromTime, toTime;
+    private final String from;
+    private final String to;
+    private final LocalDateTime fromTime;
+    private final LocalDateTime toTime;
     private final boolean useDateTime;
 
     /**
      * Creates an AddEventCommand with the specified description and LocalDateTime
      * objects to represent the event's time period.
-     * 
+     *
      * @param description
      * @param fromTime
      * @param toTime
      */
     public AddEventCommand(String description, LocalDateTime fromTime, LocalDateTime toTime) {
-        this.description = description; 
-        this.fromTime = fromTime; 
+        this.description = description;
+        this.fromTime = fromTime;
         this.toTime = toTime;
         this.from = null;
         this.to = null;
@@ -40,14 +41,14 @@ public class AddEventCommand extends Command {
     /**
      * Creates an AddEventCommand with the specified description and Strings to represent
      * the event's start and end time.
-     * 
+     *
      * @param description
      * @param from
      * @param to
      */
     public AddEventCommand(String description, String from, String to) {
-        this.description = description; 
-        this.fromTime = null; 
+        this.description = description;
+        this.fromTime = null;
         this.toTime = null;
         this.from = from;
         this.to = to;
@@ -57,16 +58,16 @@ public class AddEventCommand extends Command {
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) {
         Task t;
-        if(!useDateTime) {
+        if (!useDateTime) {
             t = new Event(description, from, to);
         } else {
             t = new Event(description, fromTime, toTime);
         }
         tasks.add(t);
-        try { 
-            storage.append(t); 
-        } catch (IOException e) { 
-            ui.showError(e.getMessage()); 
+        try {
+            storage.append(t);
+        } catch (IOException e) {
+            ui.showError(e.getMessage());
         }
         ui.show(Messages.MESSAGE_ADD_TASK.formatted(t.toString()));
     }

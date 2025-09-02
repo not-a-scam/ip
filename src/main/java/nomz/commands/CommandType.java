@@ -10,16 +10,16 @@ public enum CommandType {
 
     /**
      * Converts a string representation of a command to its CommandType enum.
-     * 
+     *
      * @param input
      * @return
      * @throws InvalidNomzCommandException
      */
     public static CommandType fromString(String input) throws InvalidNomzCommandException {
-        try { 
-            return CommandType.valueOf(input.toUpperCase()); 
-        } catch (IllegalArgumentException e) { 
-            throw new InvalidNomzCommandException(); 
+        try {
+            return CommandType.valueOf(input.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new InvalidNomzCommandException();
         }
     }
 }

@@ -16,10 +16,10 @@ public class Deadline extends Task {
     private Deadline(String description) {
         super(description, TaskType.DEADLINE);
     }
-    
+
     /**
      * Creates a Deadline task with the specified description and a LocalDateTime object.
-     * 
+     *
      * @param description
      * @param by
      */
@@ -30,26 +30,26 @@ public class Deadline extends Task {
 
     /**
      * Creates a Deadline task with the specified description and String represented time.
-     * 
+     *
      * @param description
      * @param by
      */
     public Deadline(String description, String by) {
         this(description);
-        this.by = by;  
+        this.by = by;
     }
 
     @Override
     public String toString() {
-        if(byTime == null) {
+        if (byTime == null) {
             return super.toString() + " (by: " + by + ")";
         }
         return super.toString() + " (by: " + OUT.format(byTime) + ")";
     }
 
     @Override
-    public String savedString(){
-        if(byTime == null) {
+    public String savedString() {
+        if (byTime == null) {
             return super.savedString() + "|" + by;
         }
         return super.savedString() + "|" + byTime.toString();

@@ -1,19 +1,20 @@
 package nomz.commands;
 
-import java.util.ArrayList;
-
 import static nomz.common.Messages.MESSAGE_FIND_NO_MATCH;
 import static nomz.common.Messages.MESSAGE_FIND_RESULTS_HEADER;
+
+import java.util.ArrayList;
+
 import nomz.data.exception.NomzException;
 import nomz.data.tasks.Task;
 import nomz.data.tasks.TaskList;
 import nomz.storage.Storage;
 import nomz.ui.Ui;
 
-/** 
+/**
  * Command to find tasks by description
  */
-public class FindCommand extends Command{
+public class FindCommand extends Command {
     private String keyword;
 
     /**
@@ -42,7 +43,7 @@ public class FindCommand extends Command{
                 sb.append((i + 1) + ". " + matched.get(i).toString() + "\n");
             }
             ui.show(sb.toString().trim());
-            
+
         }
     }
 }

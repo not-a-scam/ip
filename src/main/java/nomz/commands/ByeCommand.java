@@ -13,7 +13,7 @@ public class ByeCommand extends Command {
         ui.showGoodbye();
     }
     @Override
-    public boolean isExit() { 
-        return true; 
+    public boolean isExit() {
+        return true;
     }
 }

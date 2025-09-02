@@ -1,36 +1,30 @@
 package nomz.parser;
 
-import java.util.Arrays;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Arrays;
 
-import nomz.commands.ListCommand;
-import nomz.commands.MarkCommand;
-import nomz.commands.FindCommand;
-
-import nomz.commands.CommandType;
-import nomz.commands.DeleteCommand;
 import nomz.commands.AddDeadlineCommand;
 import nomz.commands.AddEventCommand;
 import nomz.commands.AddTodoCommand;
 import nomz.commands.ByeCommand;
 import nomz.commands.Command;
-
+import nomz.commands.CommandType;
+import nomz.commands.DeleteCommand;
+import nomz.commands.FindCommand;
+import nomz.commands.ListCommand;
+import nomz.commands.MarkCommand;
 import nomz.common.Messages;
-
 import nomz.data.exception.InvalidNomzArgumentException;
 import nomz.data.exception.InvalidNomzCommandException;
 import nomz.data.exception.NomzException;
-
-import nomz.data.tasks.TaskType;
 import nomz.data.tasks.Deadline;
 import nomz.data.tasks.Event;
-import nomz.data.tasks.Todo;
 import nomz.data.tasks.Task;
-
+import nomz.data.tasks.TaskType;
+import nomz.data.tasks.Todo;
 
 /**
  * Parses user input into commands and arguments.
@@ -79,7 +73,13 @@ public class Parser {
         }
     }
 
-    public static Task parseTaskFileContent(String f) throws NomzException{
+    /**
+     * Parses a task from the file content.
+     * @param f The file content string.
+     * @return The parsed Task object.
+     * @throws NomzException If the file content is invalid.
+     */
+    public static Task parseTaskFileContent(String f) throws NomzException {
         String[] args = f.split("[\\|]");
         TaskType type = TaskType.fromSymbol(args[0]);
         boolean done = args[1].equals("1");
@@ -125,7 +125,7 @@ public class Parser {
 
     /**
      * Parses a user command from the input string.
-     * 
+     *
      * @param input The input string to parse.
      * @return The corresponding Command object.
      * @throws NomzException If the input is invalid.
@@ -150,7 +150,7 @@ public class Parser {
             boolean toMark = (cmd == CommandType.MARK);
             return new MarkCommand(idx, toMark);
         }
-        
+
         case DELETE: {
             if (args.length < 2) {
                 throw new InvalidNomzArgumentException(Messages.MESSAGE_NO_INDEX_ARGUMENT);
@@ -199,7 +199,8 @@ public class Parser {
         }
 
         case EVENT: {
-            int fromIndex = -1, toIndex = -1;
+            int fromIndex = -1;
+            int toIndex = -1;
             for (int i = 1; i < args.length; i++) {
                 if (args[i].equals("/from")) {
                     fromIndex = i;
