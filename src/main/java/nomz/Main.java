@@ -1,4 +1,4 @@
-package nomz.ui;
+package nomz;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -9,6 +9,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import nomz.ui.DialogBox;
 import javafx.scene.layout.Region;
 
 public class Main extends Application {
@@ -18,8 +19,9 @@ public class Main extends Application {
     private TextField userInput;
     private Button sendButton;
     private Scene scene;
-    private Image userImage = new Image(this.getClass().getResourceAsStream("/images/DaUser.png"));
-    private Image dukeImage = new Image(this.getClass().getResourceAsStream("/images/DaDuke.png"));
+    private Image userImage = new Image(this.getClass().getResourceAsStream("/images/user.png"));
+    private Image nomzImage = new Image(this.getClass().getResourceAsStream("/images/nomz.jpg"));
+    private Nomz nomz = new Nomz("./data/tasks.txt");
 
     @Override
     public void start(Stage stage) {
@@ -76,10 +78,17 @@ public class Main extends Application {
         userInput.setOnAction((event) -> {
             handleUserInput();
         });
+
+        dialogContainer.heightProperty().addListener((observable) -> scrollPane.setVvalue(1.0));
     }
 
     private void handleUserInput() {
-        dialogContainer.getChildren().addAll(new DialogBox(userInput.getText(), userImage));
+        String userText = userInput.getText();
+        String nomzText = nomz.getResponse(userInput.getText());
+        dialogContainer.getChildren().addAll(
+                new DialogBox(userText, userImage),
+                new DialogBox(nomzText, nomzImage));
         userInput.clear();
     }
+
 }

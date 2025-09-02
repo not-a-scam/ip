@@ -54,6 +54,16 @@ public class Nomz {
         }
     }
 
+    public String getResponse(String input) {
+        try {
+            Command c = Parser.parse(input);
+            String message = c.execute(taskList, ui, storage);
+            return message;
+        } catch (NomzException e) {
+            return e.getMessage();
+        }
+    }
+
     public static void main(String[] args) {
         new Nomz("data/tasks.txt").run();
     }

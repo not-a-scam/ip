@@ -1,4 +1,4 @@
-package nomz.ui;
+package nomz;
 
 import javafx.application.Application;
 
