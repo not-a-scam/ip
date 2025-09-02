@@ -124,6 +124,17 @@ public class Parser {
     }
 
     /**
+     * Joins the arguments from the specified range into a single string.
+     * @param from The starting index (inclusive).
+     * @param to The ending index (exclusive).
+     * @param args The array of arguments.
+     * @return The joined string.
+     */
+    private static String joinArgs(int from, int to, String... args) {
+        return String.join(" ", Arrays.copyOfRange(args, from, to));
+    }
+
+    /**
      * Parses a user command from the input string.
      *
      * @param input The input string to parse.
@@ -163,7 +174,7 @@ public class Parser {
             if (args.length < 2) {
                 throw new InvalidNomzArgumentException(Messages.MESSAGE_NO_ARGUMENTS);
             }
-            String keyword = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
+            String keyword = joinArgs(1, args.length, args);
             return new FindCommand(keyword);
         }
 
@@ -171,7 +182,7 @@ public class Parser {
             if (args.length < 2) {
                 throw new InvalidNomzArgumentException(Messages.MESSAGE_NO_DESCRIPTION_ARGUMENT);
             }
-            String description = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
+            String description = joinArgs(1, args.length, args);
             return new AddTodoCommand(description);
         }
 
@@ -189,8 +200,8 @@ public class Parser {
             if (byPos == -1) {
                 throw new InvalidNomzArgumentException(Messages.MESSAGE_NO_BY_KEYWORD);
             }
-            String description = String.join(" ", Arrays.copyOfRange(args, 1, byPos));
-            String byRaw = String.join(" ", Arrays.copyOfRange(args, byPos + 1, args.length));
+            String description = joinArgs(1, byPos, args);
+            String byRaw = joinArgs(byPos + 1, args.length, args);
             LocalDateTime by = parseDateTimeFlexible(byRaw);
             if (by != null) {
                 return new AddDeadlineCommand(description, by);
@@ -214,9 +225,9 @@ public class Parser {
             if (toIndex <= fromIndex || toIndex <= 3 || toIndex == args.length - 1) {
                 throw new InvalidNomzArgumentException(Messages.MESSAGE_WRONG_TO_KEYWORD);
             }
-            String description = String.join(" ", Arrays.copyOfRange(args, 1, fromIndex));
-            String fromRaw = String.join(" ", Arrays.copyOfRange(args, fromIndex + 1, toIndex));
-            String toRaw = String.join(" ", Arrays.copyOfRange(args, toIndex + 1, args.length));
+            String description = joinArgs(1, fromIndex, args);
+            String fromRaw = joinArgs(fromIndex + 1, toIndex, args);
+            String toRaw = joinArgs(toIndex + 1, args.length, args);
             LocalDateTime from = parseDateTimeFlexible(fromRaw);
             LocalDateTime to = parseDateTimeFlexible(toRaw);
             if (from != null && to != null) {
