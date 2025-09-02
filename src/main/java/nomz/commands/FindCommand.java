@@ -9,7 +9,6 @@ import nomz.data.exception.NomzException;
 import nomz.data.tasks.Task;
 import nomz.data.tasks.TaskList;
 import nomz.storage.Storage;
-import nomz.ui.Ui;
 
 /**
  * Command to find tasks by description
@@ -26,7 +25,7 @@ public class FindCommand extends Command {
     }
 
     @Override
-    public String execute(TaskList tasks, Ui ui, Storage storage) throws NomzException {
+    public String execute(TaskList tasks, Storage storage) throws NomzException {
         ArrayList<Task> matched = new ArrayList<>();
         for (Task t : tasks.getTasks()) {
             if (t.getDescription().contains(this.keyword)) {

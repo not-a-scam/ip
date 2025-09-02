@@ -7,7 +7,6 @@ import nomz.data.tasks.Task;
 import nomz.data.tasks.TaskList;
 import nomz.data.tasks.Todo;
 import nomz.storage.Storage;
-import nomz.ui.Ui;
 
 /**
  * Adds a todo task to the task list.
@@ -25,7 +24,7 @@ public class AddTodoCommand extends Command {
     }
 
     @Override
-    public String execute(TaskList tasks, Ui ui, Storage storage) {
+    public String execute(TaskList tasks, Storage storage) {
         Task t = tasks.add(new Todo(description));
         try {
             storage.append(t);
