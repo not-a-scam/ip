@@ -1,5 +1,6 @@
 package nomz.ui;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -8,6 +9,9 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import nomz.Nomz;
+import nomz.parser.Parser;
+import nomz.commands.Command;
+import nomz.data.exception.NomzException;
 
 /**
  * Controller for the main GUI.
@@ -45,10 +49,24 @@ public class MainWindow extends AnchorPane {
     @FXML
     private void handleUserInput() {
         String input = userInput.getText();
-        String response = nomz.getResponse(input);
+        Command command = null;
+        String response = "";
+
+        try {
+            command = Parser.parse(input);
+            response = nomz.getResponse(command);
+        } catch (NomzException e) {
+            response = e.getMessage();
+        }
+
         dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(input, userImage),
-                DialogBox.getNomzDialog(response, nomzImage));
+                DialogBox.getNomzDialog(response, nomzImage)
+        );
+
+        if (command != null && command.isExit()) {
+            Platform.exit();
+        }
         userInput.clear();
     }
 }

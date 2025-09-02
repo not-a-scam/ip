@@ -54,10 +54,9 @@ public class Nomz {
         }
     }
 
-    public String getResponse(String input) {
+    public String getResponse(Command command) {
         try {
-            Command c = Parser.parse(input);
-            String message = c.execute(taskList, ui, storage);
+            String message = command.execute(taskList, ui, storage);
             return message;
         } catch (NomzException e) {
             return e.getMessage();
