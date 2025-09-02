@@ -8,7 +8,6 @@ import nomz.data.tasks.Deadline;
 import nomz.data.tasks.Task;
 import nomz.data.tasks.TaskList;
 import nomz.storage.Storage;
-import nomz.ui.Ui;
 
 /**
  * Adds a deadline task to the task list.
@@ -46,7 +45,7 @@ public class AddDeadlineCommand extends Command {
     }
 
     @Override
-    public void execute(TaskList tasks, Ui ui, Storage storage) {
+    public String execute(TaskList tasks, Storage storage) {
         Task t;
         if (!useDateTime) {
             t = new Deadline(description, by);
@@ -57,9 +56,9 @@ public class AddDeadlineCommand extends Command {
         try {
             storage.append(t);
         } catch (IOException e) {
-            ui.showError(e.getMessage());
+            return e.getMessage();
         }
-        ui.show(Messages.MESSAGE_ADD_TASK.formatted(t.toString()));
+        return Messages.MESSAGE_ADD_TASK.formatted(t.toString());
     }
 
     @Override

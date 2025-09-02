@@ -6,7 +6,6 @@ import nomz.common.Messages;
 import nomz.data.exception.NomzException;
 import nomz.data.tasks.TaskList;
 import nomz.storage.Storage;
-import nomz.ui.Ui;
 
 /**
  * Command to delete a task.
@@ -24,13 +23,13 @@ public class DeleteCommand extends Command {
     }
 
     @Override
-    public void execute(TaskList tasks, Ui ui, Storage storage) throws NomzException {
+    public String execute(TaskList tasks, Storage storage) throws NomzException {
         tasks.delete(index);
         try {
             storage.saveAll(tasks.getTasks());
         } catch (IOException e) {
-            ui.showError(e.getMessage());
+            return e.getMessage();
         }
-        ui.show(Messages.MESSAGE_DELETE_TASK.formatted(index));
+        return Messages.MESSAGE_DELETE_TASK.formatted(index);
     }
 }

@@ -8,7 +8,6 @@ import nomz.data.tasks.Event;
 import nomz.data.tasks.Task;
 import nomz.data.tasks.TaskList;
 import nomz.storage.Storage;
-import nomz.ui.Ui;
 
 /**
  * Adds an event task to the task list.
@@ -56,7 +55,7 @@ public class AddEventCommand extends Command {
     }
 
     @Override
-    public void execute(TaskList tasks, Ui ui, Storage storage) {
+    public String execute(TaskList tasks, Storage storage) {
         Task t;
         if (!useDateTime) {
             t = new Event(description, from, to);
@@ -67,9 +66,9 @@ public class AddEventCommand extends Command {
         try {
             storage.append(t);
         } catch (IOException e) {
-            ui.showError(e.getMessage());
+            return e.getMessage();
         }
-        ui.show(Messages.MESSAGE_ADD_TASK.formatted(t.toString()));
+        return Messages.MESSAGE_ADD_TASK.formatted(t.toString());
     }
 
     @Override
