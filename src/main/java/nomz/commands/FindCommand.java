@@ -26,7 +26,7 @@ public class FindCommand extends Command {
     }
 
     @Override
-    public void execute(TaskList tasks, Ui ui, Storage storage) throws NomzException {
+    public String execute(TaskList tasks, Ui ui, Storage storage) throws NomzException {
         ArrayList<Task> matched = new ArrayList<>();
         for (Task t : tasks.getTasks()) {
             if (t.getDescription().contains(this.keyword)) {
@@ -35,14 +35,14 @@ public class FindCommand extends Command {
         }
 
         if (matched.isEmpty()) {
-            ui.show(MESSAGE_FIND_NO_MATCH.formatted(this.keyword));
+            return MESSAGE_FIND_NO_MATCH.formatted(this.keyword);
         } else {
             StringBuilder sb = new StringBuilder();
             sb.append(MESSAGE_FIND_RESULTS_HEADER);
             for (int i = 0; i < matched.size(); i++) {
                 sb.append((i + 1) + ". " + matched.get(i).toString() + "\n");
             }
-            ui.show(sb.toString().trim());
+            return sb.toString().trim();
 
         }
     }

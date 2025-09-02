@@ -9,7 +9,7 @@ import nomz.ui.Ui;
  */
 public class ListCommand extends Command {
     @Override
-    public void execute(TaskList tasks, Ui ui, Storage storage) {
-        ui.show(tasks.toDisplayString());
+    public String execute(TaskList tasks, Ui ui, Storage storage) {
+        return tasks.toDisplayString();
     }
 }

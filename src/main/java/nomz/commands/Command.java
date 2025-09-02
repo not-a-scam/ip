@@ -18,7 +18,7 @@ public abstract class Command {
      * @param storage
      * @throws NomzException
      */
-    public abstract void execute(TaskList tasks, Ui ui, Storage storage) throws NomzException;
+    public abstract String execute(TaskList tasks, Ui ui, Storage storage) throws NomzException;
 
     /**
      * Checks if the command is an exit command.
