@@ -1,27 +1,25 @@
 package nomz.ui;
 
-import java.io.PrintStream;
-import java.io.InputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.ByteArrayInputStream;
-
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.AfterEach;
-
+import static nomz.common.Messages.MESSAGE_BYE;
+import static nomz.common.Messages.MESSAGE_LINEBREAK;
+import static nomz.common.Messages.MESSAGE_WELCOME;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import static nomz.common.Messages.MESSAGE_LINEBREAK;
-import static nomz.common.Messages.MESSAGE_BYE;
-import static nomz.common.Messages.MESSAGE_WELCOME;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.PrintStream;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 class UiTest {
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
     private final PrintStream originalOut = System.out;
     private final PrintStream originalErr = System.err;
-    
+
     private Ui ui;
 
     @BeforeEach
@@ -48,7 +46,8 @@ class UiTest {
     @Test
     void showWelcome_printsWelcomeMessage() {
         ui.showWelcome();
-        String expected = MESSAGE_LINEBREAK + "\n" + MESSAGE_WELCOME + "\n" + MESSAGE_LINEBREAK + System.lineSeparator();
+        String expected = MESSAGE_LINEBREAK + "\n" + MESSAGE_WELCOME + "\n" + MESSAGE_LINEBREAK
+            + System.lineSeparator();
         assertEquals(expected, outContent.toString());
     }
 

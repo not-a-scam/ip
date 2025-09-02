@@ -1,22 +1,18 @@
 package nomz.storage;
 
-import java.util.ArrayList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
-
-import java.nio.file.Files;
+import java.util.ArrayList;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import nomz.data.exception.NomzException;
 import nomz.data.tasks.Task;
 import nomz.data.tasks.Todo;
-import nomz.parser.Parser;
 
 class StorageTest {
     private static final String TEST_FILE_PATH = "test_data/storage_test.txt";
@@ -44,7 +40,7 @@ class StorageTest {
     }
 
     @Test
-    void append_and_load_singleTask_success() throws Exception {
+    void appendAndLoad_singleTask_success() throws Exception {
         Task todo = new Todo("read book");
         storage.append(todo);
 
