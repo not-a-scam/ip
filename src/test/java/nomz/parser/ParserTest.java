@@ -1,25 +1,23 @@
 package nomz.parser;
 
-import java.time.LocalDateTime;
-
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import nomz.commands.Command;
-import nomz.commands.AddTodoCommand;
-import nomz.commands.AddEventCommand;
-import nomz.commands.AddDeadlineCommand;
-
+import static nomz.common.Messages.MESSAGE_NO_ARGUMENTS;
 import static nomz.common.Messages.MESSAGE_NO_DESCRIPTION_ARGUMENT;
 import static nomz.common.Messages.MESSAGE_WRONG_FROM_KEYWORD;
 import static nomz.common.Messages.MESSAGE_WRONG_TO_KEYWORD;
-import static nomz.common.Messages.MESSAGE_NO_BY_KEYWORD;
-import static nomz.common.Messages.MESSAGE_NO_ARGUMENTS;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.time.LocalDateTime;
+
+import org.junit.jupiter.api.Test;
+
+import nomz.commands.AddDeadlineCommand;
+import nomz.commands.AddEventCommand;
+import nomz.commands.AddTodoCommand;
+import nomz.commands.Command;
+import nomz.data.tasks.Deadline;
+import nomz.data.tasks.Event;
 import nomz.data.tasks.Task;
 import nomz.data.tasks.Todo;
-import nomz.data.tasks.Event;
-import nomz.data.tasks.Deadline;
 
 public class ParserTest {
 
@@ -50,7 +48,7 @@ public class ParserTest {
         assertEquals(expected, result);
     }
 
-    @Test 
+    @Test
     public void parse_validTodoWithTrailingSpaces_returnsTodo() {
         String input = "todo read book    ";
         Command expected = new AddTodoCommand("read book");
@@ -74,10 +72,14 @@ public class ParserTest {
         }
     }
 
-    @Test 
+    @Test
     public void parse_validEventWithDateTime_returnsEventWithDateTime() {
         String input = "event project meeting /from 2024-10-10 14:00 /to 2024-10-10 16:00";
-        Command expected = new AddEventCommand("project meeting", LocalDateTime.of(2024, 10, 10, 14, 0), LocalDateTime.of(2024, 10, 10, 16, 0));
+        Command expected = new AddEventCommand(
+            "project meeting",
+            LocalDateTime.of(2024, 10, 10, 14, 0),
+            LocalDateTime.of(2024, 10, 10, 16, 0)
+        );
         Command result = null;
         try {
             result = Parser.parse(input);
@@ -87,7 +89,7 @@ public class ParserTest {
         assertEquals(expected, result);
     }
 
-    @Test 
+    @Test
     public void parse_validEventWithStringTime_returnsEventWithStringTime() {
         String input = "event project meeting /from monday /to sunday";
         Command expected = new AddEventCommand("project meeting", "monday", "sunday");
@@ -309,7 +311,11 @@ public class ParserTest {
     @Test
     public void parseTaskFileContent_validEventUnmarkedWithDateTime_returnsEventWithDateTime() {
         String input = "E|0|team meeting|2024-10-10 10:00|2024-10-10 11:00";
-        Task expected = new Event("team meeting", LocalDateTime.of(2024, 10, 10, 10, 0), LocalDateTime.of(2024, 10, 10, 11, 0));
+        Task expected = new Event(
+            "team meeting",
+            LocalDateTime.of(2024, 10, 10, 10, 0),
+            LocalDateTime.of(2024, 10, 10, 11, 0)
+        );
         Task result = null;
         try {
             result = Parser.parseTaskFileContent(input);
@@ -349,7 +355,11 @@ public class ParserTest {
     @Test
     public void parseTaskFileContent_validEventMarkedWithDateTime_returnsEventWithDateTime() {
         String input = "E|1|team meeting|2024-10-10 10:00|2024-10-10 11:00";
-        Task expected = new Event("team meeting", LocalDateTime.of(2024, 10, 10, 10, 0), LocalDateTime.of(2024, 10, 10, 11, 0));
+        Task expected = new Event(
+            "team meeting",
+            LocalDateTime.of(2024, 10, 10, 10, 0),
+            LocalDateTime.of(2024, 10, 10, 11, 0)
+        );
         expected.mark();
         Task result = null;
         try {

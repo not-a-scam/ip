@@ -16,20 +16,20 @@ public class DeleteCommand extends Command {
 
     /**
      * Creates a DeleteCommand to delete a task at the specified index.
-     * 
+     *
      * @param index
      */
     public DeleteCommand(int index) {
-        this.index = index; 
+        this.index = index;
     }
 
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) throws NomzException {
         tasks.delete(index);
-        try { 
-            storage.saveAll(tasks.getTasks()); 
-        } catch (IOException e) { 
-            ui.showError(e.getMessage()); 
+        try {
+            storage.saveAll(tasks.getTasks());
+        } catch (IOException e) {
+            ui.showError(e.getMessage());
         }
         ui.show(Messages.MESSAGE_DELETE_TASK.formatted(index));
     }

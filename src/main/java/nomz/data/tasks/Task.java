@@ -10,7 +10,7 @@ public class Task {
 
     /**
      * Creates a Task with the specified description and type.
-     * 
+     *
      * @param description
      * @param type
      */
@@ -22,7 +22,7 @@ public class Task {
 
     /**
      * Returns the status icon of the task.
-     * 
+     *
      * @return
      */
     public String getStatusIcon() {
@@ -45,7 +45,7 @@ public class Task {
 
     /**
      * Returns a string representation of the task for saving.
-     * 
+     *
      * @return
      */
     public String savedString() {
@@ -61,8 +61,8 @@ public class Task {
     }
 
     @Override
-    public String toString(){
-        return "["+ type.getSymbol() + "][" + getStatusIcon() + "] " + description;  
+    public String toString() {
+        return "[" + type.getSymbol() + "][" + getStatusIcon() + "] " + description;
     }
 
     @Override

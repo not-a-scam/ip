@@ -6,7 +6,7 @@ import java.time.format.DateTimeFormatter;
 /**
  * Represents an event task in Nomz.
  */
-public class Event extends Task{
+public class Event extends Task {
 
     private static final DateTimeFormatter OUT = DateTimeFormatter.ofPattern("MMM dd yyyy, h:mma");
 
@@ -21,7 +21,7 @@ public class Event extends Task{
 
     /**
      * Creates an Event task with the specified description and String represented time.
-     * 
+     *
      * @param description
      * @param from
      * @param to
@@ -34,7 +34,7 @@ public class Event extends Task{
 
     /**
      * Creates an Event task with the specified description and LocalDateTime objects.
-     * 
+     *
      * @param description
      * @param fromTime
      * @param toTime
@@ -54,7 +54,7 @@ public class Event extends Task{
     }
 
     @Override
-    public String savedString(){
+    public String savedString() {
         if (fromTime == null || toTime == null) {
             return super.savedString() + "|" + from + "|" + to;
         }

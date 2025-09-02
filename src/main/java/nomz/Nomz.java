@@ -19,7 +19,7 @@ public class Nomz {
 
     /**
      * Creates a Nomz application instance.
-     * 
+     *
      * @param filepath The path to the task storage file.
      */
     public Nomz(String filepath) {

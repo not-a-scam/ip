@@ -13,16 +13,16 @@ import nomz.ui.Ui;
 public class MarkCommand extends Command {
     private final int index;
     private final boolean toMark;
-    
+
     /**
      * Creates a MarkCommand to mark a task as done or not done.
-     * 
+     *
      * @param index
      * @param toMark
      */
-    public MarkCommand(int index, boolean toMark) { 
-        this.index = index; 
-        this.toMark = toMark; 
+    public MarkCommand(int index, boolean toMark) {
+        this.index = index;
+        this.toMark = toMark;
     }
 
     @Override
@@ -35,6 +35,10 @@ public class MarkCommand extends Command {
             t.unmark();
             ui.show(Messages.MESSAGE_TASK_UNMARKED.formatted(t));
         }
-        try { storage.saveAll(tasks.getTasks()); } catch (Exception e) { ui.showError(e.getMessage()); }
+        try {
+            storage.saveAll(tasks.getTasks());
+        } catch (Exception e) {
+            ui.showError(e.getMessage());
+        }
     }
 }
