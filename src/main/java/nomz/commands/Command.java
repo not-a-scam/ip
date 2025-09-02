@@ -13,7 +13,6 @@ public abstract class Command {
      * Executes the command.
      *
      * @param tasks
-     * @param ui
      * @param storage
      * @throws NomzException
      */

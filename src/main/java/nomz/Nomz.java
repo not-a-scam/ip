@@ -1,14 +1,12 @@
 package nomz;
 
 import nomz.commands.Command;
-import nomz.common.Messages;
 import nomz.data.exception.NomzException;
 import nomz.data.tasks.TaskList;
-import nomz.parser.Parser;
 import nomz.storage.Storage;
 
 /**
- * Main entry point for the Nomz application.
+ * Represents the Nomz application.
  */
 public class Nomz {
 
@@ -31,6 +29,11 @@ public class Nomz {
         this.taskList = loaded;
     }
 
+    /**
+     * Returns a message to display based on the command's execution.
+     * @param command
+     * @return
+     */
     public String getResponse(Command command) {
         try {
             String message = command.execute(taskList, storage);

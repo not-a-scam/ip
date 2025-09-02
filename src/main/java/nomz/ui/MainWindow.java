@@ -9,9 +9,9 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import nomz.Nomz;
-import nomz.parser.Parser;
 import nomz.commands.Command;
 import nomz.data.exception.NomzException;
+import nomz.parser.Parser;
 
 /**
  * Controller for the main GUI.

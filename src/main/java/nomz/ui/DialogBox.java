@@ -50,10 +50,22 @@ public class DialogBox extends HBox {
         setAlignment(Pos.TOP_LEFT);
     }
 
+    /**
+     * Creates a dialog box for user input.
+     * @param text
+     * @param img
+     * @return
+     */
     public static DialogBox getUserDialog(String text, Image img) {
         return new DialogBox(text, img);
     }
 
+    /**
+     * Creates a dialog box for Nomz's response.
+     * @param text
+     * @param img
+     * @return
+     */
     public static DialogBox getNomzDialog(String text, Image img) {
         var db = new DialogBox(text, img);
         db.flip();
