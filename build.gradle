@@ -44,7 +44,7 @@ test {
 }
 
 application {
-    mainClass.set("nomz.Nomz")
+    mainClass.set("nomz.ui.Launcher")
 }
 
 shadowJar {
