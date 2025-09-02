@@ -86,8 +86,9 @@ public class Main extends Application {
         String userText = userInput.getText();
         String nomzText = nomz.getResponse(userInput.getText());
         dialogContainer.getChildren().addAll(
-                new DialogBox(userText, userImage),
-                new DialogBox(nomzText, nomzImage));
+                DialogBox.getUserDialog(userText, userImage),
+                DialogBox.getNomzDialog(nomzText, nomzImage)
+        );
         userInput.clear();
     }
 
