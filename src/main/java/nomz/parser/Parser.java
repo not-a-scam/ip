@@ -9,6 +9,8 @@ import java.time.format.DateTimeParseException;
 
 import nomz.commands.ListCommand;
 import nomz.commands.MarkCommand;
+import nomz.commands.FindCommand;
+
 import nomz.commands.CommandType;
 import nomz.commands.DeleteCommand;
 import nomz.commands.AddDeadlineCommand;
@@ -30,6 +32,9 @@ import nomz.data.tasks.Todo;
 import nomz.data.tasks.Task;
 
 
+/**
+ * Parses user input into commands and arguments.
+ */
 public class Parser {
 
     private static final DateTimeFormatter[] DATE_TIME_FORMATS = new DateTimeFormatter[] {
@@ -66,22 +71,19 @@ public class Parser {
         return null;
     }
 
-    /** Convert a string to an integer, throwing an exception if it is not a valid integer. */
     private static int intFromString(String index) throws InvalidNomzArgumentException {
-        try { 
-            return Integer.parseInt(index); 
-        } catch (NumberFormatException e) { 
-            throw new InvalidNomzArgumentException(Messages.MESSAGE_INVALID_INTEGER_ARGUMENT); 
+        try {
+            return Integer.parseInt(index);
+        } catch (NumberFormatException e) {
+            throw new InvalidNomzArgumentException(Messages.MESSAGE_INVALID_INTEGER_ARGUMENT);
         }
     }
 
     public static Task parseTaskFileContent(String f) throws NomzException{
-        // input should take the form 
-        // <TASK_TYPE_SYMBOL>|<DONE>|<DESCRIPTION>[|<DEADLINE/EVENT_START>|<EVENT_END>]
         String[] args = f.split("[\\|]");
         TaskType type = TaskType.fromSymbol(args[0]);
         boolean done = args[1].equals("1");
-        switch(type){
+        switch (type) {
         case TODO:
             Todo todo = new Todo(args[2]);
             if (done) {
@@ -123,13 +125,14 @@ public class Parser {
 
     /**
      * Parses a user command from the input string.
+     * 
      * @param input The input string to parse.
      * @return The corresponding Command object.
      * @throws NomzException If the input is invalid.
      */
     public static Command parse(String input) throws NomzException {
         String[] args = input.trim().split("\\s+");
-        CommandType cmd = CommandType.fromString(args[0]); 
+        CommandType cmd = CommandType.fromString(args[0]);
         switch (cmd) {
         case LIST:
             return new ListCommand();
@@ -156,6 +159,14 @@ public class Parser {
             return new DeleteCommand(idx);
         }
 
+        case FIND: {
+            if (args.length < 2) {
+                throw new InvalidNomzArgumentException(Messages.MESSAGE_NO_ARGUMENTS);
+            }
+            String keyword = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
+            return new FindCommand(keyword);
+        }
+
         case TODO: {
             if (args.length < 2) {
                 throw new InvalidNomzArgumentException(Messages.MESSAGE_NO_DESCRIPTION_ARGUMENT);
@@ -170,9 +181,9 @@ public class Parser {
             }
             int byPos = -1;
             for (int i = 2; i < args.length; i++) {
-                if (args[i].equals("/by")) { 
-                    byPos = i; 
-                    break; 
+                if (args[i].equals("/by")) {
+                    byPos = i;
+                    break;
                 }
             }
             if (byPos == -1) {

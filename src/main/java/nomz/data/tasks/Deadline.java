@@ -3,6 +3,9 @@ package nomz.data.tasks;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Represents a deadline task in Nomz.
+ */
 public class Deadline extends Task {
 
     private static final DateTimeFormatter OUT = DateTimeFormatter.ofPattern("MMM dd yyyy, h:mma");
@@ -14,11 +17,23 @@ public class Deadline extends Task {
         super(description, TaskType.DEADLINE);
     }
     
+    /**
+     * Creates a Deadline task with the specified description and a LocalDateTime object.
+     * 
+     * @param description
+     * @param by
+     */
     public Deadline(String description, LocalDateTime by) {
         this(description);
         this.byTime = by;
     }
 
+    /**
+     * Creates a Deadline task with the specified description and String represented time.
+     * 
+     * @param description
+     * @param by
+     */
     public Deadline(String description, String by) {
         this(description);
         this.by = by;  
