@@ -47,18 +47,21 @@ public class Storage {
      * @throws NomzException If the file content is invalid.
      */
     public ArrayList<Task> load() throws NomzException {
-        ArrayList<Task> list = new ArrayList<>();
+
         assert file.exists() : "Storage file should exist before loading";
         try (Scanner s = new Scanner(file)) {
+            ArrayList<Task> list = new ArrayList<>();
+
             while (s.hasNextLine()) {
-                Task t = Parser.parseTaskFileContent(s.nextLine());
-                list.add(t);
+                String rawTask = s.nextLine();
+                Task task = Parser.parseTaskFileContent(rawTask);
+                list.add(task);
             }
+
+            return list;
         } catch (FileNotFoundException ignore) {
-            // File not found, return empty list
+            return new ArrayList<Task>();
         }
-        assert list != null : "Loaded task list should not be null";
-        return list;
     }
 
     /**
@@ -70,7 +73,7 @@ public class Storage {
     public void append(Task task) throws IOException {
         assert task != null : "Task should not be null";
         try (FileWriter fw = new FileWriter(file, true)) {
-            fw.write(task.savedString() + "\n");
+            fw.write(task.toSavedString() + "\n");
         }
     }
 
@@ -84,7 +87,7 @@ public class Storage {
         assert tasks != null : "Tasks should not be null";
         try (FileWriter fw = new FileWriter(file)) {
             for (Task t : tasks) {
-                fw.write(t.savedString() + "\n");
+                fw.write(t.toSavedString() + "\n");
             }
         }
     }
