@@ -1,8 +1,10 @@
 package nomz.data.tasks;
 
+import static nomz.common.Messages.MESSAGE_INVALID_TASK_INDEX;
+import static nomz.common.Messages.MESSAGE_TASK_LIST_HEADER;
+
 import java.util.ArrayList;
 
-import nomz.common.Messages;
 import nomz.data.exception.InvalidNomzArgumentException;
 
 /**
@@ -47,8 +49,9 @@ public class TaskList {
      */
     public Task delete(int oneBasedIndex) throws InvalidNomzArgumentException {
         int idx = oneBasedIndex - 1;
-        if (idx < 0 || idx >= tasks.size()) {
-            throw new InvalidNomzArgumentException(Messages.MESSAGE_INVALID_TASK_INDEX);
+        boolean isValidIndex = idx >= 0 && idx < tasks.size();
+        if (!isValidIndex) {
+            throw new InvalidNomzArgumentException(MESSAGE_INVALID_TASK_INDEX);
         }
         return tasks.remove(idx);
     }
@@ -62,8 +65,9 @@ public class TaskList {
      */
     public Task get(int oneBasedIndex) throws InvalidNomzArgumentException {
         int idx = oneBasedIndex - 1;
-        if (idx < 0 || idx >= tasks.size()) {
-            throw new InvalidNomzArgumentException(Messages.MESSAGE_INVALID_TASK_INDEX);
+        boolean isValidIndex = idx >= 0 && idx < tasks.size();
+        if (!isValidIndex) {
+            throw new InvalidNomzArgumentException(MESSAGE_INVALID_TASK_INDEX);
         }
         return tasks.get(idx);
     }
@@ -93,9 +97,10 @@ public class TaskList {
      * @return
      */
     public String toDisplayString() {
-        StringBuilder sb = new StringBuilder(Messages.MESSAGE_TASK_LIST_HEADER);
+        StringBuilder sb = new StringBuilder(MESSAGE_TASK_LIST_HEADER);
         for (int i = 0; i < tasks.size(); i++) {
-            sb.append(i + 1).append(". ").append(tasks.get(i).toString()).append("\n");
+            Task task = tasks.get(i);
+            sb.append(i + 1).append(". ").append(task.toString()).append("\n");
         }
         return sb.toString();
     }

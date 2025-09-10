@@ -66,7 +66,7 @@ public class Storage {
      */
     public void append(Task task) throws IOException {
         try (FileWriter fw = new FileWriter(file, true)) {
-            fw.write(task.savedString() + "\n");
+            fw.write(task.toSavedString() + "\n");
         }
     }
 
@@ -79,7 +79,7 @@ public class Storage {
     public void saveAll(ArrayList<Task> tasks) throws IOException {
         try (FileWriter fw = new FileWriter(file)) {
             for (Task t : tasks) {
-                fw.write(t.savedString() + "\n");
+                fw.write(t.toSavedString() + "\n");
             }
         }
     }
