@@ -40,4 +40,18 @@ public class AddTodoCommand extends Command {
 
         return message;
     }
+
+    @Override
+    public boolean equals(Object obj) { // for testing
+        if (this == obj) {
+            return true;
+        }
+
+        if (!(obj instanceof AddTodoCommand)) {
+            return false;
+        }
+
+        AddTodoCommand other = (AddTodoCommand) obj;
+        return description.equals(other.description);
+    }
 }

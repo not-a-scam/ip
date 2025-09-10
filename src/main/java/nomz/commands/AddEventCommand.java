@@ -78,4 +78,37 @@ public class AddEventCommand extends Command {
 
         return message;
     }
+
+    @Override
+    public boolean equals(Object obj) { // for testing
+        if (this == obj) {
+            return true;
+        }
+
+        if (!(obj instanceof AddEventCommand)) {
+            return false;
+        }
+
+        AddEventCommand other = (AddEventCommand) obj;
+        if (useDateTime != other.useDateTime) {
+            return false;
+        }
+
+        boolean isDescriptionEquals = description.equals(other.description);
+        if (useDateTime) {
+            boolean isFromTimeEquals = fromTime.equals(other.fromTime);
+            boolean isToTimeEquals = toTime.equals(other.toTime);
+
+            return isDescriptionEquals
+                    && isFromTimeEquals
+                    && isToTimeEquals;
+        } else {
+            boolean isFromEquals = from.equals(other.from);
+            boolean isToEquals = to.equals(other.to);
+
+            return isDescriptionEquals
+                    && isFromEquals
+                    && isToEquals;
+        }
+    }
 }
