@@ -1,9 +1,10 @@
 package nomz.commands;
 
+import static nomz.common.Messages.MESSAGE_ADD_TASK;
+
 import java.io.IOException;
 import java.time.LocalDateTime;
 
-import nomz.common.Messages;
 import nomz.data.tasks.Deadline;
 import nomz.data.tasks.Task;
 import nomz.data.tasks.TaskList;
@@ -46,37 +47,24 @@ public class AddDeadlineCommand extends Command {
 
     @Override
     public String execute(TaskList tasks, Storage storage) {
-        Task t;
+        Task task;
         if (!useDateTime) {
-            t = new Deadline(description, by);
+            task = new Deadline(description, by);
         } else {
-            t = new Deadline(description, byTime);
+            task = new Deadline(description, byTime);
         }
-        tasks.add(t);
+
+        tasks.add(task);
+
         try {
-            storage.append(t);
+            storage.append(task);
         } catch (IOException e) {
             return e.getMessage();
         }
-        return Messages.MESSAGE_ADD_TASK.formatted(t.toString());
-    }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (!(obj instanceof AddDeadlineCommand)) {
-            return false;
-        }
-        AddDeadlineCommand other = (AddDeadlineCommand) obj;
-        if (useDateTime != other.useDateTime) {
-            return false;
-        }
-        if (useDateTime) {
-            return description.equals(other.description) && byTime.equals(other.byTime);
-        } else {
-            return description.equals(other.description) && by.equals(other.by);
-        }
+        String taskString = task.toString();
+        String message = MESSAGE_ADD_TASK.formatted(taskString);
+
+        return message;
     }
 }
