@@ -25,6 +25,7 @@ import nomz.commands.DeleteCommand;
 import nomz.commands.FindCommand;
 import nomz.commands.ListCommand;
 import nomz.commands.MarkCommand;
+import nomz.commands.TagCommand;
 import nomz.data.exception.InvalidNomzArgumentException;
 import nomz.data.exception.InvalidNomzCommandException;
 import nomz.data.exception.NomzException;
@@ -286,6 +287,16 @@ public class Parser {
             }
             return new AddEventCommand(description, fromRaw, toRaw);
         }
+
+        case TAG: {
+            if (args.length < 3) {
+                throw new InvalidNomzArgumentException(MESSAGE_NO_ARGUMENTS);
+            }
+
+            int idx = intFromString(args[1]);
+            String tag = args[2];
+            return new TagCommand(idx, tag);
+}
 
         default:
             throw new InvalidNomzCommandException();
