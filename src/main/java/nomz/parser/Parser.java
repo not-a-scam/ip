@@ -1,5 +1,14 @@
 package nomz.parser;
 
+import static nomz.common.Messages.MESSAGE_INVALID_FORMAT;
+import static nomz.common.Messages.MESSAGE_INVALID_INTEGER_ARGUMENT;
+import static nomz.common.Messages.MESSAGE_NO_ARGUMENTS;
+import static nomz.common.Messages.MESSAGE_NO_BY_KEYWORD;
+import static nomz.common.Messages.MESSAGE_NO_DESCRIPTION_ARGUMENT;
+import static nomz.common.Messages.MESSAGE_NO_INDEX_ARGUMENT;
+import static nomz.common.Messages.MESSAGE_WRONG_FROM_KEYWORD;
+import static nomz.common.Messages.MESSAGE_WRONG_TO_KEYWORD;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -16,7 +25,6 @@ import nomz.commands.DeleteCommand;
 import nomz.commands.FindCommand;
 import nomz.commands.ListCommand;
 import nomz.commands.MarkCommand;
-import nomz.common.Messages;
 import nomz.data.exception.InvalidNomzArgumentException;
 import nomz.data.exception.InvalidNomzCommandException;
 import nomz.data.exception.NomzException;
@@ -45,23 +53,36 @@ public class Parser {
         DateTimeFormatter.ISO_LOCAL_DATE
     };
 
+    private static LocalDateTime tryParseDateTime(String s, DateTimeFormatter f) {
+        try {
+            return LocalDateTime.parse(s, f);
+        } catch (DateTimeParseException e) {
+            return null;
+        }
+    }
+
+    private static LocalDate tryParseDate(String s, DateTimeFormatter f) {
+        try {
+            return LocalDate.parse(s, f);
+        } catch (DateTimeParseException e) {
+            return null;
+        }
+    }
+
     private static LocalDateTime parseDateTimeFlexible(String s) {
         for (DateTimeFormatter f : DATE_TIME_FORMATS) {
-            try {
-                return LocalDateTime.parse(s, f);
-            } catch (DateTimeParseException ignored) {
-                // Continue to next format
+            LocalDateTime result = tryParseDateTime(s, f);
+            if (result != null) {
+                return result;
             }
         }
 
         for (DateTimeFormatter f : DATE_ONLY_FORMATS) {
-            try {
-                return LocalDate.parse(s, f).atStartOfDay();
-            } catch (DateTimeParseException ignored) {
-                // Continue to next format
+            LocalDate result = tryParseDate(s, f);
+            if (result != null) {
+                return result.atStartOfDay();
             }
         }
-
         return null;
     }
 
@@ -69,7 +90,7 @@ public class Parser {
         try {
             return Integer.parseInt(index);
         } catch (NumberFormatException e) {
-            throw new InvalidNomzArgumentException(Messages.MESSAGE_INVALID_INTEGER_ARGUMENT);
+            throw new InvalidNomzArgumentException(MESSAGE_INVALID_INTEGER_ARGUMENT);
         }
     }
 
@@ -83,6 +104,7 @@ public class Parser {
         String[] args = f.split("[\\|]");
         TaskType type = TaskType.fromSymbol(args[0]);
         boolean done = args[1].equals("1");
+
         switch (type) {
         case TODO:
             Todo todo = new Todo(args[2]);
@@ -91,35 +113,48 @@ public class Parser {
             }
             return todo;
 
-        case DEADLINE:
-            LocalDateTime by = parseDateTimeFlexible(args[3]);
+        case DEADLINE: {
+            String description = args[2];
+            String rawBy = args[3];
+
+            LocalDateTime by = parseDateTimeFlexible(rawBy);
             Deadline deadline;
+
             if (by == null) {
-                deadline = new Deadline(args[2], args[3]);
+                deadline = new Deadline(description, rawBy);
             } else {
-                deadline = new Deadline(args[2], by);
+                deadline = new Deadline(description, by);
             }
+
             if (done) {
                 deadline.mark();
             }
-            return deadline;
 
-        case EVENT:
-            LocalDateTime from = parseDateTimeFlexible(args[3]);
-            LocalDateTime to = parseDateTimeFlexible(args[4]);
+            return deadline;
+        }
+
+        case EVENT: {
+            String description = args[2];
+            String rawFrom = args[3];
+            String rawTo = args[4];
+
+            LocalDateTime from = parseDateTimeFlexible(rawFrom);
+            LocalDateTime to = parseDateTimeFlexible(rawTo);
             Event event;
+
             if (from == null || to == null) {
-                event = new Event(args[2], args[3], args[4]);
+                event = new Event(description, rawFrom, rawTo);
             } else {
-                event = new Event(args[2], from, to);
+                event = new Event(description, from, to);
             }
             if (done) {
                 event.mark();
             }
             return event;
+        }
 
         default:
-            throw new InvalidNomzArgumentException(Messages.MESSAGE_INVALID_FORMAT);
+            throw new InvalidNomzArgumentException(MESSAGE_INVALID_FORMAT);
         }
     }
 
@@ -155,7 +190,7 @@ public class Parser {
         // Fallthrough
         case UNMARK: {
             if (args.length < 2) {
-                throw new InvalidNomzArgumentException(Messages.MESSAGE_NO_INDEX_ARGUMENT);
+                throw new InvalidNomzArgumentException(MESSAGE_NO_INDEX_ARGUMENT);
             }
             int idx = intFromString(args[1]);
             boolean toMark = (cmd == CommandType.MARK);
@@ -164,7 +199,7 @@ public class Parser {
 
         case DELETE: {
             if (args.length < 2) {
-                throw new InvalidNomzArgumentException(Messages.MESSAGE_NO_INDEX_ARGUMENT);
+                throw new InvalidNomzArgumentException(MESSAGE_NO_INDEX_ARGUMENT);
             }
             int idx = intFromString(args[1]);
             return new DeleteCommand(idx);
@@ -172,7 +207,7 @@ public class Parser {
 
         case FIND: {
             if (args.length < 2) {
-                throw new InvalidNomzArgumentException(Messages.MESSAGE_NO_ARGUMENTS);
+                throw new InvalidNomzArgumentException(MESSAGE_NO_ARGUMENTS);
             }
             String keyword = joinArgs(1, args.length, args);
             return new FindCommand(keyword);
@@ -180,7 +215,7 @@ public class Parser {
 
         case TODO: {
             if (args.length < 2) {
-                throw new InvalidNomzArgumentException(Messages.MESSAGE_NO_DESCRIPTION_ARGUMENT);
+                throw new InvalidNomzArgumentException(MESSAGE_NO_DESCRIPTION_ARGUMENT);
             }
             String description = joinArgs(1, args.length, args);
             return new AddTodoCommand(description);
@@ -188,7 +223,7 @@ public class Parser {
 
         case DEADLINE: {
             if (args.length < 4) {
-                throw new InvalidNomzArgumentException(Messages.MESSAGE_NO_ARGUMENTS);
+                throw new InvalidNomzArgumentException(MESSAGE_NO_ARGUMENTS);
             }
             int byPos = -1;
             for (int i = 2; i < args.length; i++) {
@@ -198,7 +233,7 @@ public class Parser {
                 }
             }
             if (byPos == -1) {
-                throw new InvalidNomzArgumentException(Messages.MESSAGE_NO_BY_KEYWORD);
+                throw new InvalidNomzArgumentException(MESSAGE_NO_BY_KEYWORD);
             }
             String description = joinArgs(1, byPos, args);
             String byRaw = joinArgs(byPos + 1, args.length, args);
@@ -220,16 +255,18 @@ public class Parser {
                 }
             }
             if (fromIndex <= 1) {
-                throw new InvalidNomzArgumentException(Messages.MESSAGE_WRONG_FROM_KEYWORD);
+                throw new InvalidNomzArgumentException(MESSAGE_WRONG_FROM_KEYWORD);
             }
-            if (toIndex <= fromIndex || toIndex <= 3 || toIndex == args.length - 1) {
-                throw new InvalidNomzArgumentException(Messages.MESSAGE_WRONG_TO_KEYWORD);
+            boolean isValidToIndex = toIndex > fromIndex && toIndex > 3 && toIndex <= args.length - 1;
+            if (!isValidToIndex) {
+                throw new InvalidNomzArgumentException(MESSAGE_WRONG_TO_KEYWORD);
             }
             String description = joinArgs(1, fromIndex, args);
             String fromRaw = joinArgs(fromIndex + 1, toIndex, args);
             String toRaw = joinArgs(toIndex + 1, args.length, args);
             LocalDateTime from = parseDateTimeFlexible(fromRaw);
             LocalDateTime to = parseDateTimeFlexible(toRaw);
+
             if (from != null && to != null) {
                 return new AddEventCommand(description, from, to);
             }
