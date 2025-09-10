@@ -1,9 +1,10 @@
 package nomz.commands;
 
+import static nomz.common.Messages.MESSAGE_ADD_TASK;
+
 import java.io.IOException;
 import java.time.LocalDateTime;
 
-import nomz.common.Messages;
 import nomz.data.tasks.Event;
 import nomz.data.tasks.Task;
 import nomz.data.tasks.TaskList;
@@ -56,41 +57,25 @@ public class AddEventCommand extends Command {
 
     @Override
     public String execute(TaskList tasks, Storage storage) {
-        Task t;
+        Task task;
+
         if (!useDateTime) {
-            t = new Event(description, from, to);
+            task = new Event(description, from, to);
         } else {
-            t = new Event(description, fromTime, toTime);
+            task = new Event(description, fromTime, toTime);
         }
-        tasks.add(t);
+
+        tasks.add(task);
+
         try {
-            storage.append(t);
+            storage.append(task);
         } catch (IOException e) {
             return e.getMessage();
         }
-        return Messages.MESSAGE_ADD_TASK.formatted(t.toString());
-    }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (!(obj instanceof AddEventCommand)) {
-            return false;
-        }
-        AddEventCommand other = (AddEventCommand) obj;
-        if (useDateTime != other.useDateTime) {
-            return false;
-        }
-        if (useDateTime) {
-            return description.equals(other.description)
-                    && fromTime.equals(other.fromTime)
-                    && toTime.equals(other.toTime);
-        } else {
-            return description.equals(other.description)
-                    && from.equals(other.from)
-                    && to.equals(other.to);
-        }
+        String taskString = task.toString();
+        String message = MESSAGE_ADD_TASK.formatted(taskString);
+
+        return message;
     }
 }
