@@ -4,6 +4,7 @@ import static nomz.common.Messages.MESSAGE_FIND_NO_MATCH;
 import static nomz.common.Messages.MESSAGE_FIND_RESULTS_HEADER;
 
 import java.util.ArrayList;
+import java.util.stream.IntStream;
 
 import nomz.data.exception.NomzException;
 import nomz.data.tasks.Task;
@@ -29,14 +30,12 @@ public class FindCommand extends Command {
     public String execute(TaskList tasks, Storage storage) throws NomzException {
         assert tasks != null : "TaskList should not be null";
         assert storage != null : "Storage should not be null";
-        ArrayList<Task> matched = new ArrayList<>();
-        ArrayList<Task> currentTasks = tasks.getTasks();
 
-        for (Task task : currentTasks) {
-            if (task.getDescription().contains(this.keyword)) {
-                matched.add(task);
-            }
-        }
+        ArrayList<Task> matched = new ArrayList<>(
+            tasks.getTasks().stream()
+                .filter(t -> t.toString().toLowerCase().contains(keyword.toLowerCase()))
+                .toList()
+            );
 
         if (matched.isEmpty()) {
             return MESSAGE_FIND_NO_MATCH.formatted(this.keyword);
@@ -44,12 +43,10 @@ public class FindCommand extends Command {
             StringBuilder sb = new StringBuilder();
 
             sb.append(MESSAGE_FIND_RESULTS_HEADER);
-            for (int i = 0; i < matched.size(); i++) {
-                sb.append((i + 1) + ". " + matched.get(i).toString() + "\n");
-            }
-
-            String message = sb.toString().trim();
-            return message;
+            IntStream.range(0, matched.size())
+                .mapToObj(i -> (i + 1) + ". " + matched.get(i).toString() + "\n")
+                .forEach(sb::append);
+            return sb.toString().trim();
         }
     }
 }

@@ -2,6 +2,7 @@ package nomz.data.tasks;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 /**
  * Represents an event task in Nomz.
@@ -15,8 +16,8 @@ public class Event extends Task {
     private LocalDateTime fromTime = null;
     private LocalDateTime toTime = null;
 
-    private Event(String description) {
-        super(description, TaskType.EVENT);
+    private Event(String description, ArrayList<String> tags) {
+        super(description, TaskType.EVENT, tags);
     }
 
     /**
@@ -26,8 +27,8 @@ public class Event extends Task {
      * @param from
      * @param to
      */
-    public Event(String description, String from, String to) {
-        this(description);
+    public Event(String description, String from, String to, ArrayList<String> tags) {
+        this(description, tags);
         this.from = from;
         this.to = to;
     }
@@ -39,26 +40,36 @@ public class Event extends Task {
      * @param fromTime
      * @param toTime
      */
-    public Event(String description, LocalDateTime fromTime, LocalDateTime toTime) {
-        this(description);
+    public Event(String description, LocalDateTime fromTime, LocalDateTime toTime, ArrayList<String> tags) {
+        this(description, tags);
         this.fromTime = fromTime;
         this.toTime = toTime;
     }
 
     @Override
     public String toString() {
+        String str;
         if (fromTime == null || toTime == null) {
-            return super.toString() + " (from: " + from + " to: " + to + ")";
+            str = super.toString() + " (from: " + from + " to: " + to + ")";
+        } else {
+            str = super.toString() + " (from: " + OUT.format(fromTime) + " to: " + OUT.format(toTime) + ")";
         }
-        return super.toString() + " (from: " + OUT.format(fromTime) + " to: " + OUT.format(toTime) + ")";
+
+        str += getTagsString();
+        return str;
     }
 
     @Override
     public String toSavedString() {
+        String str;
         if (fromTime == null || toTime == null) {
-            return super.toSavedString() + "|" + from + "|" + to;
+            str = super.toSavedString() + "|" + from + "|" + to;
+        } else {
+            str = super.toSavedString() + "|" + fromTime.toString() + "|" + toTime.toString();
         }
-        return super.toSavedString() + "|" + fromTime.toString() + "|" + toTime.toString();
+
+        str += "|" + getTagsString();
+        return str;
     }
 
     @Override

@@ -4,6 +4,7 @@ import static nomz.common.Messages.MESSAGE_ADD_TASK;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 import nomz.data.tasks.Deadline;
 import nomz.data.tasks.Task;
@@ -51,9 +52,9 @@ public class AddDeadlineCommand extends Command {
         assert storage != null : "Storage should not be null";
         Task task;
         if (!useDateTime) {
-            task = new Deadline(description, by);
+            task = new Deadline(description, by, new ArrayList<>());
         } else {
-            task = new Deadline(description, byTime);
+            task = new Deadline(description, byTime, new ArrayList<>());
         }
 
         tasks.add(task);

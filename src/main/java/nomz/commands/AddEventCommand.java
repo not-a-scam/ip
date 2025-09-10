@@ -4,6 +4,7 @@ import static nomz.common.Messages.MESSAGE_ADD_TASK;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 import nomz.data.tasks.Event;
 import nomz.data.tasks.Task;
@@ -61,9 +62,9 @@ public class AddEventCommand extends Command {
         assert storage != null : "Storage should not be null";
         Task task;
         if (!useDateTime) {
-            task = new Event(description, from, to);
+            task = new Event(description, from, to, new ArrayList<>());
         } else {
-            task = new Event(description, fromTime, toTime);
+            task = new Event(description, fromTime, toTime, new ArrayList<>());
         }
 
         tasks.add(task);

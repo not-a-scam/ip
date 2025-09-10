@@ -4,6 +4,7 @@ import static nomz.common.Messages.MESSAGE_INVALID_TASK_INDEX;
 import static nomz.common.Messages.MESSAGE_TASK_LIST_HEADER;
 
 import java.util.ArrayList;
+import java.util.stream.IntStream;
 
 import nomz.data.exception.InvalidNomzArgumentException;
 
@@ -101,10 +102,9 @@ public class TaskList {
      */
     public String toDisplayString() {
         StringBuilder sb = new StringBuilder(MESSAGE_TASK_LIST_HEADER);
-        for (int i = 0; i < tasks.size(); i++) {
-            Task task = tasks.get(i);
-            sb.append(i + 1).append(". ").append(task.toString()).append("\n");
-        }
+        IntStream.range(0, tasks.size())
+            .mapToObj(i -> (i + 1) + ". " + tasks.get(i).toString() + "\n")
+            .forEach(sb::append);
         return sb.toString();
     }
 

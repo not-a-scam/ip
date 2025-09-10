@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import nomz.commands.AddDeadlineCommand;
@@ -25,6 +26,7 @@ import nomz.commands.DeleteCommand;
 import nomz.commands.FindCommand;
 import nomz.commands.ListCommand;
 import nomz.commands.MarkCommand;
+import nomz.commands.TagCommand;
 import nomz.data.exception.InvalidNomzArgumentException;
 import nomz.data.exception.InvalidNomzCommandException;
 import nomz.data.exception.NomzException;
@@ -96,6 +98,18 @@ public class Parser {
         }
     }
 
+    private static ArrayList<String> parseTags(String rawTags) {
+        ArrayList<String> tags;
+        if (rawTags.length() <= 6) {
+            return new ArrayList<>();
+        }
+        assert rawTags.length() > 6 : "Tag string is too short";
+        String[] strArr = rawTags.substring(6, rawTags.length() - 1).trim().split("[,]");
+        tags = new ArrayList<>(Arrays.asList(strArr));
+
+        return tags;
+    }
+
     /**
      * Parses a task from the file content.
      * @param f The file content string.
@@ -112,27 +126,35 @@ public class Parser {
         boolean done = args[1].equals("1");
 
         switch (type) {
-        case TODO:
-            assert args.length >= 3 : "Todo save string should have 3 arguments";
-            Todo todo = new Todo(args[2]);
+        case TODO: {
+            assert args.length >= 4 : "Todo save string should have 4 arguments";
+            
+            String rawTags = args.length >= 4 ? args[3].trim() : "";
+            ArrayList<String> tags = parseTags(rawTags);
+
+            Todo todo = new Todo(args[2], tags);
             if (done) {
                 todo.mark();
             }
             return todo;
+        }
 
         case DEADLINE: {
-            assert args.length >= 4 : "Deadline save string should have 4 arguments";
+            assert args.length >= 5 : "Deadline save string should have 5 arguments";
 
             String description = args[2];
             String rawBy = args[3];
+            String rawTags = args.length >= 5 ? args[4].trim() : "";
+
+            ArrayList<String> tags = parseTags(rawTags);
 
             LocalDateTime by = parseDateTimeFlexible(rawBy);
             Deadline deadline;
 
             if (by == null) {
-                deadline = new Deadline(description, rawBy);
+                deadline = new Deadline(description, rawBy, tags);
             } else {
-                deadline = new Deadline(description, by);
+                deadline = new Deadline(description, by, tags);
             }
 
             if (done) {
@@ -143,18 +165,22 @@ public class Parser {
         }
 
         case EVENT: {
+            assert args.length >= 6 : "Event save string should have 6 arguments";
+
             String description = args[2];
             String rawFrom = args[3];
             String rawTo = args[4];
+            String rawTags = args.length >= 6 ? args[5].trim() : "";
 
             LocalDateTime from = parseDateTimeFlexible(rawFrom);
             LocalDateTime to = parseDateTimeFlexible(rawTo);
             Event event;
+            ArrayList<String> tags = parseTags(rawTags);
 
             if (from == null || to == null) {
-                event = new Event(description, rawFrom, rawTo);
+                event = new Event(description, rawFrom, rawTo, tags);
             } else {
-                event = new Event(description, from, to);
+                event = new Event(description, from, to, tags);
             }
             if (done) {
                 event.mark();
@@ -286,6 +312,16 @@ public class Parser {
             }
             return new AddEventCommand(description, fromRaw, toRaw);
         }
+
+        case TAG: {
+            if (args.length < 3) {
+                throw new InvalidNomzArgumentException(MESSAGE_NO_ARGUMENTS);
+            }
+
+            int idx = intFromString(args[1]);
+            String tag = joinArgs(2, args.length, args);
+            return new TagCommand(idx, tag);
+}
 
         default:
             throw new InvalidNomzCommandException();
