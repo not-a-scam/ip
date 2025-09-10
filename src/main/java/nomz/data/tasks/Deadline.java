@@ -60,7 +60,7 @@ public class Deadline extends Task {
         if (byTime == null) {
             str = super.toSavedString() + "|" + by;
         } else {
-            str =  super.toSavedString() + "|" + byTime.toString();
+            str = super.toSavedString() + "|" + byTime.toString();
         }
 
         str += "|" + getTagsString();
