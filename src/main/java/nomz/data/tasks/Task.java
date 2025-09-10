@@ -1,5 +1,7 @@
 package nomz.data.tasks;
 
+import java.util.ArrayList;
+
 /**
  * Represents a task in Nomz.
  */
@@ -7,6 +9,7 @@ public class Task {
     protected String description;
     protected boolean isDone;
     protected TaskType type;
+    protected ArrayList<String> tags;
 
     /**
      * Creates a Task with the specified description and type.
@@ -18,6 +21,7 @@ public class Task {
         this.description = description;
         this.isDone = false;
         this.type = type;
+        this.tags = new ArrayList<>();
     }
 
     /**
@@ -41,6 +45,29 @@ public class Task {
      */
     public void unmark() {
         this.isDone = false;
+    }
+
+    /**
+     * Adds a tag to the task
+     * @param tag
+     */
+    public void addTag(String tag) {
+        tags.add(tag);
+    }
+
+    /**
+     * Returns all tags associated with the task
+     */
+    public ArrayList<String> getTags() {
+        return tags;
+    }
+
+    /**
+     * Returns tags in string format
+     * @return
+     */
+    public String getTagsString() {
+        return tags.isEmpty() ? "" : " [tags: " + String.join(", ", tags) + "]";
     }
 
     /**

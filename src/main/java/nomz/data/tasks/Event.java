@@ -47,18 +47,28 @@ public class Event extends Task {
 
     @Override
     public String toString() {
+        String str;
         if (fromTime == null || toTime == null) {
-            return super.toString() + " (from: " + from + " to: " + to + ")";
+            str = super.toString() + " (from: " + from + " to: " + to + ")";
+        } else {
+            str = super.toString() + " (from: " + OUT.format(fromTime) + " to: " + OUT.format(toTime) + ")";
         }
-        return super.toString() + " (from: " + OUT.format(fromTime) + " to: " + OUT.format(toTime) + ")";
+
+        str += getTagsString();
+        return str;
     }
 
     @Override
     public String toSavedString() {
+        String str;
         if (fromTime == null || toTime == null) {
-            return super.toSavedString() + "|" + from + "|" + to;
+            str = super.toSavedString() + "|" + from + "|" + to;
+        } else {
+            str = super.toSavedString() + "|" + fromTime.toString() + "|" + toTime.toString();
         }
-        return super.toSavedString() + "|" + fromTime.toString() + "|" + toTime.toString();
+
+        str += "|" + getTagsString();
+        return str;
     }
 
     @Override

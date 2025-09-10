@@ -44,7 +44,7 @@ public class Deadline extends Task {
         if (byTime == null) {
             return super.toString() + " (by: " + by + ")";
         }
-        return super.toString() + " (by: " + OUT.format(byTime) + ")";
+        return super.toString() + " (by: " + OUT.format(byTime) + ")" + getTagsString();
     }
 
     @Override
@@ -52,7 +52,7 @@ public class Deadline extends Task {
         if (byTime == null) {
             return super.toSavedString() + "|" + by;
         }
-        return super.toSavedString() + "|" + byTime.toString();
+        return super.toSavedString() + "|" + byTime.toString() + "|" + getTagsString();
     }
 
     @Override
