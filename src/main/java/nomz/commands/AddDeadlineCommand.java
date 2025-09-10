@@ -1,9 +1,10 @@
 package nomz.commands;
 
+import static nomz.common.Messages.MESSAGE_ADD_TASK;
+
 import java.io.IOException;
 import java.time.LocalDateTime;
 
-import nomz.common.Messages;
 import nomz.data.tasks.Deadline;
 import nomz.data.tasks.Task;
 import nomz.data.tasks.TaskList;
@@ -46,37 +47,52 @@ public class AddDeadlineCommand extends Command {
 
     @Override
     public String execute(TaskList tasks, Storage storage) {
-        Task t;
+        assert tasks != null : "TaskList should not be null";
+        assert storage != null : "Storage should not be null";
+        Task task;
         if (!useDateTime) {
-            t = new Deadline(description, by);
+            task = new Deadline(description, by);
         } else {
-            t = new Deadline(description, byTime);
+            task = new Deadline(description, byTime);
         }
-        tasks.add(t);
+
+        tasks.add(task);
+
         try {
-            storage.append(t);
+            storage.append(task);
         } catch (IOException e) {
             return e.getMessage();
         }
-        return Messages.MESSAGE_ADD_TASK.formatted(t.toString());
+
+        String taskString = task.toString();
+        String message = MESSAGE_ADD_TASK.formatted(taskString);
+
+        return message;
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(Object obj) { // for testing
         if (this == obj) {
             return true;
         }
+
         if (!(obj instanceof AddDeadlineCommand)) {
             return false;
         }
+
         AddDeadlineCommand other = (AddDeadlineCommand) obj;
         if (useDateTime != other.useDateTime) {
             return false;
         }
+
+        boolean isDescriptionEquals = description.equals(other.description);
         if (useDateTime) {
-            return description.equals(other.description) && byTime.equals(other.byTime);
+            boolean isByTimeEquals = byTime.equals(other.byTime);
+
+            return isDescriptionEquals && isByTimeEquals;
         } else {
-            return description.equals(other.description) && by.equals(other.by);
+            boolean isByEquals = by.equals(other.by);
+            return isDescriptionEquals && isByEquals;
         }
     }
 }

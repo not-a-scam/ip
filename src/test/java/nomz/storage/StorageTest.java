@@ -46,7 +46,7 @@ class StorageTest {
 
         ArrayList<Task> loaded = storage.load();
         assertEquals(1, loaded.size());
-        assertEquals(todo.savedString(), loaded.get(0).savedString());
+        assertEquals(todo.toSavedString(), loaded.get(0).toSavedString());
     }
 
     @Test
@@ -61,8 +61,8 @@ class StorageTest {
 
         ArrayList<Task> loaded = storage.load();
         assertEquals(2, loaded.size());
-        assertEquals(todo1.savedString(), loaded.get(0).savedString());
-        assertEquals(todo2.savedString(), loaded.get(1).savedString());
+        assertEquals(todo1.toSavedString(), loaded.get(0).toSavedString());
+        assertEquals(todo2.toSavedString(), loaded.get(1).toSavedString());
     }
 
     @Test

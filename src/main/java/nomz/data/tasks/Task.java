@@ -48,7 +48,7 @@ public class Task {
      *
      * @return
      */
-    public String savedString() {
+    public String toSavedString() {
         return type.getSymbol() + "|" + (isDone ? 1 : 0) + "|" + description;
     }
 

@@ -34,7 +34,10 @@ public enum TaskType {
      */
     public static TaskType fromSymbol(String symbol) throws InvalidNomzCommandException {
         for (TaskType type : TaskType.values()) {
-            if (type.getSymbol().equalsIgnoreCase(symbol)) {
+            String thisSymbol = type.getSymbol();
+            boolean isSymbolEqual = thisSymbol.equalsIgnoreCase(symbol);
+
+            if (isSymbolEqual) {
                 return type;
             }
         }

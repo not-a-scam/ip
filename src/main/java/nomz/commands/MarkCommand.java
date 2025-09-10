@@ -1,6 +1,8 @@
 package nomz.commands;
 
-import nomz.common.Messages;
+import static nomz.common.Messages.MESSAGE_TASK_MARKED;
+import static nomz.common.Messages.MESSAGE_TASK_UNMARKED;
+
 import nomz.data.exception.NomzException;
 import nomz.data.tasks.Task;
 import nomz.data.tasks.TaskList;
@@ -26,20 +28,26 @@ public class MarkCommand extends Command {
 
     @Override
     public String execute(TaskList tasks, Storage storage) throws NomzException {
-        Task t = tasks.get(index);
+        assert tasks != null : "TaskList should not be null";
+        assert storage != null : "Storage should not be null";
+        Task task = tasks.get(index);
+        assert task != null : "Task should not be null";
         String message;
+
         if (toMark) {
-            t.mark();
-            message = Messages.MESSAGE_TASK_MARKED.formatted(t);
+            task.mark();
+            message = MESSAGE_TASK_MARKED.formatted(task);
         } else {
-            t.unmark();
-            message = Messages.MESSAGE_TASK_UNMARKED.formatted(t);
+            task.unmark();
+            message = MESSAGE_TASK_UNMARKED.formatted(task);
         }
+
         try {
             storage.saveAll(tasks.getTasks());
         } catch (Exception e) {
             return e.getMessage();
         }
+
         return message;
     }
 }

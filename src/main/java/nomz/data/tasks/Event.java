@@ -54,11 +54,11 @@ public class Event extends Task {
     }
 
     @Override
-    public String savedString() {
+    public String toSavedString() {
         if (fromTime == null || toTime == null) {
-            return super.savedString() + "|" + from + "|" + to;
+            return super.toSavedString() + "|" + from + "|" + to;
         }
-        return super.savedString() + "|" + fromTime.toString() + "|" + toTime.toString();
+        return super.toSavedString() + "|" + fromTime.toString() + "|" + toTime.toString();
     }
 
     @Override

@@ -37,6 +37,7 @@ public class Storage {
         } catch (IOException e) {
             throw new RuntimeException("Cannot create storage file", e);
         }
+        assert file.exists() : "File must exist";
     }
 
     /**
@@ -46,16 +47,21 @@ public class Storage {
      * @throws NomzException If the file content is invalid.
      */
     public ArrayList<Task> load() throws NomzException {
-        ArrayList<Task> list = new ArrayList<>();
+
+        assert file.exists() : "Storage file should exist before loading";
         try (Scanner s = new Scanner(file)) {
+            ArrayList<Task> list = new ArrayList<>();
+
             while (s.hasNextLine()) {
-                Task t = Parser.parseTaskFileContent(s.nextLine());
-                list.add(t);
+                String rawTask = s.nextLine();
+                Task task = Parser.parseTaskFileContent(rawTask);
+                list.add(task);
             }
+
+            return list;
         } catch (FileNotFoundException ignore) {
-            // File not found, return empty list
+            return new ArrayList<Task>();
         }
-        return list;
     }
 
     /**
@@ -65,8 +71,9 @@ public class Storage {
      * @throws IOException If an I/O error occurs.
      */
     public void append(Task task) throws IOException {
+        assert task != null : "Task should not be null";
         try (FileWriter fw = new FileWriter(file, true)) {
-            fw.write(task.savedString() + "\n");
+            fw.write(task.toSavedString() + "\n");
         }
     }
 
@@ -77,9 +84,10 @@ public class Storage {
      * @throws IOException If an I/O error occurs.
      */
     public void saveAll(ArrayList<Task> tasks) throws IOException {
+        assert tasks != null : "Tasks should not be null";
         try (FileWriter fw = new FileWriter(file)) {
             for (Task t : tasks) {
-                fw.write(t.savedString() + "\n");
+                fw.write(t.toSavedString() + "\n");
             }
         }
     }

@@ -22,11 +22,15 @@ public class FindCommand extends Command {
      * @param keyword the keyword to search for
      */
     public FindCommand(String keyword) {
+        assert keyword != null : "Keyword should not be null";
         this.keyword = keyword;
     }
 
     @Override
     public String execute(TaskList tasks, Storage storage) throws NomzException {
+        assert tasks != null : "TaskList should not be null";
+        assert storage != null : "Storage should not be null";
+
         ArrayList<Task> matched = new ArrayList<>(
             tasks.getTasks().stream()
                 .filter(t -> t.toString().toLowerCase().contains(keyword.toLowerCase()))
@@ -37,12 +41,12 @@ public class FindCommand extends Command {
             return MESSAGE_FIND_NO_MATCH.formatted(this.keyword);
         } else {
             StringBuilder sb = new StringBuilder();
+
             sb.append(MESSAGE_FIND_RESULTS_HEADER);
             IntStream.range(0, matched.size())
                 .mapToObj(i -> (i + 1) + ". " + matched.get(i).toString() + "\n")
                 .forEach(sb::append);
             return sb.toString().trim();
-
         }
     }
 }

@@ -48,11 +48,11 @@ public class Deadline extends Task {
     }
 
     @Override
-    public String savedString() {
+    public String toSavedString() {
         if (byTime == null) {
-            return super.savedString() + "|" + by;
+            return super.toSavedString() + "|" + by;
         }
-        return super.savedString() + "|" + byTime.toString();
+        return super.toSavedString() + "|" + byTime.toString();
     }
 
     @Override
