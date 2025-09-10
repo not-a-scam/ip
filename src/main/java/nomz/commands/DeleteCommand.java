@@ -1,9 +1,11 @@
 package nomz.commands;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import nomz.common.Messages;
 import nomz.data.exception.NomzException;
+import nomz.data.tasks.Task;
 import nomz.data.tasks.TaskList;
 import nomz.storage.Storage;
 
@@ -25,8 +27,10 @@ public class DeleteCommand extends Command {
     @Override
     public String execute(TaskList tasks, Storage storage) throws NomzException {
         tasks.delete(index);
+
         try {
-            storage.saveAll(tasks.getTasks());
+            ArrayList<Task> taskArrayList = tasks.getTasks();
+            storage.saveAll(taskArrayList);
         } catch (IOException e) {
             return e.getMessage();
         }
