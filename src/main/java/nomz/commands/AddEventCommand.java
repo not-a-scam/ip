@@ -56,6 +56,8 @@ public class AddEventCommand extends Command {
 
     @Override
     public String execute(TaskList tasks, Storage storage) {
+        assert tasks != null : "TaskList should not be null";
+        assert storage != null : "Storage should not be null";
         Task t;
         if (!useDateTime) {
             t = new Event(description, from, to);

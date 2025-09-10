@@ -26,7 +26,10 @@ public class MarkCommand extends Command {
 
     @Override
     public String execute(TaskList tasks, Storage storage) throws NomzException {
+        assert tasks != null : "TaskList should not be null";
+        assert storage != null : "Storage should not be null";
         Task t = tasks.get(index);
+        assert t != null : "Task should not be null";
         String message;
         if (toMark) {
             t.mark();

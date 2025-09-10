@@ -46,6 +46,7 @@ public class Parser {
     };
 
     private static LocalDateTime parseDateTimeFlexible(String s) {
+        assert s != null : "Date string should not be null";
         for (DateTimeFormatter f : DATE_TIME_FORMATS) {
             try {
                 return LocalDateTime.parse(s, f);
@@ -66,6 +67,7 @@ public class Parser {
     }
 
     private static int intFromString(String index) throws InvalidNomzArgumentException {
+        assert index != null : "Index string should not be null";
         try {
             return Integer.parseInt(index);
         } catch (NumberFormatException e) {
@@ -81,10 +83,15 @@ public class Parser {
      */
     public static Task parseTaskFileContent(String f) throws NomzException {
         String[] args = f.split("[\\|]");
+        assert args.length > 0 : "Input should not be empty";
+
         TaskType type = TaskType.fromSymbol(args[0]);
+        assert type != null : "TaskType should not be null";
+
         boolean done = args[1].equals("1");
         switch (type) {
         case TODO:
+            assert args.length >= 3 : "Todo save string should have 3 arguments";
             Todo todo = new Todo(args[2]);
             if (done) {
                 todo.mark();
@@ -92,6 +99,7 @@ public class Parser {
             return todo;
 
         case DEADLINE:
+            assert args.length >= 4 : "Deadline save string should have 4 arguments";
             LocalDateTime by = parseDateTimeFlexible(args[3]);
             Deadline deadline;
             if (by == null) {
@@ -105,6 +113,7 @@ public class Parser {
             return deadline;
 
         case EVENT:
+            assert args.length >= 5 : "Event save string should have 5 arguments";
             LocalDateTime from = parseDateTimeFlexible(args[3]);
             LocalDateTime to = parseDateTimeFlexible(args[4]);
             Event event;
@@ -131,6 +140,8 @@ public class Parser {
      * @return The joined string.
      */
     private static String joinArgs(int from, int to, String... args) {
+        assert args != null : "Arguments array should not be null";
+        assert from >= 0 && to <= args.length && from <= to : "Invalid joinArgs indices";
         return String.join(" ", Arrays.copyOfRange(args, from, to));
     }
 
@@ -143,7 +154,10 @@ public class Parser {
      */
     public static Command parse(String input) throws NomzException {
         String[] args = input.trim().split("\\s+");
+        assert args.length > 0 : "Input should not be empty";
+
         CommandType cmd = CommandType.fromString(args[0]);
+        assert cmd != null : "CommandType should not be null";
         switch (cmd) {
         case LIST:
             return new ListCommand();
