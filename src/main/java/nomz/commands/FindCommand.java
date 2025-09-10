@@ -4,6 +4,7 @@ import static nomz.common.Messages.MESSAGE_FIND_NO_MATCH;
 import static nomz.common.Messages.MESSAGE_FIND_RESULTS_HEADER;
 
 import java.util.ArrayList;
+import java.util.stream.IntStream;
 
 import nomz.data.exception.NomzException;
 import nomz.data.tasks.Task;
@@ -26,21 +27,20 @@ public class FindCommand extends Command {
 
     @Override
     public String execute(TaskList tasks, Storage storage) throws NomzException {
-        ArrayList<Task> matched = new ArrayList<>();
-        for (Task t : tasks.getTasks()) {
-            if (t.getDescription().contains(this.keyword)) {
-                matched.add(t);
-            }
-        }
+        ArrayList<Task> matched = new ArrayList<>(
+            tasks.getTasks().stream()
+                .filter(t -> t.toString().toLowerCase().contains(keyword.toLowerCase()))
+                .toList()
+            );
 
         if (matched.isEmpty()) {
             return MESSAGE_FIND_NO_MATCH.formatted(this.keyword);
         } else {
             StringBuilder sb = new StringBuilder();
             sb.append(MESSAGE_FIND_RESULTS_HEADER);
-            for (int i = 0; i < matched.size(); i++) {
-                sb.append((i + 1) + ". " + matched.get(i).toString() + "\n");
-            }
+            IntStream.range(0, matched.size())
+                .mapToObj(i -> (i + 1) + ". " + matched.get(i).toString() + "\n")
+                .forEach(sb::append);
             return sb.toString().trim();
 
         }
