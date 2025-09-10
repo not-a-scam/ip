@@ -1,6 +1,7 @@
 package nomz.data.tasks;
 
 import java.util.ArrayList;
+import java.util.stream.IntStream;
 
 import nomz.common.Messages;
 import nomz.data.exception.InvalidNomzArgumentException;
@@ -94,9 +95,9 @@ public class TaskList {
      */
     public String toDisplayString() {
         StringBuilder sb = new StringBuilder(Messages.MESSAGE_TASK_LIST_HEADER);
-        for (int i = 0; i < tasks.size(); i++) {
-            sb.append(i + 1).append(". ").append(tasks.get(i).toString()).append("\n");
-        }
+        IntStream.range(0, tasks.size())
+            .mapToObj(i -> (i + 1) + ". " + tasks.get(i).toString() + "\n")
+            .forEach(sb::append);
         return sb.toString();
     }
 
