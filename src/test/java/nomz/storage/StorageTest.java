@@ -41,7 +41,7 @@ class StorageTest {
 
     @Test
     void appendAndLoad_singleTask_success() throws Exception {
-        Task todo = new Todo("read book");
+        Task todo = new Todo("read book", new ArrayList<>());
         storage.append(todo);
 
         ArrayList<Task> loaded = storage.load();
@@ -51,8 +51,8 @@ class StorageTest {
 
     @Test
     void saveAll_overwritesFile_success() throws Exception {
-        Task todo1 = new Todo("task one");
-        Task todo2 = new Todo("task two");
+        Task todo1 = new Todo("task one", new ArrayList<>());
+        Task todo2 = new Todo("task two", new ArrayList<>());
         ArrayList<Task> tasks = new ArrayList<>();
         tasks.add(todo1);
         tasks.add(todo2);

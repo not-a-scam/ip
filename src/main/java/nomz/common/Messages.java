@@ -13,6 +13,7 @@ public class Messages {
 
     // Tasks
     public static final String MESSAGE_ADD_TASK = "Nomz haz added:\n\t%s\nto the nomz list!";
+    public static final String MESSAGE_ADD_TAG = "Nomz has added the tag!:\n\t%s";
     public static final String MESSAGE_TASK_UNMARKED = "Nomz has unmarked your task:\n%s";
     public static final String MESSAGE_TASK_MARKED = "Nomz says good job!:\n%s";
     public static final String MESSAGE_DELETE_TASK = "nomz haz removed task %s from the nomz list";

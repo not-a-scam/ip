@@ -7,6 +7,7 @@ import static nomz.common.Messages.MESSAGE_WRONG_TO_KEYWORD;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
 
@@ -230,7 +231,7 @@ public class ParserTest {
     @Test
     public void parseTaskFileContent_validTodoUnmarked_returnsTodo() {
         String input = "T|0|read book";
-        Task expected = new Todo("read book");
+        Task expected = new Todo("read book", new ArrayList<>());
         Task result = null;
         try {
             result = Parser.parseTaskFileContent(input);
@@ -243,7 +244,7 @@ public class ParserTest {
     @Test
     public void parseTaskFileContent_validTodoMarked_returnsTodo() {
         String input = "T|1|read book";
-        Task expected = new Todo("read book");
+        Task expected = new Todo("read book", new ArrayList<>());
         expected.mark();
         Task result = null;
         try {
@@ -257,7 +258,7 @@ public class ParserTest {
     @Test
     public void parseTaskFileContent_validDeadlineUnmarkedWithDateTime_returnsDeadlineWithDateTime() {
         String input = "D|0|submit report|2024-10-10 23:59";
-        Task expected = new Deadline("submit report", LocalDateTime.of(2024, 10, 10, 23, 59));
+        Task expected = new Deadline("submit report", LocalDateTime.of(2024, 10, 10, 23, 59), new ArrayList<>());
         Task result = null;
         try {
             result = Parser.parseTaskFileContent(input);
@@ -270,7 +271,7 @@ public class ParserTest {
     @Test
     public void parseTaskFileContent_validDeadlineUnmarkedWithStringTime_returnsDeadlineWithStringTime() {
         String input = "D|0|submit report|tomorrow";
-        Task expected = new Deadline("submit report", "tomorrow");
+        Task expected = new Deadline("submit report", "tomorrow", new ArrayList<>());
         Task result = null;
         try {
             result = Parser.parseTaskFileContent(input);
@@ -283,7 +284,7 @@ public class ParserTest {
     @Test
     public void parseTaskFileContent_validDeadlineMarkedWithStringTime_returnsDeadlineWithStringTime() {
         String input = "D|1|submit report|tomorrow";
-        Task expected = new Deadline("submit report", "tomorrow");
+        Task expected = new Deadline("submit report", "tomorrow", new ArrayList<>());
         expected.mark();
         Task result = null;
         try {
@@ -297,7 +298,7 @@ public class ParserTest {
     @Test
     public void parseTaskFileContent_validDeadlineMarkedWithDateTime_returnsDeadlineWithDateTime() {
         String input = "D|1|submit report|2024-10-10 23:59";
-        Task expected = new Deadline("submit report", LocalDateTime.of(2024, 10, 10, 23, 59));
+        Task expected = new Deadline("submit report", LocalDateTime.of(2024, 10, 10, 23, 59), new ArrayList<>());
         expected.mark();
         Task result = null;
         try {
@@ -314,7 +315,8 @@ public class ParserTest {
         Task expected = new Event(
             "team meeting",
             LocalDateTime.of(2024, 10, 10, 10, 0),
-            LocalDateTime.of(2024, 10, 10, 11, 0)
+            LocalDateTime.of(2024, 10, 10, 11, 0),
+            new ArrayList<>()
         );
         Task result = null;
         try {
@@ -328,7 +330,7 @@ public class ParserTest {
     @Test
     public void parseTaskFileContent_validEventUnmarkedWithStringTime_returnsEventWithStringTime() {
         String input = "E|0|team meeting|tomorrow|sunday";
-        Task expected = new Event("team meeting", "tomorrow", "sunday");
+        Task expected = new Event("team meeting", "tomorrow", "sunday", new ArrayList<>());
         Task result = null;
         try {
             result = Parser.parseTaskFileContent(input);
@@ -341,7 +343,7 @@ public class ParserTest {
     @Test
     public void parseTaskFileContent_validEventMarkedWithStringTime_returnsEventWithStringTime() {
         String input = "E|1|team meeting|tomorrow|sunday";
-        Task expected = new Event("team meeting", "tomorrow", "sunday");
+        Task expected = new Event("team meeting", "tomorrow", "sunday", new ArrayList<>());
         expected.mark();
         Task result = null;
         try {
@@ -358,7 +360,8 @@ public class ParserTest {
         Task expected = new Event(
             "team meeting",
             LocalDateTime.of(2024, 10, 10, 10, 0),
-            LocalDateTime.of(2024, 10, 10, 11, 0)
+            LocalDateTime.of(2024, 10, 10, 11, 0),
+            new ArrayList<>()
         );
         expected.mark();
         Task result = null;
