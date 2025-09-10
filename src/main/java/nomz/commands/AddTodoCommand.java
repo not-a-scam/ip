@@ -1,8 +1,9 @@
 package nomz.commands;
 
+import static nomz.common.Messages.MESSAGE_ADD_TASK;
+
 import java.io.IOException;
 
-import nomz.common.Messages;
 import nomz.data.tasks.Task;
 import nomz.data.tasks.TaskList;
 import nomz.data.tasks.Todo;
@@ -25,24 +26,18 @@ public class AddTodoCommand extends Command {
 
     @Override
     public String execute(TaskList tasks, Storage storage) {
-        Task t = tasks.add(new Todo(description));
+        Task task = new Todo(description);
+        tasks.add(task);
+        
         try {
-            storage.append(t);
+            storage.append(task);
         } catch (IOException e) {
             return e.getMessage();
         }
-        return Messages.MESSAGE_ADD_TASK.formatted(t.toString());
-    }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (!(obj instanceof AddTodoCommand)) {
-            return false;
-        }
-        AddTodoCommand other = (AddTodoCommand) obj;
-        return description.equals(other.description);
+        String taskString = task.toString();
+        String message = MESSAGE_ADD_TASK.formatted(taskString);
+
+        return message;
     }
 }
