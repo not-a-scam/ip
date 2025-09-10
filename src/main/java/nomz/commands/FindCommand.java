@@ -21,11 +21,14 @@ public class FindCommand extends Command {
      * @param keyword the keyword to search for
      */
     public FindCommand(String keyword) {
+        assert keyword != null : "Keyword should not be null";
         this.keyword = keyword;
     }
 
     @Override
     public String execute(TaskList tasks, Storage storage) throws NomzException {
+        assert tasks != null : "TaskList should not be null";
+        assert storage != null : "Storage should not be null";
         ArrayList<Task> matched = new ArrayList<>();
         ArrayList<Task> currentTasks = tasks.getTasks();
 

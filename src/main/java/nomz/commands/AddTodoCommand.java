@@ -26,9 +26,9 @@ public class AddTodoCommand extends Command {
 
     @Override
     public String execute(TaskList tasks, Storage storage) {
-        Task task = new Todo(description);
-        tasks.add(task);
-
+        assert tasks != null : "TaskList should not be null";
+        assert storage != null : "Storage should not be null";
+        Task task = tasks.add(new Todo(description));
         try {
             storage.append(task);
         } catch (IOException e) {

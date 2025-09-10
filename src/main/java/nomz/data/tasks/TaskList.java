@@ -36,6 +36,7 @@ public class TaskList {
      * @return
      */
     public Task add(Task task) {
+        assert task != null : "Task should not be null";
         tasks.add(task);
         return task;
     }
@@ -53,6 +54,7 @@ public class TaskList {
         if (!isValidIndex) {
             throw new InvalidNomzArgumentException(MESSAGE_INVALID_TASK_INDEX);
         }
+        assert idx >= 0 && idx < tasks.size() : "Index out of bounds";
         return tasks.remove(idx);
     }
 
@@ -69,6 +71,7 @@ public class TaskList {
         if (!isValidIndex) {
             throw new InvalidNomzArgumentException(MESSAGE_INVALID_TASK_INDEX);
         }
+        assert idx >= 0 && idx < tasks.size() : "Index out of bounds";
         return tasks.get(idx);
     }
 
