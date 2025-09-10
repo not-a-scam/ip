@@ -24,6 +24,8 @@ public class DeleteCommand extends Command {
 
     @Override
     public String execute(TaskList tasks, Storage storage) throws NomzException {
+        assert tasks != null : "TaskList should not be null";
+        assert storage != null : "Storage should not be null";
         tasks.delete(index);
         try {
             storage.saveAll(tasks.getTasks());

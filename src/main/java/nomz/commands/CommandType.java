@@ -16,6 +16,7 @@ public enum CommandType {
      * @throws InvalidNomzCommandException
      */
     public static CommandType fromString(String input) throws InvalidNomzCommandException {
+        assert input != null : "String input should not be null";
         try {
             return CommandType.valueOf(input.toUpperCase());
         } catch (IllegalArgumentException e) {
