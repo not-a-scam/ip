@@ -1,5 +1,7 @@
 package nomz.data.tasks;
 
+import java.util.ArrayList;
+
 /**
  * Represents a todo task in Nomz.
  */
@@ -10,8 +12,8 @@ public class Todo extends Task {
      *
      * @param description
      */
-    public Todo(String description) {
-        super(description, TaskType.TODO);
+    public Todo(String description, ArrayList<String> tags) {
+        super(description, TaskType.TODO, tags);
     }
 
     @Override

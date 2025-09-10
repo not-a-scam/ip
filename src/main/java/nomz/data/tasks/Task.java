@@ -17,11 +17,11 @@ public class Task {
      * @param description
      * @param type
      */
-    public Task(String description, TaskType type) {
+    public Task(String description, TaskType type, ArrayList<String> tags) {
         this.description = description;
         this.isDone = false;
         this.type = type;
-        this.tags = new ArrayList<>();
+        this.tags = tags;
     }
 
     /**
@@ -53,13 +53,6 @@ public class Task {
      */
     public void addTag(String tag) {
         tags.add(tag);
-    }
-
-    /**
-     * Returns all tags associated with the task
-     */
-    public ArrayList<String> getTags() {
-        return tags;
     }
 
     /**

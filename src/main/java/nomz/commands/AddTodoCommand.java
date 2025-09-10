@@ -3,6 +3,7 @@ package nomz.commands;
 import static nomz.common.Messages.MESSAGE_ADD_TASK;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import nomz.data.tasks.Task;
 import nomz.data.tasks.TaskList;
@@ -28,7 +29,7 @@ public class AddTodoCommand extends Command {
     public String execute(TaskList tasks, Storage storage) {
         assert tasks != null : "TaskList should not be null";
         assert storage != null : "Storage should not be null";
-        Task task = tasks.add(new Todo(description));
+        Task task = tasks.add(new Todo(description, new ArrayList<>()));
         try {
             storage.append(task);
         } catch (IOException e) {
