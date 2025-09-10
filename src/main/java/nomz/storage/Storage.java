@@ -46,16 +46,19 @@ public class Storage {
      * @throws NomzException If the file content is invalid.
      */
     public ArrayList<Task> load() throws NomzException {
-        ArrayList<Task> list = new ArrayList<>();
         try (Scanner s = new Scanner(file)) {
+            ArrayList<Task> list = new ArrayList<>();
+
             while (s.hasNextLine()) {
-                Task t = Parser.parseTaskFileContent(s.nextLine());
-                list.add(t);
+                String rawTask = s.nextLine();
+                Task task = Parser.parseTaskFileContent(rawTask);
+                list.add(task);
             }
+
+            return list;
         } catch (FileNotFoundException ignore) {
-            // File not found, return empty list
+            return new ArrayList<Task>();
         }
-        return list;
     }
 
     /**
