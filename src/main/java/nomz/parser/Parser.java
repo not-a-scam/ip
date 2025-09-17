@@ -6,6 +6,9 @@ import static nomz.common.Messages.MESSAGE_NO_ARGUMENTS;
 import static nomz.common.Messages.MESSAGE_NO_BY_KEYWORD;
 import static nomz.common.Messages.MESSAGE_NO_DESCRIPTION_ARGUMENT;
 import static nomz.common.Messages.MESSAGE_NO_INDEX_ARGUMENT;
+import static nomz.common.Messages.MESSAGE_NO_TAG_DESCRIPTION;
+import static nomz.common.Messages.MESSAGE_WRONG_DEADLINE;
+import static nomz.common.Messages.MESSAGE_WRONG_EVENT;
 import static nomz.common.Messages.MESSAGE_WRONG_FROM_KEYWORD;
 import static nomz.common.Messages.MESSAGE_WRONG_TO_KEYWORD;
 
@@ -266,8 +269,11 @@ public class Parser {
     }
 
     private static Command handleTagCommand(String[] args) throws InvalidNomzArgumentException {
+        if (args.length < 2) {
+            throw new InvalidNomzArgumentException(MESSAGE_NO_INDEX_ARGUMENT);
+        }
         if (args.length < 3) {
-            throw new InvalidNomzArgumentException(MESSAGE_NO_ARGUMENTS);
+            throw new InvalidNomzArgumentException(MESSAGE_NO_TAG_DESCRIPTION);
         }
 
         int idx = intFromString(args[1]);
@@ -276,8 +282,13 @@ public class Parser {
     }
 
     private static Command handleAddEventCommand(String[] args) throws InvalidNomzArgumentException {
+        if (args.length < 5) {
+            throw new InvalidNomzArgumentException(MESSAGE_WRONG_EVENT);
+        }
+
         int fromIndex = -1;
         int toIndex = -1;
+
         for (int i = 1; i < args.length; i++) {
             if (args[i].equals("/from")) {
                 fromIndex = i;
@@ -285,13 +296,20 @@ public class Parser {
                 toIndex = i;
             }
         }
+
         if (fromIndex <= 1) {
             throw new InvalidNomzArgumentException(MESSAGE_WRONG_FROM_KEYWORD);
         }
-        boolean isValidToIndex = toIndex > fromIndex && toIndex > 3 && toIndex <= args.length - 1;
+
+        boolean toAfterFrom = toIndex > fromIndex;
+        boolean toBeforeEnd = toIndex < args.length - 1;
+        boolean toAtLeastThree = toIndex > 3;
+        boolean isValidToIndex = toAfterFrom && toBeforeEnd && toAtLeastThree;
+
         if (!isValidToIndex) {
             throw new InvalidNomzArgumentException(MESSAGE_WRONG_TO_KEYWORD);
         }
+
         String description = joinArgs(1, fromIndex, args);
         String fromRaw = joinArgs(fromIndex + 1, toIndex, args);
         String toRaw = joinArgs(toIndex + 1, args.length, args);
@@ -306,8 +324,9 @@ public class Parser {
 
     private static Command handleAddDeadlineCommand(String[] args) throws InvalidNomzArgumentException {
         if (args.length < 4) {
-            throw new InvalidNomzArgumentException(MESSAGE_NO_ARGUMENTS);
+            throw new InvalidNomzArgumentException(MESSAGE_WRONG_DEADLINE);
         }
+
         int byPos = -1;
         for (int i = 2; i < args.length; i++) {
             if (args[i].equals("/by")) {
@@ -315,9 +334,11 @@ public class Parser {
                 break;
             }
         }
+
         if (byPos == -1) {
-            throw new InvalidNomzArgumentException(MESSAGE_NO_BY_KEYWORD);
+            throw new InvalidNomzArgumentException(MESSAGE_WRONG_DEADLINE);
         }
+
         String description = joinArgs(1, byPos, args);
         String byRaw = joinArgs(byPos + 1, args.length, args);
         LocalDateTime by = parseDateTimeFlexible(byRaw);
