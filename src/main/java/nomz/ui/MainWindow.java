@@ -1,5 +1,8 @@
 package nomz.ui;
 
+import static nomz.common.Messages.MESSAGE_INVALID_FILE_FORMAT;
+import static nomz.common.Messages.MESSAGE_WELCOME;
+
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -28,17 +31,33 @@ public class MainWindow extends AnchorPane {
 
     private Nomz nomz;
 
-    private Image userImage = new Image(this.getClass().getResourceAsStream("/images/user.png"));
-    private Image nomzImage = new Image(this.getClass().getResourceAsStream("/images/nomz.jpg"));
+    private final Image userImage = new Image(this.getClass().getResourceAsStream("/images/user.png"));
+    private final Image nomzImage = new Image(this.getClass().getResourceAsStream("/images/nomz.jpg"));
 
+    /** Initializes the main window. */
     @FXML
     public void initialize() {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
+        dialogContainer.getChildren().addAll(
+            DialogBox.getNomzDialog(MESSAGE_WELCOME, nomzImage)
+        );
     }
 
     /** Injects the Nomz instance */
     public void setNomz(Nomz n) {
         nomz = n;
+        showLoadError();
+    }
+
+    /** Shows an error dialog if there was an error loading from storage */
+    private void showLoadError() {
+        if (nomz.hasStorageError()) {
+            DialogBox db = DialogBox.getNomzDialog(
+                MESSAGE_INVALID_FILE_FORMAT,
+                nomzImage
+            );
+            dialogContainer.getChildren().add(db);
+        }
     }
 
     /**
@@ -50,7 +69,7 @@ public class MainWindow extends AnchorPane {
     private void handleUserInput() {
         String input = userInput.getText();
         Command command = null;
-        String response = "";
+        String response;
 
         try {
             command = Parser.parse(input);
@@ -60,8 +79,8 @@ public class MainWindow extends AnchorPane {
         }
 
         dialogContainer.getChildren().addAll(
-                DialogBox.getUserDialog(input, userImage),
-                DialogBox.getNomzDialog(response, nomzImage)
+            DialogBox.getUserDialog(input, userImage),
+            DialogBox.getNomzDialog(response, nomzImage)
         );
 
         if (command != null && command.isExit()) {

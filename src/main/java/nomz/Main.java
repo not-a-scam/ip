@@ -14,7 +14,7 @@ import nomz.ui.MainWindow;
  */
 public class Main extends Application {
 
-    private Nomz nomz = new Nomz("./data/tasks.txt");
+    private final Nomz nomz = new Nomz("./data/tasks.txt");
 
     @Override
     public void start(Stage stage) {

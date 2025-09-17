@@ -22,16 +22,25 @@ public class Messages {
     public static final String MESSAGE_INVALID_INTEGER_ARGUMENT = "your index argument is not a valid integer!";
     public static final String MESSAGE_INVALID_TASK_INDEX = "task index is out of bounds!";
     public static final String MESSAGE_INVALID_FORMAT = "the file contains an invalid format :(";
+    public static final String MESSAGE_INVALID_FILE_FORMAT =
+        "uh oh, there were some errors loading your tasks from file :(\nplease check the file for errors!";
 
     public static final String MESSAGE_NO_INDEX_ARGUMENT = "you need to provide an index argument :((";
     public static final String MESSAGE_NO_DESCRIPTION_ARGUMENT = "you didnt specify the task :((";
     public static final String MESSAGE_NO_ARGUMENTS = "you don't have enough arguments :(";
     public static final String MESSAGE_NO_BY_KEYWORD = "you didnt use the /by keyword :((";
+    public static final String MESSAGE_NO_TAG_DESCRIPTION = "you need to provide a tag :((";
+    public static final String MESSAGE_DUPLICATE_KEYWORD = "you used the %s keyword more than once :((";
 
     public static final String MESSAGE_WRONG_FROM_KEYWORD = "you didnt use the /from keyword properly :((";
     public static final String MESSAGE_WRONG_TO_KEYWORD = "you didnt use the /to keyword properly :((";
+    public static final String MESSAGE_WRONG_EVENT =
+        "you used the command wrongly :((\nuse \"event <description> /from <start time> /to <end time>\"";
+    public static final String MESSAGE_WRONG_DEADLINE =
+        "you used the command wrongly :((\nuse \"deadline <description> /by <due time>\"";
 
     public static final String MESSAGE_INVALID_COMMAND = "idk that command :(";
+    public static final String MESSAGE_INVALID_SAVE_STRING = "the file contains an invalid save string :(";
 
     // Find Command Messages
     public static final String MESSAGE_FIND_NO_MATCH = "nomz couldn't find any tasks with: %s";

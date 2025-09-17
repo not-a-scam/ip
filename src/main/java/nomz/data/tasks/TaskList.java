@@ -12,7 +12,7 @@ import nomz.data.exception.InvalidNomzArgumentException;
  * Represents a list of tasks in Nomz.
  */
 public class TaskList {
-    private ArrayList<Task> tasks;
+    private final ArrayList<Task> tasks;
 
     /**
      * Creates a TaskList with an empty list of tasks.

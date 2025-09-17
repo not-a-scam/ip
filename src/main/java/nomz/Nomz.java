@@ -1,17 +1,19 @@
 package nomz;
 
+import java.util.ArrayList;
+
 import nomz.commands.Command;
 import nomz.data.exception.NomzException;
+import nomz.data.tasks.Task;
 import nomz.data.tasks.TaskList;
 import nomz.storage.Storage;
-
 /**
  * Represents the Nomz application.
  */
 public class Nomz {
 
-    private Storage storage;
-    private TaskList taskList;
+    private final Storage storage;
+    private final TaskList taskList;
 
     /**
      * Creates a Nomz application instance.
@@ -22,7 +24,8 @@ public class Nomz {
         this.storage = new Storage(filepath);
         TaskList loaded;
         try {
-            loaded = new TaskList(storage.load());
+            ArrayList<Task> tasks = storage.load();
+            loaded = new TaskList(tasks);
         } catch (NomzException e) {
             loaded = new TaskList();
         }
@@ -41,5 +44,9 @@ public class Nomz {
         } catch (NomzException e) {
             return e.getMessage();
         }
+    }
+
+    public boolean hasStorageError() {
+        return storage.hasLoadError();
     }
 }

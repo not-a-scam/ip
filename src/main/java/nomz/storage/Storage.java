@@ -16,6 +16,7 @@ import nomz.parser.Parser;
  */
 public class Storage {
     private final File file;
+    private boolean hasLoadError = false;
 
     /**
      * Creates a Storage object to manage task storage.
@@ -47,21 +48,47 @@ public class Storage {
      * @throws NomzException If the file content is invalid.
      */
     public ArrayList<Task> load() throws NomzException {
-
         assert file.exists() : "Storage file should exist before loading";
+
+        ArrayList<Task> list = new ArrayList<>();
         try (Scanner s = new Scanner(file)) {
-            ArrayList<Task> list = new ArrayList<>();
-
             while (s.hasNextLine()) {
-                String rawTask = s.nextLine();
-                Task task = Parser.parseTaskFileContent(rawTask);
-                list.add(task);
+                addTaskToList(list, s);
             }
-
-            return list;
         } catch (FileNotFoundException ignore) {
-            return new ArrayList<Task>();
+            return new ArrayList<>();
         }
+        return list;
+    }
+
+    /**
+     * Parses a line from the file and adds the corresponding task to the list.
+     *
+     * @param list The list to add the task to.
+     * @param s    The scanner reading the file.
+     */
+    private void addTaskToList(ArrayList<Task> list, Scanner s) {
+        String rawTask = s.nextLine().trim();
+
+        if (rawTask.isEmpty()) {
+            return;
+        }
+
+        try {
+            Task task = Parser.parseTaskFileContent(rawTask);
+            list.add(task);
+        } catch (NomzException e) {
+            this.hasLoadError = true;
+        }
+    }
+
+    /**
+     * Checks if there was an error during the last load operation.
+     *
+     * @return true if there was a load error, false otherwise.
+     */
+    public boolean hasLoadError() {
+        return hasLoadError;
     }
 
     /**
