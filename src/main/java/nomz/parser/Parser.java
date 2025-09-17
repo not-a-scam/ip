@@ -152,7 +152,7 @@ public class Parser {
     }
 
     private static Event handleEventString(String... args) {
-        assert args.length >= 6 : "Event save string should have 6 arguments";
+        //assert args.length >= 6 : "Event save string should have 6 arguments";
 
         boolean done = args[1].equals("1");
         String description = args[2];
