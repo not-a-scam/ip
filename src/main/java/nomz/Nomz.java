@@ -10,8 +10,8 @@ import nomz.storage.Storage;
  */
 public class Nomz {
 
-    private Storage storage;
-    private TaskList taskList;
+    private final Storage storage;
+    private final TaskList taskList;
 
     /**
      * Creates a Nomz application instance.
