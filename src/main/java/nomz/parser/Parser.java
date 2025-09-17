@@ -2,8 +2,8 @@ package nomz.parser;
 
 import static nomz.common.Messages.MESSAGE_INVALID_FORMAT;
 import static nomz.common.Messages.MESSAGE_INVALID_INTEGER_ARGUMENT;
+import static nomz.common.Messages.MESSAGE_INVALID_SAVE_STRING;
 import static nomz.common.Messages.MESSAGE_NO_ARGUMENTS;
-import static nomz.common.Messages.MESSAGE_NO_BY_KEYWORD;
 import static nomz.common.Messages.MESSAGE_NO_DESCRIPTION_ARGUMENT;
 import static nomz.common.Messages.MESSAGE_NO_INDEX_ARGUMENT;
 import static nomz.common.Messages.MESSAGE_NO_TAG_DESCRIPTION;
@@ -113,7 +113,11 @@ public class Parser {
         return tags;
     }
 
-    private static Todo handleTodoString(String... args) {
+    private static Todo handleTodoString(String... args) throws InvalidNomzArgumentException {
+        if (args.length < 3) {
+            throw new InvalidNomzArgumentException(MESSAGE_INVALID_SAVE_STRING);
+        }
+
         assert args.length >= 3 : "Todo save string should have at least 3 arguments";
 
         boolean done = args[1].equals("1");
@@ -128,7 +132,11 @@ public class Parser {
         return todo;
     }
 
-    private static Deadline handleDeadlineString(String... args) {
+    private static Deadline handleDeadlineString(String... args) throws InvalidNomzArgumentException {
+        if (args.length < 4) {
+            throw new InvalidNomzArgumentException(MESSAGE_INVALID_SAVE_STRING);
+        }
+
         assert args.length >= 4 : "Deadline save string should have at least 4 arguments";
 
         boolean done = args[1].equals("1");
@@ -154,8 +162,12 @@ public class Parser {
         return deadline;
     }
 
-    private static Event handleEventString(String... args) {
-        //assert args.length >= 6 : "Event save string should have 6 arguments";
+    private static Event handleEventString(String... args) throws InvalidNomzArgumentException {
+        if (args.length < 5) {
+            throw new InvalidNomzArgumentException(MESSAGE_INVALID_SAVE_STRING);
+        }
+
+        assert args.length >= 5 : "Event save string should have at least 5 arguments";
 
         boolean done = args[1].equals("1");
         String description = args[2];
