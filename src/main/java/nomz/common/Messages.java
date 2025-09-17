@@ -30,6 +30,7 @@ public class Messages {
     public static final String MESSAGE_NO_ARGUMENTS = "you don't have enough arguments :(";
     public static final String MESSAGE_NO_BY_KEYWORD = "you didnt use the /by keyword :((";
     public static final String MESSAGE_NO_TAG_DESCRIPTION = "you need to provide a tag :((";
+    public static final String MESSAGE_DUPLICATE_KEYWORD = "you used the %s keyword more than once :((";
 
     public static final String MESSAGE_WRONG_FROM_KEYWORD = "you didnt use the /from keyword properly :((";
     public static final String MESSAGE_WRONG_TO_KEYWORD = "you didnt use the /to keyword properly :((";

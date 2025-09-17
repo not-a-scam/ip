@@ -1,5 +1,6 @@
 package nomz.parser;
 
+import static nomz.common.Messages.MESSAGE_DUPLICATE_KEYWORD;
 import static nomz.common.Messages.MESSAGE_INVALID_FORMAT;
 import static nomz.common.Messages.MESSAGE_INVALID_INTEGER_ARGUMENT;
 import static nomz.common.Messages.MESSAGE_INVALID_SAVE_STRING;
@@ -92,6 +93,13 @@ public class Parser {
         return null;
     }
 
+    /**
+     * Parses an integer from the given string.
+     *
+     * @param index The string to parse.
+     * @return The parsed integer.
+     * @throws InvalidNomzArgumentException If the string is not a valid integer.
+     */
     private static int intFromString(String index) throws InvalidNomzArgumentException {
         assert index != null : "Index string should not be null";
         try {
@@ -101,6 +109,12 @@ public class Parser {
         }
     }
 
+    /**
+     * Parses the raw tag string into a list of tags.
+     *
+     * @param rawTags The raw tag string.
+     * @return The list of tags.
+     */
     private static ArrayList<String> parseTags(String rawTags) {
         ArrayList<String> tags;
         if (rawTags.length() <= 6) {
@@ -113,6 +127,13 @@ public class Parser {
         return tags;
     }
 
+    /**
+     * Handles the parsing of the Todo from the given arguments.
+     *
+     * @param args The array of arguments.
+     * @return The constructed Todo.
+     * @throws InvalidNomzArgumentException If the arguments are invalid.
+     */
     private static Todo handleTodoString(String... args) throws InvalidNomzArgumentException {
         if (args.length < 3) {
             throw new InvalidNomzArgumentException(MESSAGE_INVALID_SAVE_STRING);
@@ -132,6 +153,13 @@ public class Parser {
         return todo;
     }
 
+    /**
+     * Handles the parsing of the Deadline from the given arguments.
+     *
+     * @param args The array of arguments.
+     * @return The constructed Deadline.
+     * @throws InvalidNomzArgumentException If the arguments are invalid.
+     */
     private static Deadline handleDeadlineString(String... args) throws InvalidNomzArgumentException {
         if (args.length < 4) {
             throw new InvalidNomzArgumentException(MESSAGE_INVALID_SAVE_STRING);
@@ -162,6 +190,13 @@ public class Parser {
         return deadline;
     }
 
+    /**
+     * Handles the parsing of the Event from the given arguments.
+     *
+     * @param args The array of arguments.
+     * @return The constructed Event.
+     * @throws InvalidNomzArgumentException If the arguments are invalid.
+     */
     private static Event handleEventString(String... args) throws InvalidNomzArgumentException {
         if (args.length < 5) {
             throw new InvalidNomzArgumentException(MESSAGE_INVALID_SAVE_STRING);
@@ -280,6 +315,13 @@ public class Parser {
         }
     }
 
+    /**
+     * Handles the parsing of the TagCommand from the given arguments.
+     *
+     * @param args The array of arguments.
+     * @return The constructed TagCommand.
+     * @throws InvalidNomzArgumentException If the arguments are invalid.
+     */
     private static Command handleTagCommand(String[] args) throws InvalidNomzArgumentException {
         if (args.length < 2) {
             throw new InvalidNomzArgumentException(MESSAGE_NO_INDEX_ARGUMENT);
@@ -293,34 +335,21 @@ public class Parser {
         return new TagCommand(idx, tag);
     }
 
+    /**
+     * Handles the parsing of the AddEventCommand from the given arguments.
+     * @param args The array of arguments.
+     * @return The constructed AddEventCommand.
+     * @throws InvalidNomzArgumentException If the arguments are invalid.
+     */
     private static Command handleAddEventCommand(String[] args) throws InvalidNomzArgumentException {
         if (args.length < 5) {
             throw new InvalidNomzArgumentException(MESSAGE_WRONG_EVENT);
         }
 
-        int fromIndex = -1;
-        int toIndex = -1;
+        int fromIndex = findKeywordIndex(args, "/from");
+        int toIndex = findKeywordIndex(args, "/to");
 
-        for (int i = 1; i < args.length; i++) {
-            if (args[i].equals("/from")) {
-                fromIndex = i;
-            } else if (args[i].equals("/to")) {
-                toIndex = i;
-            }
-        }
-
-        if (fromIndex <= 1) {
-            throw new InvalidNomzArgumentException(MESSAGE_WRONG_FROM_KEYWORD);
-        }
-
-        boolean toAfterFrom = toIndex > fromIndex;
-        boolean toBeforeEnd = toIndex < args.length - 1;
-        boolean toAtLeastThree = toIndex > 3;
-        boolean isValidToIndex = toAfterFrom && toBeforeEnd && toAtLeastThree;
-
-        if (!isValidToIndex) {
-            throw new InvalidNomzArgumentException(MESSAGE_WRONG_TO_KEYWORD);
-        }
+        validateFromToIndex(args, fromIndex, toIndex);
 
         String description = joinArgs(1, fromIndex, args);
         String fromRaw = joinArgs(fromIndex + 1, toIndex, args);
@@ -334,32 +363,94 @@ public class Parser {
         return new AddEventCommand(description, fromRaw, toRaw);
     }
 
+    /**
+     * Validates the positions of the /from and /to keywords in the arguments array.
+     *
+     * @param args The array of arguments.
+     * @param fromIndex The index of the /from keyword.
+     * @param toIndex The index of the /to keyword.
+     * @throws InvalidNomzArgumentException If the indices are invalid.
+     */
+    private static void validateFromToIndex(String[] args, int fromIndex, int toIndex)
+            throws InvalidNomzArgumentException {
+        if (fromIndex <= 1) {
+            throw new InvalidNomzArgumentException(MESSAGE_WRONG_FROM_KEYWORD);
+        }
+
+        boolean toAfterFrom = toIndex > fromIndex;
+        boolean toBeforeEnd = toIndex < args.length - 1;
+        boolean toAtLeastThree = toIndex > 3;
+        boolean isValidToIndex = toAfterFrom && toBeforeEnd && toAtLeastThree;
+
+        if (!isValidToIndex) {
+            throw new InvalidNomzArgumentException(MESSAGE_WRONG_TO_KEYWORD);
+        }
+    }
+
+    /**
+     * Finds the index of the specified keyword in the arguments array.
+     *
+     * @param args The array of arguments.
+     * @param keyword The keyword to find.
+     * @return The index of the keyword, or -1 if not found.
+     * @throws InvalidNomzArgumentException If the keyword appears more than once.
+     */
+    private static int findKeywordIndex(String[] args, String keyword) throws InvalidNomzArgumentException {
+        assert args != null : "Arguments array should not be null";
+        assert keyword != null : "Keyword string should not be null";
+
+        int index = -1;
+        for (int i = 0; i < args.length; i++) {
+            if (args[i].equals(keyword)) {
+                if (index != -1) {
+                    throw new InvalidNomzArgumentException(MESSAGE_DUPLICATE_KEYWORD.formatted(keyword));
+                }
+                index = i;
+            }
+        }
+        return index;
+    }
+
+    /**
+     * Handles the parsing of the AddDeadlineCommand from the given arguments.
+     *
+     * @param args The array of arguments.
+     * @return The constructed AddDeadlineCommand.
+     * @throws InvalidNomzArgumentException If the arguments are invalid.
+     */
     private static Command handleAddDeadlineCommand(String[] args) throws InvalidNomzArgumentException {
         if (args.length < 4) {
             throw new InvalidNomzArgumentException(MESSAGE_WRONG_DEADLINE);
         }
 
-        int byPos = -1;
-        for (int i = 2; i < args.length; i++) {
-            if (args[i].equals("/by")) {
-                byPos = i;
-                break;
-            }
-        }
+        int byPos = findKeywordIndex(args, "/by");
 
-        if (byPos == -1) {
-            throw new InvalidNomzArgumentException(MESSAGE_WRONG_DEADLINE);
-        }
+        validateByIndex(byPos);
 
         String description = joinArgs(1, byPos, args);
         String byRaw = joinArgs(byPos + 1, args.length, args);
         LocalDateTime by = parseDateTimeFlexible(byRaw);
+
         if (by != null) {
             return new AddDeadlineCommand(description, by);
         }
         return new AddDeadlineCommand(description, byRaw);
     }
 
+    private static void validateByIndex(int byPos) throws InvalidNomzArgumentException {
+        if (byPos == -1) {
+            throw new InvalidNomzArgumentException(MESSAGE_WRONG_DEADLINE);
+        }
+    }
+
+    /**
+     * Handles the parsing of marking and unmarking commands.
+     *
+     * @param cmd The command type (MARK or UNMARK).
+     * @param args The array of arguments.
+     * @return The constructed MarkCommand.
+     * @throws NomzException If the arguments are invalid.
+     */
     private static MarkCommand handleMarkingCommand(CommandType cmd, String... args) throws NomzException {
         if (args.length < 2) {
             throw new InvalidNomzArgumentException(MESSAGE_NO_INDEX_ARGUMENT);
@@ -370,6 +461,13 @@ public class Parser {
         return new MarkCommand(idx, toMark);
     }
 
+    /**
+     * Handles the parsing of the DeleteCommand from the given arguments.
+     *
+     * @param args The array of arguments.
+     * @return The constructed DeleteCommand.
+     * @throws InvalidNomzArgumentException If the arguments are invalid.
+     */
     private static DeleteCommand handleDeleteCommand(String... args) throws NomzException {
         if (args.length < 2) {
             throw new InvalidNomzArgumentException(MESSAGE_NO_INDEX_ARGUMENT);
@@ -378,6 +476,13 @@ public class Parser {
         return new DeleteCommand(idx);
     }
 
+    /**
+     * Handles the parsing of the AddTodoCommand from the given arguments.
+     *
+     * @param args The array of arguments.
+     * @return The constructed AddTodoCommand.
+     * @throws InvalidNomzArgumentException If the arguments are invalid.
+     */
     private static Command handleAddTodoCommand(String[] args) throws InvalidNomzArgumentException {
         if (args.length < 2) {
             throw new InvalidNomzArgumentException(MESSAGE_NO_DESCRIPTION_ARGUMENT);
@@ -386,6 +491,13 @@ public class Parser {
         return new AddTodoCommand(description);
     }
 
+    /**
+     * Handles the parsing of the FindCommand from the given arguments.
+     *
+     * @param args The array of arguments.
+     * @return The constructed FindCommand.
+     * @throws InvalidNomzArgumentException If the arguments are invalid.
+     */
     private static Command handleFindCommand(String[] args) throws InvalidNomzArgumentException {
         if (args.length < 2) {
             throw new InvalidNomzArgumentException(MESSAGE_NO_ARGUMENTS);
