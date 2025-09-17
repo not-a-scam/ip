@@ -1,5 +1,7 @@
 package nomz.commands;
 
+import java.io.IOException;
+
 import static nomz.common.Messages.MESSAGE_TASK_MARKED;
 import static nomz.common.Messages.MESSAGE_TASK_UNMARKED;
 
@@ -44,7 +46,7 @@ public class MarkCommand extends Command {
 
         try {
             storage.saveAll(tasks.getTasks());
-        } catch (Exception e) {
+        } catch (IOException e) {
             return e.getMessage();
         }
 
