@@ -38,4 +38,21 @@ public class DeleteCommand extends Command {
         }
         return Messages.MESSAGE_DELETE_TASK.formatted(index);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof DeleteCommand)) {
+            return false;
+        }
+        DeleteCommand that = (DeleteCommand) o;
+        return this.index == that.index;
+    }
+
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(index);
+    }
 }

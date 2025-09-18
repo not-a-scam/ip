@@ -4,6 +4,7 @@ import static nomz.common.Messages.MESSAGE_ADD_TASK;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import nomz.data.tasks.Task;
 import nomz.data.tasks.TaskList;
@@ -54,5 +55,10 @@ public class AddTodoCommand extends Command {
 
         AddTodoCommand other = (AddTodoCommand) obj;
         return description.equals(other.description);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(description);
     }
 }

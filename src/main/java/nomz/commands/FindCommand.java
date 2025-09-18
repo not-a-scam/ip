@@ -15,7 +15,7 @@ import nomz.storage.Storage;
  * Command to find tasks by description
  */
 public class FindCommand extends Command {
-    private String keyword;
+    private final String keyword;
 
     /**
      * Creates a FindCommand to search for tasks by description.
@@ -48,5 +48,22 @@ public class FindCommand extends Command {
                 .forEach(sb::append);
             return sb.toString().trim();
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof FindCommand)) {
+            return false;
+        }
+        FindCommand that = (FindCommand) o;
+        return this.keyword.equals(that.keyword);
+    }
+
+    @Override
+    public int hashCode() {
+        return keyword.hashCode();
     }
 }

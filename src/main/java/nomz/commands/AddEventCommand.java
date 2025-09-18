@@ -5,6 +5,7 @@ import static nomz.common.Messages.MESSAGE_ADD_TASK;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import nomz.data.tasks.Event;
 import nomz.data.tasks.Task;
@@ -112,5 +113,10 @@ public class AddEventCommand extends Command {
                     && isFromEquals
                     && isToEquals;
         }
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(description, from, to, fromTime, toTime, useDateTime);
     }
 }
