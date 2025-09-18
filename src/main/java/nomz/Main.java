@@ -22,11 +22,12 @@ public class Main extends Application {
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/view/MainWindow.fxml"));
             AnchorPane ap = fxmlLoader.load();
             Scene scene = new Scene(ap);
+            stage.setTitle("chat with nomz!");
             stage.setScene(scene);
             fxmlLoader.<MainWindow>getController().setNomz(nomz); // inject the Nomz instance
             stage.show();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Error loading FXML file: " + e.getMessage());
         }
     }
 }
