@@ -3,6 +3,7 @@ package nomz.data.tasks;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Represents an event task in Nomz.
@@ -122,5 +123,10 @@ public class Event extends Task {
         }
 
         return fromTime.equals(event.fromTime) && toTime.equals(event.toTime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), fromTime, toTime, from, to);
     }
 }

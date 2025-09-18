@@ -3,6 +3,7 @@ package nomz.data.tasks;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Represents a deadline task in Nomz.
@@ -98,5 +99,10 @@ public class Deadline extends Task {
             return (by.equals(deadline.by));
         }
         return byTime.equals(deadline.byTime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), byTime, by);
     }
 }

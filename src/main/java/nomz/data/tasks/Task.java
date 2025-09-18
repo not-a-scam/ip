@@ -1,6 +1,7 @@
 package nomz.data.tasks;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Represents a task in Nomz.
@@ -103,5 +104,10 @@ public class Task {
         }
         Task task = (Task) o;
         return isDone == task.isDone && description.equals(task.description) && type == task.type;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(description, isDone, type);
     }
 }
