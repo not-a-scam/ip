@@ -3,7 +3,7 @@
 
 Nomz User Guide
 
-![Nomz Screenshot](./UI.png)
+![Nomz Screenshot](./Ui.png)
 
 Nomz is a simple, intuitive task manager for students and busy professionals. It helps you keep track of todos, deadlines, and events, with tagging and search features for easy organization.
 
