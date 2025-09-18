@@ -1,9 +1,9 @@
 package nomz.commands;
 
-import java.io.IOException;
-
 import static nomz.common.Messages.MESSAGE_TASK_MARKED;
 import static nomz.common.Messages.MESSAGE_TASK_UNMARKED;
+
+import java.io.IOException;
 
 import nomz.data.exception.NomzException;
 import nomz.data.tasks.Task;
