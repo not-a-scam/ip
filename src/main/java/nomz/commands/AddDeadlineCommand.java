@@ -5,6 +5,7 @@ import static nomz.common.Messages.MESSAGE_ADD_TASK;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import nomz.data.tasks.Deadline;
 import nomz.data.tasks.Task;
@@ -95,5 +96,10 @@ public class AddDeadlineCommand extends Command {
             boolean isByEquals = by.equals(other.by);
             return isDescriptionEquals && isByEquals;
         }
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(description, by, byTime, useDateTime);
     }
 }

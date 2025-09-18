@@ -1,9 +1,9 @@
 package nomz.commands;
 
-import java.io.IOException;
-
 import static nomz.common.Messages.MESSAGE_TASK_MARKED;
 import static nomz.common.Messages.MESSAGE_TASK_UNMARKED;
+
+import java.io.IOException;
 
 import nomz.data.exception.NomzException;
 import nomz.data.tasks.Task;
@@ -51,5 +51,24 @@ public class MarkCommand extends Command {
         }
 
         return message;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof MarkCommand)) {
+            return false;
+        }
+        MarkCommand that = (MarkCommand) o;
+        boolean indexEqual = this.index == that.index;
+        boolean toMarkEqual = this.toMark == that.toMark;
+        return indexEqual && toMarkEqual;
+    }
+
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(index) + Boolean.hashCode(toMark);
     }
 }

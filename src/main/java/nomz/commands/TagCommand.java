@@ -41,4 +41,23 @@ public class TagCommand extends Command {
 
         return MESSAGE_ADD_TAG.formatted(task.toString());
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof TagCommand)) {
+            return false;
+        }
+        TagCommand that = (TagCommand) o;
+        boolean indexEqual = this.index == that.index;
+        boolean tagEqual = this.tag.equals(that.tag);
+        return indexEqual && tagEqual;
+    }
+
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(index) + tag.hashCode();
+    }
 }

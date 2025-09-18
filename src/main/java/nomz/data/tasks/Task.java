@@ -1,6 +1,7 @@
 package nomz.data.tasks;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Represents a task in Nomz.
@@ -80,6 +81,14 @@ public class Task {
         return this.description;
     }
 
+    /**
+     * Returns whether the task is done.
+     * @return true if the task is done, false otherwise
+     */
+    public boolean isDone() {
+        return this.isDone;
+    }
+
     @Override
     public String toString() {
         return "[" + type.getSymbol() + "][" + getStatusIcon() + "] " + description;
@@ -95,5 +104,10 @@ public class Task {
         }
         Task task = (Task) o;
         return isDone == task.isDone && description.equals(task.description) && type == task.type;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(description, isDone, type);
     }
 }

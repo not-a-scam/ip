@@ -3,6 +3,7 @@ package nomz.data.tasks;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Represents a deadline task in Nomz.
@@ -38,6 +39,24 @@ public class Deadline extends Task {
     public Deadline(String description, String by, ArrayList<String> tags) {
         this(description, tags);
         this.by = by;
+    }
+
+    /**
+     * Returns the LocalDateTime object for by time.
+     *
+     * @return
+     */
+    public LocalDateTime getByTime() {
+        return byTime;
+    }
+
+    /**
+     * Returns the raw by time.
+     *
+     * @return
+     */
+    public String getByRaw() {
+        return by;
     }
 
     @Override
@@ -80,5 +99,10 @@ public class Deadline extends Task {
             return (by.equals(deadline.by));
         }
         return byTime.equals(deadline.byTime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), byTime, by);
     }
 }

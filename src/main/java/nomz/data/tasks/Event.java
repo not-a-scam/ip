@@ -3,6 +3,7 @@ package nomz.data.tasks;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Represents an event task in Nomz.
@@ -46,6 +47,42 @@ public class Event extends Task {
         this.toTime = toTime;
     }
 
+    /**
+     * Returns the LocalDateTime object for from time.
+     *
+     * @return
+     */
+    public LocalDateTime getFromTime() {
+        return fromTime;
+    }
+
+    /**
+     * Returns the LocalDateTime object for to time.
+     *
+     * @return
+     */
+    public LocalDateTime getToTime() {
+        return toTime;
+    }
+
+    /**
+     * Returns the raw from time.
+     *
+     * @return
+     */
+    public String getFromRaw() {
+        return from;
+    }
+
+    /**
+     * Returns the raw to time.
+     *
+     * @return
+     */
+    public String getToRaw() {
+        return to;
+    }
+
     @Override
     public String toString() {
         String str;
@@ -86,5 +123,10 @@ public class Event extends Task {
         }
 
         return fromTime.equals(event.fromTime) && toTime.equals(event.toTime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), fromTime, toTime, from, to);
     }
 }
