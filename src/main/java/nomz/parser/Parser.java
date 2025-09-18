@@ -408,6 +408,10 @@ public class Parser {
                 index = i;
             }
         }
+        if (index == args.length - 1) {
+            throw new InvalidNomzArgumentException(MESSAGE_NO_ARGUMENTS);
+        }
+
         return index;
     }
 
