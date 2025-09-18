@@ -46,6 +46,42 @@ public class Event extends Task {
         this.toTime = toTime;
     }
 
+    /**
+     * Returns the LocalDateTime object for from time.
+     *
+     * @return
+     */
+    public LocalDateTime getFromTime() {
+        return fromTime;
+    }
+
+    /**
+     * Returns the LocalDateTime object for to time.
+     *
+     * @return
+     */
+    public LocalDateTime getToTime() {
+        return toTime;
+    }
+
+    /**
+     * Returns the raw from time.
+     *
+     * @return
+     */
+    public String getFromRaw() {
+        return from;
+    }
+
+    /**
+     * Returns the raw to time.
+     *
+     * @return
+     */
+    public String getToRaw() {
+        return to;
+    }
+
     @Override
     public String toString() {
         String str;

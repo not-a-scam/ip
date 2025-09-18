@@ -40,6 +40,24 @@ public class Deadline extends Task {
         this.by = by;
     }
 
+    /**
+     * Returns the LocalDateTime object for by time.
+     *
+     * @return
+     */
+    public LocalDateTime getByTime() {
+        return byTime;
+    }
+
+    /**
+     * Returns the raw by time.
+     *
+     * @return
+     */
+    public String getByRaw() {
+        return by;
+    }
+
     @Override
     public String toString() {
         String str;

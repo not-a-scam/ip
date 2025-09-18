@@ -80,6 +80,14 @@ public class Task {
         return this.description;
     }
 
+    /**
+     * Returns whether the task is done.
+     * @return true if the task is done, false otherwise
+     */
+    public boolean isDone() {
+        return this.isDone;
+    }
+
     @Override
     public String toString() {
         return "[" + type.getSymbol() + "][" + getStatusIcon() + "] " + description;
