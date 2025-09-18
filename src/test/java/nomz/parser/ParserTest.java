@@ -1,18 +1,8 @@
 package nomz.parser;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import org.junit.jupiter.api.Test;
-
-import nomz.commands.AddDeadlineCommand;
-import nomz.commands.AddEventCommand;
-import nomz.commands.AddTodoCommand;
-import nomz.commands.Command;
 import static nomz.common.Messages.MESSAGE_DUPLICATE_KEYWORD;
 import static nomz.common.Messages.MESSAGE_INVALID_COMMAND;
+import static nomz.common.Messages.MESSAGE_INVALID_DEADLINE;
 import static nomz.common.Messages.MESSAGE_INVALID_EVENT;
 import static nomz.common.Messages.MESSAGE_INVALID_FROM_KEYWORD;
 import static nomz.common.Messages.MESSAGE_INVALID_SAVE_STRING;
@@ -20,7 +10,18 @@ import static nomz.common.Messages.MESSAGE_INVALID_TO_KEYWORD;
 import static nomz.common.Messages.MESSAGE_NO_ARGUMENTS;
 import static nomz.common.Messages.MESSAGE_NO_DESCRIPTION_ARGUMENT;
 import static nomz.common.Messages.MESSAGE_NO_TAG_DESCRIPTION;
-import static nomz.common.Messages.MESSAGE_INVALID_DEADLINE;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+
+import org.junit.jupiter.api.Test;
+
+import nomz.commands.AddDeadlineCommand;
+import nomz.commands.AddEventCommand;
+import nomz.commands.AddTodoCommand;
+import nomz.commands.Command;
 import nomz.data.exception.InvalidNomzArgumentException;
 import nomz.data.exception.InvalidNomzCommandException;
 import nomz.data.tasks.Deadline;
