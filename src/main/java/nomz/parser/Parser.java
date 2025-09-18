@@ -1,17 +1,17 @@
 package nomz.parser;
 
 import static nomz.common.Messages.MESSAGE_DUPLICATE_KEYWORD;
+import static nomz.common.Messages.MESSAGE_INVALID_DEADLINE;
+import static nomz.common.Messages.MESSAGE_INVALID_EVENT;
 import static nomz.common.Messages.MESSAGE_INVALID_FORMAT;
+import static nomz.common.Messages.MESSAGE_INVALID_FROM_KEYWORD;
 import static nomz.common.Messages.MESSAGE_INVALID_INTEGER_ARGUMENT;
 import static nomz.common.Messages.MESSAGE_INVALID_SAVE_STRING;
+import static nomz.common.Messages.MESSAGE_INVALID_TO_KEYWORD;
 import static nomz.common.Messages.MESSAGE_NO_ARGUMENTS;
 import static nomz.common.Messages.MESSAGE_NO_DESCRIPTION_ARGUMENT;
 import static nomz.common.Messages.MESSAGE_NO_INDEX_ARGUMENT;
 import static nomz.common.Messages.MESSAGE_NO_TAG_DESCRIPTION;
-import static nomz.common.Messages.MESSAGE_WRONG_DEADLINE;
-import static nomz.common.Messages.MESSAGE_WRONG_EVENT;
-import static nomz.common.Messages.MESSAGE_WRONG_FROM_KEYWORD;
-import static nomz.common.Messages.MESSAGE_WRONG_TO_KEYWORD;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -343,7 +343,7 @@ public class Parser {
      */
     private static Command handleAddEventCommand(String[] args) throws InvalidNomzArgumentException {
         if (args.length < 5) {
-            throw new InvalidNomzArgumentException(MESSAGE_WRONG_EVENT);
+            throw new InvalidNomzArgumentException(MESSAGE_INVALID_EVENT);
         }
 
         int fromIndex = findKeywordIndex(args, "/from");
@@ -374,7 +374,7 @@ public class Parser {
     private static void validateFromToIndex(String[] args, int fromIndex, int toIndex)
             throws InvalidNomzArgumentException {
         if (fromIndex <= 1) {
-            throw new InvalidNomzArgumentException(MESSAGE_WRONG_FROM_KEYWORD);
+            throw new InvalidNomzArgumentException(MESSAGE_INVALID_FROM_KEYWORD);
         }
 
         boolean toAfterFrom = toIndex > fromIndex;
@@ -383,7 +383,7 @@ public class Parser {
         boolean isValidToIndex = toAfterFrom && toBeforeEnd && toAtLeastThree;
 
         if (!isValidToIndex) {
-            throw new InvalidNomzArgumentException(MESSAGE_WRONG_TO_KEYWORD);
+            throw new InvalidNomzArgumentException(MESSAGE_INVALID_TO_KEYWORD);
         }
     }
 
@@ -424,7 +424,7 @@ public class Parser {
      */
     private static Command handleAddDeadlineCommand(String[] args) throws InvalidNomzArgumentException {
         if (args.length < 4) {
-            throw new InvalidNomzArgumentException(MESSAGE_WRONG_DEADLINE);
+            throw new InvalidNomzArgumentException(MESSAGE_INVALID_DEADLINE);
         }
 
         int byPos = findKeywordIndex(args, "/by");
@@ -443,7 +443,7 @@ public class Parser {
 
     private static void validateByIndex(int byPos) throws InvalidNomzArgumentException {
         if (byPos == -1) {
-            throw new InvalidNomzArgumentException(MESSAGE_WRONG_DEADLINE);
+            throw new InvalidNomzArgumentException(MESSAGE_INVALID_DEADLINE);
         }
     }
 

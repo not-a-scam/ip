@@ -1,27 +1,26 @@
 package nomz.parser;
 
-import static nomz.common.Messages.MESSAGE_DUPLICATE_KEYWORD;
-import static nomz.common.Messages.MESSAGE_INVALID_COMMAND;
-import static nomz.common.Messages.MESSAGE_INVALID_SAVE_STRING;
-import static nomz.common.Messages.MESSAGE_NO_ARGUMENTS;
-import static nomz.common.Messages.MESSAGE_NO_DESCRIPTION_ARGUMENT;
-import static nomz.common.Messages.MESSAGE_NO_TAG_DESCRIPTION;
-import static nomz.common.Messages.MESSAGE_WRONG_DEADLINE;
-import static nomz.common.Messages.MESSAGE_WRONG_EVENT;
-import static nomz.common.Messages.MESSAGE_WRONG_FROM_KEYWORD;
-import static nomz.common.Messages.MESSAGE_WRONG_TO_KEYWORD;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 
 import nomz.commands.AddDeadlineCommand;
 import nomz.commands.AddEventCommand;
 import nomz.commands.AddTodoCommand;
 import nomz.commands.Command;
+import static nomz.common.Messages.MESSAGE_DUPLICATE_KEYWORD;
+import static nomz.common.Messages.MESSAGE_INVALID_COMMAND;
+import static nomz.common.Messages.MESSAGE_INVALID_EVENT;
+import static nomz.common.Messages.MESSAGE_INVALID_FROM_KEYWORD;
+import static nomz.common.Messages.MESSAGE_INVALID_SAVE_STRING;
+import static nomz.common.Messages.MESSAGE_INVALID_TO_KEYWORD;
+import static nomz.common.Messages.MESSAGE_NO_ARGUMENTS;
+import static nomz.common.Messages.MESSAGE_NO_DESCRIPTION_ARGUMENT;
+import static nomz.common.Messages.MESSAGE_NO_TAG_DESCRIPTION;
+import static nomz.common.Messages.MESSAGE_INVALID_DEADLINE;
 import nomz.data.exception.InvalidNomzArgumentException;
 import nomz.data.exception.InvalidNomzCommandException;
 import nomz.data.tasks.Deadline;
@@ -87,35 +86,35 @@ public class ParserTest {
     public void parse_invalidEventNoDescription_throwsException() {
         String input = "event";
         Exception e = assertThrows(InvalidNomzArgumentException.class, () -> Parser.parse(input));
-        assertEquals(MESSAGE_WRONG_EVENT, e.getMessage());
+        assertEquals(MESSAGE_INVALID_EVENT, e.getMessage());
     }
 
     @Test
     public void parse_invalidEventNoFrom_throwsException() {
         String input = "event project meeting /to 2024-10-10 16:00";
         Exception e = assertThrows(InvalidNomzArgumentException.class, () -> Parser.parse(input));
-        assertEquals(MESSAGE_WRONG_FROM_KEYWORD, e.getMessage());
+        assertEquals(MESSAGE_INVALID_FROM_KEYWORD, e.getMessage());
     }
 
     @Test
     public void parse_invalidEventNoTo_throwsException() {
         String input = "event project meeting /from 2024-10-10 14:00";
         Exception e = assertThrows(InvalidNomzArgumentException.class, () -> Parser.parse(input));
-        assertEquals(MESSAGE_WRONG_TO_KEYWORD, e.getMessage());
+        assertEquals(MESSAGE_INVALID_TO_KEYWORD, e.getMessage());
     }
 
     @Test
     public void parse_invalidEventWrongOrder_throwsException() {
         String input = "event project meeting /to 2024-10-10 14:00 /from 2024-10-10 16:00";
         Exception e = assertThrows(InvalidNomzArgumentException.class, () -> Parser.parse(input));
-        assertEquals(MESSAGE_WRONG_TO_KEYWORD, e.getMessage());
+        assertEquals(MESSAGE_INVALID_TO_KEYWORD, e.getMessage());
     }
 
     @Test
     public void parse_invalidEventLackArguments_throwsException() {
         String input = "event /from /to";
         Exception e = assertThrows(InvalidNomzArgumentException.class, () -> Parser.parse(input));
-        assertEquals(MESSAGE_WRONG_EVENT, e.getMessage());
+        assertEquals(MESSAGE_INVALID_EVENT, e.getMessage());
     }
 
     @Test
@@ -138,7 +137,7 @@ public class ParserTest {
     public void parse_invalidDeadlineNoArgs_throwsException() {
         String input = "deadline";
         Exception e = assertThrows(InvalidNomzArgumentException.class, () -> Parser.parse(input));
-        assertEquals(MESSAGE_WRONG_DEADLINE, e.getMessage());
+        assertEquals(MESSAGE_INVALID_DEADLINE, e.getMessage());
     }
 
     @Test
@@ -152,14 +151,14 @@ public class ParserTest {
     public void parse_invalidDeadlineNoBy_throwsException() {
         String input = "deadline submit report ";
         Exception e = assertThrows(InvalidNomzArgumentException.class, () -> Parser.parse(input));
-        assertEquals(MESSAGE_WRONG_DEADLINE, e.getMessage());
+        assertEquals(MESSAGE_INVALID_DEADLINE, e.getMessage());
     }
 
     @Test
     public void parse_invalidDeadlineNoDescription_throwsException() {
         String input = "deadline /by noon";
         Exception e = assertThrows(InvalidNomzArgumentException.class, () -> Parser.parse(input));
-        assertEquals(MESSAGE_WRONG_DEADLINE, e.getMessage());
+        assertEquals(MESSAGE_INVALID_DEADLINE, e.getMessage());
     }
 
     @Test
